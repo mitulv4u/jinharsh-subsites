@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>JinHarsh Group — Product Subsite Template</title>
+  <meta name="description" content="Official JinHarsh Group product portal and inquiry center." />
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-slate-50 text-slate-900 antialiased">
+  <header class="bg-slate-900 text-white py-4 px-6 flex items-center justify-between">
+    <div class="font-bold text-lg tracking-wide">JinHarsh Group</div>
+    <a href="#inquiry" class="bg-amber-500 hover:bg-amber-400 text-slate-950 font-semibold px-4 py-2 rounded-lg text-sm transition">
+      Request Quote
+    </a>
+  </header>
+
+  <main class="max-w-5xl mx-auto px-6 py-14 space-y-16">
+    <section class="text-center space-y-4">
+      <span class="inline-block bg-amber-100 text-amber-800 text-xs font-semibold px-3 py-1 rounded-full uppercase">
+        Product Line
+      </span>
+      <h1 class="text-4xl font-extrabold tracking-tight text-slate-900">
+        Replace With Product / Brand Title
+      </h1>
+      <p class="text-lg text-slate-600 max-w-2xl mx-auto">
+        Customize this template using AI to showcase specifications, downloadable catalogs, and direct quote requests.
+      </p>
+    </section>
+
+    <section id="inquiry" class="bg-white rounded-2xl shadow-sm border border-slate-200 p-8 max-w-2xl mx-auto">
+      <h2 class="text-2xl font-bold mb-2">Send an Inquiry</h2>
+      <p class="text-sm text-slate-500 mb-6">Your request is routed directly to our JinHarsh Odoo ERP sales team.</p>
+      <form id="odoo-inquiry-form" class="space-y-4">
+        <input type="hidden" name="source_domain" value="template.jinharsh.com" />
+        <input type="hidden" name="product_category" value="General" />
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <input required name="name" placeholder="Your Name" class="border border-slate-300 rounded-lg px-4 py-2.5 w-full" />
+          <input required name="company" placeholder="Company Name" class="border border-slate-300 rounded-lg px-4 py-2.5 w-full" />
+        </div>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <input required type="email" name="email" placeholder="Work Email" class="border border-slate-300 rounded-lg px-4 py-2.5 w-full" />
+          <input required name="phone" placeholder="Phone / WhatsApp" class="border border-slate-300 rounded-lg px-4 py-2.5 w-full" />
+        </div>
+        <textarea required name="message" rows="4" placeholder="Product requirements, quantity, or catalog request..." class="border border-slate-300 rounded-lg px-4 py-2.5 w-full"></textarea>
+        <button type="submit" class="w-full bg-slate-900 hover:bg-slate-800 text-white font-semibold py-3 rounded-lg transition">
+          Submit Inquiry
+        </button>
+        <p id="form-status" class="text-sm text-center hidden"></p>
+      </form>
+    </section>
+  </main>
+
+  <footer class="border-t border-slate-200 py-6 text-center text-sm text-slate-500">
+    &copy; 2026 JinHarsh Group. All rights reserved.
+  </footer>
+
+  <script>
+    document.getElementById("odoo-inquiry-form").addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const status = document.getElementById("form-status");
+      const data = Object.fromEntries(new FormData(e.target).entries());
+      status.classList.remove("hidden");
+      status.textContent = "Sending inquiry...";
+      try {
+        const res = await fetch("https://api.jinharsh.com/inquiries", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(data),
+        });
+        status.textContent = res.ok
+          ? "Thank you! Our team has received your inquiry."
+          : "Could not submit right now. Please try again.";
+      } catch {
+        status.textContent = "Network error. Please try again.";
+      }
+    });
+  </script>
+</body>
+</html>
