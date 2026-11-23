@@ -27,6 +27,6 @@ jobs:
           for site in $CHANGED_SITES; do
             if [ -d "sites/$site" ]; then
               echo "Deploying $site -> /www/wwwroot/$site"
-              rsync -avz --delete -e "ssh -i ~/.ssh/id_deploy" "sites/$site/" "deploy@159.89.94.209:/www/wwwroot/$site/"
+              rsync -avz --delete --omit-dir-times --exclude='.user.ini' --exclude='.well-known' -e "ssh -i ~/.ssh/id_deploy" "sites/$site/" "deploy@159.89.94.209:/www/wwwroot/$site/"
             fi
           done
