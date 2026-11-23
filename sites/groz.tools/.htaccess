@@ -1,0 +1,4 @@
+# The site loads its scripts as JavaScript modules (.mjs); Apache must label them as JavaScript.
+AddType text/javascript .mjs
+AddType font/woff2 .woff2
+AddType image/webp .webp
