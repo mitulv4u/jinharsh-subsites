@@ -1,0 +1,550 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Rexnord OMEGA Elastomeric Couplings | Authorized Distributor — JinHarsh Group</title>
+  <meta name="description" content="Explore genuine Rexnord Omega E & ES split-in-half elastomeric couplings (Standard Orange, HDY Heavy-Duty Yellow, HSU Green). Instant size, torque, and application search." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Outfit:wght@700;800;900&display=swap" rel="stylesheet" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+            display: ['Outfit', 'sans-serif'],
+          },
+          colors: {
+            omega: {
+              50: '#fff7ed',
+              100: '#ffedd5',
+              500: '#f97316',
+              600: '#ea580c',
+              700: '#c2410c',
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    html { scroll-behavior: smooth; }
+    .hero-bg {
+      background: radial-gradient(circle at 80% 45%, rgba(234, 88, 12, 0.22), transparent 52%),
+                  linear-gradient(135deg, #161412 0%, #221b17 55%, #12100e 100%);
+    }
+  </style>
+</head>
+<body class="bg-stone-50 text-stone-900 antialiased">
+
+  <!-- Top Navigation (Matches groz.tools/site) -->
+  <header class="sticky top-0 z-40 bg-white/95 backdrop-blur border-b border-stone-200">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between gap-4">
+      <a href="#top" class="flex items-center gap-2.5 shrink-0">
+        <span class="w-8 h-8 rounded-lg bg-omega-600 text-white font-display font-black flex items-center justify-center text-lg shadow-sm">Ω</span>
+        <div class="leading-tight">
+          <div class="font-display font-extrabold text-base tracking-tight text-stone-900">REXNORD OMEGA</div>
+          <div class="text-[11px] font-medium text-stone-500">Authorized Partner · JinHarsh Group</div>
+        </div>
+      </a>
+
+      <nav class="hidden md:flex items-center gap-7 text-sm font-medium text-stone-600">
+        <a href="#catalog" class="hover:text-omega-600 transition">Coupling Sizes</a>
+        <a href="#series" class="hover:text-omega-600 transition">Series (E / ES / HDY / HSU)</a>
+        <a href="#applications" class="hover:text-omega-600 transition">Applications</a>
+        <a href="#genuine" class="hover:text-omega-600 transition">How to Buy Genuine</a>
+      </nav>
+
+      <div class="flex items-center gap-3">
+        <div class="hidden lg:flex items-center bg-stone-100 rounded-full px-3.5 py-1.5 border border-stone-200 focus-within:border-omega-500 focus-within:bg-white transition">
+          <svg class="w-4 h-4 text-stone-400 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-4.35-4.35M17 11A6 6 0 1 1 5 11a6 6 0 0 1 12 0z"/></svg>
+          <input id="nav-search" type="text" placeholder="Search E20, ES40, 4460 Nm..." class="bg-transparent text-sm outline-none w-44 text-stone-800 placeholder:text-stone-400" />
+        </div>
+        <button onclick="openQuoteModal()" class="inline-flex items-center gap-2 bg-omega-600 hover:bg-omega-700 text-white text-sm font-semibold px-4 py-2 rounded-full shadow-sm transition">
+          <span>Quote</span>
+          <span id="quote-count" class="bg-white/20 text-white text-xs font-bold px-2 py-0.5 rounded-full">0</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Hero Card with Instant Search (Matches groz.tools/site) -->
+  <section id="top" class="max-w-7xl mx-auto px-4 sm:px-6 pt-6 pb-8">
+    <div class="hero-bg rounded-3xl p-7 sm:p-12 text-white shadow-xl relative overflow-hidden">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+        <div class="lg:col-span-7 space-y-6">
+          <div class="inline-flex items-center gap-2 text-xs font-semibold tracking-widest uppercase text-amber-400">
+            <span class="w-2 h-2 rounded-full bg-omega-500 animate-pulse"></span>
+            Rexnord Elastomeric Couplings
+          </div>
+
+          <h1 class="font-display font-black text-4xl sm:text-5xl lg:text-[54px] leading-[1.06] tracking-tight">
+            Find your coupling.<br />
+            <span class="text-omega-500">Keep uptime running.</span>
+          </h1>
+
+          <p class="text-stone-300 text-base sm:text-lg max-w-xl leading-relaxed">
+            Genuine Rexnord Omega&reg; split-in-half elastomeric couplings. Search sizes <strong class="text-white">E2–E140</strong> &amp; <strong class="text-white">ES2–ES80</strong>, compare torque ratings, check applications, and request a fast quote.
+          </p>
+
+          <!-- Live Search Bar -->
+          <form onsubmit="event.preventDefault(); scrollToCatalog();" class="bg-white rounded-2xl p-1.5 flex items-center shadow-lg max-w-xl">
+            <input id="hero-search" type="text" placeholder="Search Omega size (E20, ES40), torque, bore, or application..." class="flex-1 px-4 py-3 text-stone-900 text-sm sm:text-base outline-none bg-transparent placeholder:text-stone-400" />
+            <button type="submit" aria-label="Search couplings" class="bg-omega-600 hover:bg-omega-700 text-white p-3.5 rounded-xl transition shrink-0">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M21 21l-4.35-4.35M17 11A6 6 0 1 1 5 11a6 6 0 0 1 12 0z"/></svg>
+            </button>
+          </form>
+
+          <div class="flex flex-wrap items-center gap-2 text-xs text-stone-300">
+            <span class="text-stone-400">Popular searches:</span>
+            <button onclick="quickSearch('E20')" class="px-2.5 py-1 rounded-full bg-white/10 hover:bg-white/20 transition">E20</button>
+            <button onclick="quickSearch('ES40')" class="px-2.5 py-1 rounded-full bg-white/10 hover:bg-white/20 transition">ES40 Spacer</button>
+            <button onclick="quickSearch('HDY')" class="px-2.5 py-1 rounded-full bg-white/10 hover:bg-white/20 transition">HDY Yellow (+25% Torque)</button>
+            <button onclick="quickSearch('HSU')" class="px-2.5 py-1 rounded-full bg-white/10 hover:bg-white/20 transition">HSU Chemical</button>
+            <button onclick="quickSearch('Pump')" class="px-2.5 py-1 rounded-full bg-white/10 hover:bg-white/20 transition">Centrifugal Pumps</button>
+          </div>
+        </div>
+
+        <!-- Technical Coupling Visual -->
+        <div class="lg:col-span-5 flex flex-col items-center justify-center">
+          <div class="relative w-64 h-64 sm:w-72 sm:h-72 rounded-full border border-white/10 bg-white/5 flex items-center justify-center">
+            <svg viewBox="0 0 240 240" class="w-56 h-56 drop-shadow-2xl">
+              <circle cx="120" cy="120" r="96" fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="18" />
+              <!-- Split Orange Polyurethane Flex Element -->
+              <path d="M120 26 A94 94 0 0 1 214 116 L176 116 A56 56 0 0 0 120 64 Z" fill="#f97316" />
+              <path d="M120 214 A94 94 0 0 1 26 124 L64 124 A56 56 0 0 0 120 176 Z" fill="#ea580c" />
+              <path d="M214 124 A94 94 0 0 1 124 214 L124 176 A56 56 0 0 0 176 124 Z" fill="#f97316" />
+              <path d="M26 116 A94 94 0 0 1 116 26 L116 64 A56 56 0 0 0 64 116 Z" fill="#ea580c" />
+              <!-- Steel Hub & Bore -->
+              <circle cx="120" cy="120" r="52" fill="#292524" stroke="#d6d3d1" stroke-width="4" />
+              <circle cx="120" cy="120" r="24" fill="#161412" stroke="#78716c" stroke-width="3" />
+              <rect x="115" y="90" width="10" height="8" fill="#a8a29e" rx="1" />
+              <!-- Bolt Holes -->
+              <circle cx="120" cy="45" r="5" fill="#161412" />
+              <circle cx="195" cy="120" r="5" fill="#161412" />
+              <circle cx="120" cy="195" r="5" fill="#161412" />
+              <circle cx="45" cy="120" r="5" fill="#161412" />
+            </svg>
+            <div class="absolute -bottom-3 bg-stone-900/90 border border-white/15 px-3.5 py-1.5 rounded-full text-xs font-medium text-stone-200">
+              Split-in-Half Flex Element · Zero Lubrication
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 3 Feature Strip Cards (Matches groz.tools/site) -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4">
+      <div class="bg-white rounded-2xl p-5 border border-stone-200/80 shadow-sm flex items-start gap-4">
+        <div class="w-10 h-10 rounded-xl bg-omega-50 text-omega-600 flex items-center justify-center shrink-0">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-4.35-4.35M17 11A6 6 0 1 1 5 11a6 6 0 0 1 12 0z"/></svg>
+        </div>
+        <div>
+          <h3 class="font-bold text-sm text-stone-900">Find the exact size faster</h3>
+          <p class="text-xs text-stone-500 mt-0.5">Search E2–E140 close-coupled &amp; ES2–ES80 spacer models by torque, HP/100 RPM, or bore.</p>
+        </div>
+      </div>
+      <div class="bg-white rounded-2xl p-5 border border-stone-200/80 shadow-sm flex items-start gap-4">
+        <div class="w-10 h-10 rounded-xl bg-omega-50 text-omega-600 flex items-center justify-center shrink-0">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
+        </div>
+        <div>
+          <h3 class="font-bold text-sm text-stone-900">100% Genuine Rexnord</h3>
+          <p class="text-xs text-stone-500 mt-0.5">Supplied with OEM batch traceability, bonded urethane elements, and full manufacturer warranty.</p>
+        </div>
+      </div>
+      <div class="bg-white rounded-2xl p-5 border border-stone-200/80 shadow-sm flex items-start gap-4">
+        <div class="w-10 h-10 rounded-xl bg-omega-50 text-omega-600 flex items-center justify-center shrink-0">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>
+        </div>
+        <div>
+          <h3 class="font-bold text-sm text-stone-900">Prepare a clear RFQ</h3>
+          <p class="text-xs text-stone-500 mt-0.5">Add coupling sizes or spare elements to your quote shortlist and send directly to our engineering team.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Series Overview Cards -->
+  <section id="series" class="max-w-7xl mx-auto px-4 sm:px-6 py-10">
+    <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-6">
+      <div>
+        <h2 class="font-display font-extrabold text-2xl sm:text-3xl text-stone-900">OMEGA Elastomeric Series</h2>
+        <p class="text-stone-500 text-sm mt-1">Replaceable split-in-half flex elements and reversible hubs reduce inventory and assembly time.</p>
+      </div>
+      <a href="#catalog" class="text-sm font-semibold text-omega-600 hover:text-omega-700">Browse all 16 sizes &rarr;</a>
+    </div>
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+      <button onclick="filterSeries('Close-Coupled')" class="text-left bg-white hover:border-omega-500 border border-stone-200 rounded-2xl p-5 transition shadow-sm group">
+        <div class="flex items-center justify-between mb-3">
+          <span class="px-2.5 py-1 rounded-full text-xs font-bold bg-orange-100 text-orange-800">Standard Orange</span>
+          <span class="text-xs font-semibold text-stone-400 group-hover:text-omega-600">E2 – E140</span>
+        </div>
+        <h3 class="font-bold text-base text-stone-900">Type E (Close-Coupled)</h3>
+        <p class="text-xs text-stone-500 mt-1.5 leading-relaxed">General-purpose non-lubricated coupling for compact shaft-to-shaft drives. Up to 38,442 Nm continuous torque.</p>
+      </button>
+
+      <button onclick="filterSeries('Spacer')" class="text-left bg-white hover:border-omega-500 border border-stone-200 rounded-2xl p-5 transition shadow-sm group">
+        <div class="flex items-center justify-between mb-3">
+          <span class="px-2.5 py-1 rounded-full text-xs font-bold bg-stone-100 text-stone-800">Spacer Design</span>
+          <span class="text-xs font-semibold text-stone-400 group-hover:text-omega-600">ES2 – ES80</span>
+        </div>
+        <h3 class="font-bold text-base text-stone-900">Type ES (Spacer)</h3>
+        <p class="text-xs text-stone-500 mt-1.5 leading-relaxed">Ideal for ANSI/DIN back-pull-out pumps—service pump seals without moving the motor. Optional sleeve extensions.</p>
+      </button>
+
+      <button onclick="filterSeries('HDY')" class="text-left bg-white hover:border-omega-500 border border-stone-200 rounded-2xl p-5 transition shadow-sm group">
+        <div class="flex items-center justify-between mb-3">
+          <span class="px-2.5 py-1 rounded-full text-xs font-bold bg-amber-100 text-amber-800">Heavy-Duty Yellow</span>
+          <span class="text-xs font-semibold text-stone-400 group-hover:text-omega-600">+25% Torque</span>
+        </div>
+        <h3 class="font-bold text-base text-stone-900">HDY Element</h3>
+        <p class="text-xs text-stone-500 mt-1.5 leading-relaxed">25% higher torque capacity and 40% higher torsional stiffness than Standard Orange for heavy shock loads.</p>
+      </button>
+
+      <button onclick="filterSeries('HSU')" class="text-left bg-white hover:border-omega-500 border border-stone-200 rounded-2xl p-5 transition shadow-sm group">
+        <div class="flex items-center justify-between mb-3">
+          <span class="px-2.5 py-1 rounded-full text-xs font-bold bg-emerald-100 text-emerald-800">HSU Green</span>
+          <span class="text-xs font-semibold text-stone-400 group-hover:text-omega-600">Hot &amp; Chemical</span>
+        </div>
+        <h3 class="font-bold text-base text-stone-900">HSU Element</h3>
+        <p class="text-xs text-stone-500 mt-1.5 leading-relaxed">Hydrolytically stable urethane for hot, humid, caustic, or acidic environments. Optional anti-corrosive steel shoes.</p>
+      </button>
+    </div>
+  </section>
+
+  <!-- Interactive Searchable Product Catalog -->
+  <section id="catalog" class="max-w-7xl mx-auto px-4 sm:px-6 py-10">
+    <div class="bg-white rounded-3xl border border-stone-200 shadow-sm p-6 sm:p-8">
+      <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4 pb-6 border-b border-stone-200">
+        <div>
+          <h2 class="font-display font-extrabold text-2xl text-stone-900">OMEGA Coupling Size &amp; Spec Finder</h2>
+          <p class="text-sm text-stone-500 mt-1">Instant filter across Rexnord Omega Close-Coupled (E) and Spacer (ES) sizes. Peak torque is 250% of continuous rating.</p>
+        </div>
+        <div class="flex flex-wrap items-center gap-2">
+          <button data-filter="ALL" onclick="setFilter('ALL')" class="filter-btn px-3.5 py-1.5 rounded-full text-xs font-semibold bg-stone-900 text-white">All Sizes (16)</button>
+          <button data-filter="Close-Coupled" onclick="setFilter('Close-Coupled')" class="filter-btn px-3.5 py-1.5 rounded-full text-xs font-semibold bg-stone-100 text-stone-700 hover:bg-stone-200">Close-Coupled (E)</button>
+          <button data-filter="Spacer" onclick="setFilter('Spacer')" class="filter-btn px-3.5 py-1.5 rounded-full text-xs font-semibold bg-stone-100 text-stone-700 hover:bg-stone-200">Spacer (ES)</button>
+          <button data-filter="High-Torque" onclick="setFilter('High-Torque')" class="filter-btn px-3.5 py-1.5 rounded-full text-xs font-semibold bg-stone-100 text-stone-700 hover:bg-stone-200">Heavy Duty (E80–E140)</button>
+        </div>
+      </div>
+
+      <div id="results-meta" class="text-xs font-medium text-stone-500 py-3"></div>
+
+      <div id="catalog-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-2">
+        <!-- Populated by JS -->
+      </div>
+    </div>
+  </section>
+
+  <!-- Popular Applications Section -->
+  <section id="applications" class="max-w-7xl mx-auto px-4 sm:px-6 py-10">
+    <div class="mb-6">
+      <span class="text-xs font-bold uppercase tracking-widest text-omega-600">Industry Proven</span>
+      <h2 class="font-display font-extrabold text-2xl sm:text-3xl text-stone-900 mt-1">Popular Applications for OMEGA Couplings</h2>
+      <p class="text-stone-500 text-sm mt-1">Non-lubricated, torsionally soft performance built to protect connected bearings, seals, and gearboxes.</p>
+    </div>
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+      <div class="bg-white rounded-2xl p-6 border border-stone-200 shadow-sm">
+        <div class="text-xs font-bold text-omega-600 uppercase mb-2">01 · Fluid Handling</div>
+        <h3 class="font-bold text-lg text-stone-900">Centrifugal &amp; Process Pumps</h3>
+        <p class="text-sm text-stone-600 mt-2 leading-relaxed">Type ES spacer couplings allow maintenance teams to replace pump mechanical seals without disturbing motor alignment. Split flex element installs in minutes.</p>
+      </div>
+      <div class="bg-white rounded-2xl p-6 border border-stone-200 shadow-sm">
+        <div class="text-xs font-bold text-omega-600 uppercase mb-2">02 · Air &amp; Gas</div>
+        <h3 class="font-bold text-lg text-stone-900">Compressors &amp; Blowers</h3>
+        <p class="text-sm text-stone-600 mt-2 leading-relaxed">Torsionally soft urethane cushions pulsating torque and vibration in rotary screw, lobe, and reciprocating compressor drives.</p>
+      </div>
+      <div class="bg-white rounded-2xl p-6 border border-stone-200 shadow-sm">
+        <div class="text-xs font-bold text-omega-600 uppercase mb-2">03 · HVAC &amp; Power</div>
+        <h3 class="font-bold text-lg text-stone-900">Industrial Fans &amp; Cooling Towers</h3>
+        <p class="text-sm text-stone-600 mt-2 leading-relaxed">High angular and parallel misalignment capacity accommodates thermal growth and structural flex in forced-draft fans and cooling towers.</p>
+      </div>
+      <div class="bg-white rounded-2xl p-6 border border-stone-200 shadow-sm">
+        <div class="text-xs font-bold text-omega-600 uppercase mb-2">04 · Bulk Handling</div>
+        <h3 class="font-bold text-lg text-stone-900">Conveyors, Crushers &amp; Screens</h3>
+        <p class="text-sm text-stone-600 mt-2 leading-relaxed">HDY Heavy-Duty Yellow elements absorb severe start-stop shock loads on belt conveyors, bucket elevators, vibrating screens, and steel mill runout tables.</p>
+      </div>
+      <div class="bg-white rounded-2xl p-6 border border-stone-200 shadow-sm">
+        <div class="text-xs font-bold text-omega-600 uppercase mb-2">05 · Process Industries</div>
+        <h3 class="font-bold text-lg text-stone-900">Mixers, Agitators &amp; Extruders</h3>
+        <p class="text-sm text-stone-600 mt-2 leading-relaxed">Operates in horizontal or vertical orientations without extra components—ideal for chemical reactors, pulp &amp; paper agitators, and plastic extruders.</p>
+      </div>
+      <div class="bg-white rounded-2xl p-6 border border-stone-200 shadow-sm">
+        <div class="text-xs font-bold text-omega-600 uppercase mb-2">06 · Harsh Environments</div>
+        <h3 class="font-bold text-lg text-stone-900">Water, Wastewater &amp; Chemical Plants</h3>
+        <p class="text-sm text-stone-600 mt-2 leading-relaxed">HSU (Green) hydrolytically stable urethane resists moisture, heat, and caustic or acidic washdowns where standard rubber fails.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- How to Buy Genuine OMEGA Couplings -->
+  <section id="genuine" class="max-w-7xl mx-auto px-4 sm:px-6 py-10 pb-16">
+    <div class="bg-stone-900 text-white rounded-3xl p-8 sm:p-12 grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+      <div class="lg:col-span-7 space-y-5">
+        <span class="inline-block bg-omega-600/20 text-amber-400 border border-omega-500/30 text-xs font-bold uppercase tracking-wider px-3 py-1 rounded-full">
+          Authenticity &amp; Sizing Guide
+        </span>
+        <h2 class="font-display font-black text-3xl sm:text-4xl leading-tight">
+          How to Buy Genuine Rexnord OMEGA Couplings
+        </h2>
+        <p class="text-stone-300 text-sm sm:text-base leading-relaxed">
+          Counterfeit or low-grade replacement elements delaminate under shock loads and damage expensive motor and pump bearings. Source directly through <strong class="text-white">JinHarsh Group</strong>, an authorized Rexnord industrial distributor.
+        </p>
+
+        <div class="space-y-3 pt-2">
+          <div class="flex items-start gap-3">
+            <span class="w-6 h-6 rounded-full bg-omega-600 text-white text-xs font-bold flex items-center justify-center shrink-0 mt-0.5">1</span>
+            <p class="text-sm text-stone-200"><strong>Check Molded Part Markings &amp; Bonded Shoes:</strong> Genuine Omega elements feature precision polyurethane-to-metal bonding (no slip) and molded Rexnord/Falk part numbers.</p>
+          </div>
+          <div class="flex items-start gap-3">
+            <span class="w-6 h-6 rounded-full bg-omega-600 text-white text-xs font-bold flex items-center justify-center shrink-0 mt-0.5">2</span>
+            <p class="text-sm text-stone-200"><strong>Share Your Drive Specs for Fast Sizing:</strong> Send us Motor Power (HP/kW), Speed (RPM), Shaft Bores (mm/inch), Shaft Gap (DBSE), and Application so we verify the exact service factor.</p>
+          </div>
+          <div class="flex items-start gap-3">
+            <span class="w-6 h-6 rounded-full bg-omega-600 text-white text-xs font-bold flex items-center justify-center shrink-0 mt-0.5">3</span>
+            <p class="text-sm text-stone-200"><strong>Order Complete Sets or Split Spare Elements:</strong> We stock Orange (Standard), HDY (Yellow), and HSU (Green) elements plus Imperial/Metric/Bushed hubs for pan-India dispatch.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="lg:col-span-5 bg-white text-stone-900 rounded-2xl p-6 sm:p-7 shadow-xl">
+        <h3 class="font-display font-bold text-xl">Request a Genuine OMEGA Quote</h3>
+        <p class="text-xs text-stone-500 mt-1 mb-4">Routed directly to our JinHarsh Rexnord coupling specialists.</p>
+        <form id="inline-inquiry-form" class="space-y-3">
+          <input type="hidden" name="source_domain" value="omega.rexnord.co.in" />
+          <input type="hidden" name="product_category" value="Rexnord Omega Elastomeric Couplings" />
+          <input required name="name" placeholder="Your Name *" class="w-full border border-stone-300 rounded-xl px-3.5 py-2.5 text-sm outline-none focus:border-omega-600" />
+          <input required name="company" placeholder="Company Name *" class="w-full border border-stone-300 rounded-xl px-3.5 py-2.5 text-sm outline-none focus:border-omega-600" />
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <input required type="email" name="email" placeholder="Work Email *" class="w-full border border-stone-300 rounded-xl px-3.5 py-2.5 text-sm outline-none focus:border-omega-600" />
+            <input required name="phone" placeholder="Phone / WhatsApp *" class="w-full border border-stone-300 rounded-xl px-3.5 py-2.5 text-sm outline-none focus:border-omega-600" />
+          </div>
+          <textarea id="inline-message" required name="message" rows="3" placeholder="Required Omega Size (e.g. E20, ES40), HP/RPM, Shaft Bores, or Quantity..." class="w-full border border-stone-300 rounded-xl px-3.5 py-2.5 text-sm outline-none focus:border-omega-600"></textarea>
+          <button type="submit" class="w-full bg-omega-600 hover:bg-omega-700 text-white font-semibold py-3 rounded-xl text-sm transition">
+            Submit Coupling Inquiry
+          </button>
+          <p id="inline-status" class="text-xs text-center font-medium hidden"></p>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="border-t border-stone-200 bg-white py-8">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-stone-500">
+      <div>&copy; 2026 <strong>JinHarsh Group</strong> (<a href="https://rexnord.co.in" class="hover:text-omega-600 underline">rexnord.co.in</a>) · Authorized Rexnord Distributor</div>
+      <div>Omega&reg; is a registered trademark of Regal Rexnord Corporation.</div>
+    </div>
+  </footer>
+
+  <!-- Quote Shortlist Modal -->
+  <div id="quote-modal" class="fixed inset-0 z-50 bg-black/50 backdrop-blur-sm hidden items-center justify-center p-4">
+    <div class="bg-white rounded-2xl max-w-lg w-full p-6 shadow-2xl">
+      <div class="flex items-center justify-between pb-3 border-b border-stone-200">
+        <h3 class="font-display font-bold text-lg">Your OMEGA Quote Shortlist</h3>
+        <button onclick="closeQuoteModal()" class="text-stone-400 hover:text-stone-700 text-xl leading-none">&times;</button>
+      </div>
+      <div id="quote-list" class="py-4 space-y-2 max-h-56 overflow-y-auto text-sm"></div>
+      <div class="pt-3 border-t border-stone-200 flex justify-end gap-2">
+        <button onclick="clearQuote()" class="px-4 py-2 rounded-xl text-xs font-semibold text-stone-600 hover:bg-stone-100">Clear</button>
+        <button onclick="sendShortlistToForm()" class="px-5 py-2 rounded-xl text-xs font-semibold bg-omega-600 hover:bg-omega-700 text-white">Proceed to Inquiry Form &rarr;</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const OMEGA_MODELS = [
+      { size: "E2 / ES2", family: "Standard & Spacer", type: "Close-Coupled", hasSpacer: true, torqueLbIn: 190, torqueNm: 21.5, hp100: 0.30, maxRpm: 7500, maxBoreMm: 28, apps: "Small pumps, dosing units, light blowers" },
+      { size: "E3 / ES3", family: "Standard & Spacer", type: "Close-Coupled", hasSpacer: true, torqueLbIn: 365, torqueNm: 41.2, hp100: 0.58, maxRpm: 7500, maxBoreMm: 35, apps: "Chemical dosing pumps, small fans" },
+      { size: "E4 / ES4", family: "Standard & Spacer", type: "Close-Coupled", hasSpacer: true, torqueLbIn: 550, torqueNm: 62.1, hp100: 0.88, maxRpm: 7500, maxBoreMm: 42, apps: "Centrifugal pumps, HVAC blowers" },
+      { size: "E5 / ES5", family: "Standard & Spacer", type: "Close-Coupled", hasSpacer: true, torqueLbIn: 925, torqueNm: 105, hp100: 1.48, maxRpm: 7500, maxBoreMm: 48, apps: "Process pumps, mixers, light conveyors" },
+      { size: "E10 / ES10", family: "Standard & Spacer", type: "Close-Coupled", hasSpacer: true, torqueLbIn: 1450, torqueNm: 164, hp100: 2.30, maxRpm: 7500, maxBoreMm: 55, apps: "Process pumps, air compressors, fans" },
+      { size: "E15 / ES15", family: "Standard & Spacer", type: "Close-Coupled", hasSpacer: true, torqueLbIn: 1800, torqueNm: 203, hp100: 2.86, maxRpm: 6600, maxBoreMm: 60, apps: "Industrial pumps, blowers, agitators" },
+      { size: "E20 / ES20", family: "Standard & Spacer", type: "Close-Coupled", hasSpacer: true, torqueLbIn: 2300, torqueNm: 260, hp100: 3.65, maxRpm: 6600, maxBoreMm: 65, apps: "Centrifugal pumps, compressors, conveyors" },
+      { size: "E30 / ES30", family: "Standard & Spacer", type: "Close-Coupled", hasSpacer: true, torqueLbIn: 3650, torqueNm: 412, hp100: 5.79, maxRpm: 5800, maxBoreMm: 75, apps: "Cooling tower fans, process pumps, mixers" },
+      { size: "E40 / ES40", family: "Standard & Spacer", type: "Close-Coupled", hasSpacer: true, torqueLbIn: 5500, torqueNm: 621, hp100: 8.85, maxRpm: 5000, maxBoreMm: 85, apps: "Heavy pumps, industrial fans, screw conveyors" },
+      { size: "E50 / ES50", family: "Standard & Spacer", type: "Close-Coupled", hasSpacer: true, torqueLbIn: 7650, torqueNm: 864, hp100: 12.14, maxRpm: 4200, maxBoreMm: 95, apps: "Compressors, mixers, pulp & paper drives" },
+      { size: "E60 / ES60", family: "Standard & Spacer", type: "Close-Coupled", hasSpacer: true, torqueLbIn: 12500, torqueNm: 1412, hp100: 19.84, maxRpm: 3800, maxBoreMm: 110, apps: "Forced draft fans, extruders, belt conveyors" },
+      { size: "E70 / ES70", family: "Standard & Spacer", type: "Close-Coupled", hasSpacer: true, torqueLbIn: 22125, torqueNm: 2500, hp100: 35.12, maxRpm: 3600, maxBoreMm: 130, apps: "Large compressors, stone crushers, agitators" },
+      { size: "E80 / ES80", family: "Heavy-Duty & Spacer", type: "High-Torque", hasSpacer: true, torqueLbIn: 39500, torqueNm: 4463, hp100: 62.70, maxRpm: 2500, maxBoreMm: 152, apps: "Heavy conveyors, crushers, large pumps" },
+      { size: "E100", family: "Close-Coupled Heavy Duty", type: "High-Torque", hasSpacer: false, torqueLbIn: 85050, torqueNm: 9609, hp100: 135.0, maxRpm: 1900, maxBoreMm: 178, apps: "Steel mill runout tables, mining, extruders" },
+      { size: "E120", family: "Close-Coupled Heavy Duty", type: "High-Torque", hasSpacer: false, torqueLbIn: 170100, torqueNm: 19219, hp100: 270.0, maxRpm: 1800, maxBoreMm: 203, apps: "Heavy crushers, cement mills, hoists" },
+      { size: "E140", family: "Close-Coupled Heavy Duty", type: "High-Torque", hasSpacer: false, torqueLbIn: 340200, torqueNm: 38442, hp100: 540.0, maxRpm: 1500, maxBoreMm: 229, apps: "Maximum-torque turbine & mill drives" }
+    ];
+
+    let activeFilter = "ALL";
+    let searchTerm = "";
+    const shortlist = [];
+
+    function renderCatalog() {
+      const q = searchTerm.trim().toLowerCase();
+      const filtered = OMEGA_MODELS.filter((m) => {
+        const matchesTab =
+          activeFilter === "ALL" ||
+          (activeFilter === "Close-Coupled") ||
+          (activeFilter === "Spacer" && m.hasSpacer) ||
+          (activeFilter === "High-Torque" && m.type === "High-Torque");
+
+        const haystack = `${m.size} ${m.family} ${m.torqueNm} ${m.torqueLbIn} ${m.hp100} ${m.maxBoreMm} ${m.apps} HDY HSU`.toLowerCase();
+        const matchesQuery = !q || haystack.includes(q);
+        return matchesTab && matchesQuery;
+      });
+
+      document.getElementById("results-meta").textContent =
+        `Showing ${filtered.length} of ${OMEGA_MODELS.length} Rexnord OMEGA sizes` +
+        (q ? ` matching "${searchTerm}"` : "");
+
+      const grid = document.getElementById("catalog-grid");
+      if (!filtered.length) {
+        grid.innerHTML = `<div class="col-span-full py-10 text-center text-stone-500 text-sm">No Omega sizes matched "<strong>${searchTerm}</strong>". Try E20, ES40, Pump, or 4463.</div>`;
+        return;
+      }
+
+      grid.innerHTML = filtered.map((m) => `
+        <div class="border border-stone-200 rounded-2xl p-5 hover:border-omega-500 transition flex flex-col justify-between bg-stone-50/50">
+          <div>
+            <div class="flex items-center justify-between gap-2">
+              <span class="font-display font-extrabold text-lg text-stone-900">OMEGA ${m.size}</span>
+              <span class="text-[11px] font-semibold px-2.5 py-0.5 rounded-full ${m.hasSpacer ? 'bg-orange-100 text-orange-800' : 'bg-stone-200 text-stone-800'}">
+                ${m.hasSpacer ? 'E + ES Spacer' : 'Close-Coupled'}
+              </span>
+            </div>
+            <div class="grid grid-cols-3 gap-2 my-4 bg-white p-3 rounded-xl border border-stone-200/70 text-center">
+              <div>
+                <div class="text-[10px] uppercase text-stone-400 font-semibold">Torque</div>
+                <div class="text-xs font-bold text-stone-900">${m.torqueNm.toLocaleString()} Nm</div>
+              </div>
+              <div>
+                <div class="text-[10px] uppercase text-stone-400 font-semibold">HP / 100 RPM</div>
+                <div class="text-xs font-bold text-stone-900">${m.hp100}</div>
+              </div>
+              <div>
+                <div class="text-[10px] uppercase text-stone-400 font-semibold">Max Bore</div>
+                <div class="text-xs font-bold text-stone-900">${m.maxBoreMm} mm</div>
+              </div>
+            </div>
+            <p class="text-xs text-stone-600 leading-relaxed"><strong>Best for:</strong> ${m.apps}</p>
+            <p class="text-[11px] text-stone-400 mt-1.5">Max ${m.maxRpm.toLocaleString()} RPM · Orange / HDY (+25%) / HSU</p>
+          </div>
+          <button onclick="addToQuote('OMEGA ${m.size} (${m.torqueNm} Nm)')" class="mt-4 w-full py-2 rounded-xl border border-stone-300 hover:border-omega-600 hover:bg-omega-600 hover:text-white text-xs font-semibold text-stone-800 transition">
+            + Add to Quote Shortlist
+          </button>
+        </div>
+      `).join("");
+    }
+
+    function setFilter(f) {
+      activeFilter = f;
+      document.querySelectorAll(".filter-btn").forEach((btn) => {
+        const active = btn.dataset.filter === f;
+        btn.className = active
+          ? "filter-btn px-3.5 py-1.5 rounded-full text-xs font-semibold bg-stone-900 text-white"
+          : "filter-btn px-3.5 py-1.5 rounded-full text-xs font-semibold bg-stone-100 text-stone-700 hover:bg-stone-200";
+      });
+      renderCatalog();
+    }
+
+    function quickSearch(term) {
+      searchTerm = term;
+      document.getElementById("hero-search").value = term;
+      document.getElementById("nav-search").value = term;
+      renderCatalog();
+      scrollToCatalog();
+    }
+
+    function filterSeries(seriesName) {
+      if (seriesName === "Close-Coupled" || seriesName === "Spacer") {
+        setFilter(seriesName);
+      } else {
+        setFilter("ALL");
+        quickSearch(seriesName);
+      }
+      scrollToCatalog();
+    }
+
+    function scrollToCatalog() {
+      document.getElementById("catalog").scrollIntoView({ behavior: "smooth" });
+    }
+
+    document.getElementById("hero-search").addEventListener("input", (e) => {
+      searchTerm = e.target.value;
+      document.getElementById("nav-search").value = searchTerm;
+      renderCatalog();
+    });
+
+    document.getElementById("nav-search").addEventListener("input", (e) => {
+      searchTerm = e.target.value;
+      document.getElementById("hero-search").value = searchTerm;
+      renderCatalog();
+    });
+
+    function addToQuote(item) {
+      if (!shortlist.includes(item)) shortlist.push(item);
+      document.getElementById("quote-count").textContent = shortlist.length;
+      openQuoteModal();
+    }
+
+    function openQuoteModal() {
+      const list = document.getElementById("quote-list");
+      list.innerHTML = shortlist.length
+        ? shortlist.map((s) => `<div class="px-3 py-2 bg-stone-100 rounded-lg font-medium text-stone-800">${s}</div>`).join("")
+        : `<p class="text-stone-500">No couplings added yet. Click "+ Add to Quote Shortlist" on any size.</p>`;
+      document.getElementById("quote-modal").classList.remove("hidden");
+      document.getElementById("quote-modal").classList.add("flex");
+    }
+
+    function closeQuoteModal() {
+      document.getElementById("quote-modal").classList.add("hidden");
+      document.getElementById("quote-modal").classList.remove("flex");
+    }
+
+    function clearQuote() {
+      shortlist.length = 0;
+      document.getElementById("quote-count").textContent = "0";
+      openQuoteModal();
+    }
+
+    function sendShortlistToForm() {
+      if (shortlist.length) {
+        document.getElementById("inline-message").value =
+          "Interested in Rexnord OMEGA Couplings:\n- " + shortlist.join("\n- ") + "\n\nMotor HP / RPM / Shaft Bore:";
+      }
+      closeQuoteModal();
+      document.getElementById("genuine").scrollIntoView({ behavior: "smooth" });
+    }
+
+    document.getElementById("inline-inquiry-form").addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const status = document.getElementById("inline-status");
+      const data = Object.fromEntries(new FormData(e.target).entries());
+      status.classList.remove("hidden");
+      status.className = "text-xs text-center font-medium text-stone-600";
+      status.textContent = "Submitting your Rexnord OMEGA inquiry...";
+      try {
+        const res = await fetch("https://api.jinharsh.com/inquiries", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(data),
+        });
+        status.className = res.ok
+          ? "text-xs text-center font-medium text-emerald-700"
+          : "text-xs text-center font-medium text-amber-700";
+        status.textContent = res.ok
+          ? "Thank you! Our JinHarsh Rexnord coupling team will respond shortly."
+          : "Inquiry logged—please also email enquiry@rexnord.co.in if urgent.";
+      } catch {
+        status.className = "text-xs text-center font-medium text-amber-700";
+        status.textContent = "Thank you! Please email enquiry@rexnord.co.in or call our JinHarsh Rexnord desk.";
+      }
+    });
+
+    renderCatalog();
+  </script>
+</body>
+</html>
