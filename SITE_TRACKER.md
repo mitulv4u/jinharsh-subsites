@@ -2,14 +2,17 @@
 
 **Owners:** Mitul (Strategy & Approvals) | Dhwani (Tech Lead) | Adesh (Complex Sites & Odoo) | Riya & Gayatri (Product Subdomains)
 
-| Target Domain / Subdomain | Product / Purpose | Owner | Status | Firebase Preview URL | Odoo Lead Tag |
-|---|---|---|---|---|---|
-| `www.jinharsh.com` | Main JinHarsh Group Hub + Catalogs | Adesh (Dhwani) | `In Progress` | — | `jinharsh-main` |
-| `omega.rexon.co.in` | Example: Omega Product Range | Riya / Gayatri | `Backlog` | — | `rexon-omega` |
-| `viva.rexon.co.in` | Example: Viva Product Range | Riya / Gayatri | `Backlog` | — | `rexon-viva` |
+| Target Domain / Subdomain | Product / Purpose | Owner | Status | Odoo Lead Tag |
+|---|---|---|---|---|
+| `www.groz.tools` / `groz.in` | GROZ Industrial Tools & Catalogs | Adesh | `Live` (SSL Active) | `groz-tools` |
+| `omega.rexnord.co.in` | Rexnord OMEGA Elastomeric Couplings | Mitul / Adesh | `Live` (SSL Active) | `rexnord-omega` |
+| `indiansales.in` | Indian Sales Portal | Riya & Gayatri | `Ready for Upload` (Folder & SSL Active) | `indiansales` |
+| `general.tools` | General Tools Subsite | Riya & Gayatri | `Ready for Upload` (Folder & SSL Active) | `general-tools` |
+| `www.jinharsh.com` | Main JinHarsh Group Hub + Catalogs | Adesh (Dhwani) | `In Progress` (SSL Renewed) | `jinharsh-main` |
+| `viva.rexnord.co.in` | Rexnord VIVA Couplings | Riya / Gayatri | `Backlog` | `rexnord-viva` |
 
 ### Status Legend
 - `Backlog` — Decided in weekly meeting, waiting for domain/build
+- `Ready for Upload` — Git folder, server permissions, and SSL are ready
 - `In Progress` — Being built with AI on a feature branch
-- `Preview Ready` — Firebase `*.web.app` link ready for Mitul & Dhwani review
 - `Live` — Merged to `main` and auto-deployed to `159.89.94.209`
