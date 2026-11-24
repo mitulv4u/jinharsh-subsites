@@ -30,3 +30,4 @@ jobs:
               rsync -rlvz --delete --no-perms --no-owner --no-group --omit-dir-times --exclude='.user.ini' --exclude='.well-known' -e "ssh -i ~/.ssh/id_deploy" "sites/$site/" "deploy@159.89.94.209:/www/wwwroot/$site/"
             fi
           done
+          python3 -c "import json, os; print(json.dumps(sorted([d for d in os.listdir('sites') if os.path.isdir(os.path.join('sites', d))])))" | ssh -i ~/.ssh/id_deploy deploy@159.89.94.209 "cat > /home/deploy/git-sites.json"
