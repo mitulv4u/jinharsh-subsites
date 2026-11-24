@@ -2,3 +2,15 @@
 AddType text/javascript .mjs
 AddType font/woff2 .woff2
 AddType image/webp .webp
+
+# Speed (24 Nov 2026). Pictures, fonts, flipbook pages and catalogue PDFs rarely change: browsers keep them
+# for a week. Pages, scripts, styles and data change with every update: browsers check them on each visit
+# (a short "not modified" answer when unchanged), so an update shows at once.
+<IfModule mod_headers.c>
+  <FilesMatch "\.(webp|png|jpe?g|svg|woff2|pdf)$">
+    Header set Cache-Control "public, max-age=604800"
+  </FilesMatch>
+  <FilesMatch "\.(html|mjs|js|css|json|xml|txt)$">
+    Header set Cache-Control "no-cache"
+  </FilesMatch>
+</IfModule>
