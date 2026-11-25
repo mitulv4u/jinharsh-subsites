@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>JinHarsh Master Product Catalog | Bearings, Couplings, Lubrication &amp; Industrial Solutions</title>
+  <meta
+    name="description"
+    content="Explore the JinHarsh Industrial Solutions (JIS) Master Product Catalog across 14 divisions and 50+ global OEM brands including Timken, Regal Rexnord, Shell, Dräger, Flexco, Groz, and ABB."
+  />
+  <meta property="og:title" content="JinHarsh Master Product Catalog — catalog.jinharsh.com" />
+  <meta
+    property="og:description"
+    content="Complete industrial catalog: Bearings, Housed Units, Couplings, Motors, Lubricants, Gas Detection, Welding, Conveyor Solutions &amp; Tools."
+  />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://catalog.jinharsh.com" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+    rel="stylesheet"
+  />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header class="site-header">
+    <div class="container header-inner">
+      <a href="#top" class="brand">
+        <span class="brand-mark">JIS</span>
+        <div>
+          <div class="brand-title">JinHarsh Master Catalog</div>
+          <div class="brand-sub">JinHarsh Industrial Solutions Pvt. Ltd.</div>
+        </div>
+      </a>
+
+      <nav class="nav-links" aria-label="Primary Navigation">
+        <a href="#catalog">Product Divisions</a>
+        <a href="#brands">OEM Brands</a>
+        <a href="#offices">Offices</a>
+        <a href="#inquiry">Request Quote</a>
+      </nav>
+
+      <a href="#inquiry" class="btn btn-primary">Request Quote</a>
+    </div>
+  </header>
+
+  <main id="top" class="container main-content">
+    <section class="hero">
+      <span class="hero-eyebrow">Established 1985 · Authorized Pan-India Industrial Distributor</span>
+      <h1>JinHarsh Master Product Catalog</h1>
+      <p class="hero-desc">
+        Browse 14 industrial product divisions and 50+ global OEM principals—from Timken bearings and Regal Rexnord couplings to Shell lubricants, Dräger safety systems, and Flexco conveyor solutions.
+      </p>
+
+      <div class="search-bar-wrap">
+        <input
+          id="catalog-search"
+          type="search"
+          class="search-input"
+          placeholder="Search products, part codes, or brands (e.g. Timken, Omega, Shell, Dräger, Flexco)..."
+          aria-label="Search JinHarsh product catalog"
+        />
+        <a href="#inquiry" class="btn btn-primary">Send RFQ</a>
+      </div>
+
+      <div class="hero-stats">
+        <div>
+          <div class="stat-value">14</div>
+          <div class="stat-label">Product Divisions</div>
+        </div>
+        <div>
+          <div class="stat-value">50+</div>
+          <div class="stat-label">Global OEM Brands</div>
+        </div>
+        <div>
+          <div class="stat-value">39+ Yrs</div>
+          <div class="stat-label">Engineering Heritage</div>
+        </div>
+        <div>
+          <div class="stat-value">9</div>
+          <div class="stat-label">India Offices &amp; Service Points</div>
+        </div>
+      </div>
+    </section>
+
+    <section id="catalog">
+      <div class="section-head section-head-row">
+        <div>
+          <h2>Product Divisions</h2>
+          <p>Filter by division or click any card to pre-fill an inquiry for our engineering sales team.</p>
+        </div>
+      </div>
+
+      <div class="filter-bar" role="tablist" aria-label="Product Division Categories">
+        <button type="button" class="filter-chip active" data-group="All">All (14)</button>
+        <button type="button" class="filter-chip" data-group="Bearings & PT">Bearings &amp; PT</button>
+        <button type="button" class="filter-chip" data-group="Motors & Automation">Motors &amp; Drives</button>
+        <button type="button" class="filter-chip" data-group="Lubrication">Lubrication</button>
+        <button type="button" class="filter-chip" data-group="Safety & Welding">Safety &amp; Welding</button>
+        <button type="button" class="filter-chip" data-group="Conveyors & Tools">Conveyors &amp; Tools</button>
+        <button type="button" class="filter-chip" data-group="Eco & FRP">Eco &amp; FRP</button>
+      </div>
+
+      <div id="active-filter-banner" class="active-filter-banner">
+        <span id="active-filter-text"></span>
+        <button type="button" id="clear-brand-filter" class="btn btn-outline">Clear brand filter</button>
+      </div>
+
+      <div id="catalog-grid" class="catalog-grid"></div>
+
+      <div id="empty-state" class="empty-state">
+        <p>No catalog divisions match your current search or filter.</p>
+        <button type="button" id="reset-filters-btn" class="btn btn-outline">Reset Filters</button>
+      </div>
+    </section>
+
+    <section id="brands" class="brands-panel">
+      <div class="section-head">
+        <h2>Authorized OEM Principals &amp; Brands</h2>
+        <p>Click any brand to filter the catalog divisions carrying it.</p>
+      </div>
+      <div id="brand-pills" class="brand-pills"></div>
+    </section>
+
+    <section id="offices">
+      <div class="section-head">
+        <h2>Pan-India Support &amp; Direct Sales</h2>
+        <p>Technical sales, installation, condition monitoring, and dispatch across India &amp; Southeast Asia.</p>
+      </div>
+
+      <div class="offices-grid">
+        <div class="info-card">
+          <h3>Headquarters &amp; Branches</h3>
+          <p>Offices and service points serving major industrial corridors:</p>
+          <ul>
+            <li>Mumbai (HQ) &amp; Borivali</li>
+            <li>Surat (Jinharsh House) &amp; Hazira</li>
+            <li>Vadodara, Gandhidham, Goa</li>
+            <li>Nagpur, Indore, Raipur, Pen (Raigad)</li>
+          </ul>
+        </div>
+
+        <div class="info-card">
+          <h3>Direct Sales Desk</h3>
+          <p>Reach our regional teams for urgent stock checks and technical sizing:</p>
+          <ul>
+            <li>Rest of India: <strong>+91-22-40900000</strong></li>
+            <li>Gujarat Desk: <strong>+91-8000-104000</strong></li>
+            <li>CRM: <strong>crm@jinharsh.com</strong></li>
+            <li>Exports: <strong>internationalsales@jinharsh.com</strong></li>
+          </ul>
+        </div>
+
+        <div class="info-card">
+          <h3>Engineering Services</h3>
+          <p>Beyond supply aggregation, JIS provides end-to-end plant reliability:</p>
+          <ul>
+            <li>Installation &amp; Commissioning</li>
+            <li>Condition Monitoring &amp; Vibration Analysis</li>
+            <li>Annual Maintenance Contracts (AMC)</li>
+            <li>Centralized Lubrication &amp; Lube Rooms</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section id="inquiry" class="inquiry-section">
+      <h2>Request a Catalog Quote</h2>
+      <p class="inquiry-sub">
+        Your inquiry is routed directly to our JinHarsh Odoo ERP sales team for fast response.
+      </p>
+
+      <form id="odoo-inquiry-form" class="form-grid">
+        <input type="hidden" name="source_domain" value="catalog.jinharsh.com" />
+
+        <div class="form-row-2">
+          <div>
+            <label for="inquiry-name" class="field-label">Your Name *</label>
+            <input id="inquiry-name" required name="name" placeholder="Full Name" class="field-input" />
+          </div>
+          <div>
+            <label for="inquiry-company" class="field-label">Company Name *</label>
+            <input id="inquiry-company" required name="company" placeholder="Organization / Plant" class="field-input" />
+          </div>
+        </div>
+
+        <div class="form-row-2">
+          <div>
+            <label for="inquiry-email" class="field-label">Work Email *</label>
+            <input id="inquiry-email" required type="email" name="email" placeholder="name@company.com" class="field-input" />
+          </div>
+          <div>
+            <label for="inquiry-phone" class="field-label">Phone / WhatsApp *</label>
+            <input id="inquiry-phone" required name="phone" placeholder="+91 98XXXXXXXX" class="field-input" />
+          </div>
+        </div>
+
+        <div>
+          <label for="inquiry-category" class="field-label">Product Division *</label>
+          <select id="inquiry-category" name="product_category" class="field-input" required>
+            <option value="Master Catalog General">All / General Catalog Inquiry</option>
+          </select>
+        </div>
+
+        <div>
+          <label for="inquiry-message" class="field-label">Requirements / Part Numbers *</label>
+          <textarea
+            id="inquiry-message"
+            required
+            name="message"
+            rows="4"
+            placeholder="Share bearing numbers, coupling sizes, lubricant grades, quantities, or request a PDF catalog..."
+            class="field-input"
+          ></textarea>
+        </div>
+
+        <button id="inquiry-submit-btn" type="submit" class="btn btn-primary">
+          Submit Inquiry
+        </button>
+        <p id="form-status" class="form-status"></p>
+      </form>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <div>&copy; 2026 JinHarsh Industrial Solutions Private Limited (JIS). All rights reserved.</div>
+      <div>
+        <a href="https://www.jinharsh.com" target="_blank" rel="noopener">www.jinharsh.com</a>
+        &middot;
+        <a href="mailto:crm@jinharsh.com">crm@jinharsh.com</a>
+      </div>
+    </div>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>
