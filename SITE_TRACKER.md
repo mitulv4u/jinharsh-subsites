@@ -10,6 +10,7 @@
 | `general.tools` | General Tools Subsite | Riya & Gayatri | `Ready for Upload` (Folder & SSL Active) | `general-tools` |
 | `www.jinharsh.com` | Main JinHarsh Group Hub + Catalogs | Adesh (Dhwani) | `In Progress` (SSL Renewed) | `jinharsh-main` |
 | `viva.rexnord.co.in` | Rexnord VIVA Couplings | Riya / Gayatri | `Backlog` | `rexnord-viva` |
+| `catalog.jinharsh.com` | JinHarsh Master Product Catalog (14 Divisions) | Mitul | `In Progress` | `jinharsh-catalog` |
 
 ### Status Legend
 - `Backlog` — Decided in weekly meeting, waiting for domain/build
