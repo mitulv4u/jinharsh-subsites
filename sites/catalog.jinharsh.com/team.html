@@ -1,0 +1,609 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Team &amp; Exhibition Portal — JINHARSH Catalog Hub</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    body { font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; }
+  </style>
+</head>
+<body class="bg-slate-50 text-slate-900 min-h-screen flex flex-col">
+
+  <!-- Header -->
+  <header class="sticky top-0 z-30 bg-white/95 backdrop-blur border-b border-slate-200">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 h-14 flex items-center justify-between gap-3">
+      <div class="flex items-center gap-3">
+        <a href="/" class="flex items-center gap-2.5">
+          <div class="w-8 h-8 rounded-lg bg-slate-900 text-white font-bold flex items-center justify-center text-xs">JH</div>
+          <div>
+            <div class="font-bold text-sm text-slate-900">JINHARSH Team Portal</div>
+            <div class="text-[11px] text-slate-500 hidden sm:block">Exhibition Analytics · Smart Catalog Uploader</div>
+          </div>
+        </a>
+      </div>
+      <div class="flex items-center gap-2">
+        <a href="/" class="text-xs font-medium text-slate-600 hover:text-slate-900 px-3 py-1.5 rounded-lg hover:bg-slate-100 transition">← Back to Catalog Hub</a>
+        <button id="logout-btn" onclick="logout()" class="hidden text-xs font-semibold text-rose-600 hover:bg-rose-50 px-3 py-1.5 rounded-lg transition">Sign Out</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Passcode Login Gate -->
+  <main id="login-gate" class="flex-1 flex items-center justify-center p-4">
+    <div class="bg-white border border-slate-200 rounded-2xl p-6 sm:p-8 max-w-sm w-full shadow-sm space-y-5">
+      <div>
+        <div class="text-xs font-bold uppercase tracking-wider text-indigo-600">JinHarsh Internal</div>
+        <h1 class="text-xl font-bold text-slate-900 mt-1">Team Portal Access</h1>
+        <p class="text-xs text-slate-500 mt-1">Enter your team passcode to view exhibition visitor analytics, post-exhibition revisits, queries, and upload new catalogs.</p>
+      </div>
+      <form id="login-form" class="space-y-3">
+        <input id="passcode-input" type="password" required placeholder="Team Passcode" class="w-full border border-slate-200 rounded-xl px-3.5 py-2.5 text-sm outline-none focus:border-indigo-500" />
+        <button type="submit" class="w-full bg-slate-900 hover:bg-slate-800 text-white text-sm font-semibold py-2.5 rounded-xl transition">Unlock Portal</button>
+        <p id="login-error" class="hidden text-xs text-rose-600 text-center font-medium"></p>
+      </form>
+    </div>
+  </main>
+
+  <!-- Authenticated Dashboard -->
+  <main id="dashboard" class="hidden max-w-7xl w-full mx-auto px-4 sm:px-6 py-6 space-y-6">
+    <!-- Exhibition Status Bar & Tabs -->
+    <div class="bg-white border border-slate-200 rounded-2xl p-4 sm:p-5 flex flex-wrap items-center justify-between gap-4 shadow-2xs">
+      <div>
+        <div class="flex items-center gap-2 flex-wrap">
+          <span id="ex-name" class="font-bold text-base text-slate-900">Exhibition</span>
+          <span id="ex-phase-badge" class="text-[11px] font-bold px-2.5 py-0.5 rounded-full"></span>
+        </div>
+        <div id="ex-dates" class="text-xs text-slate-500 mt-0.5"></div>
+      </div>
+
+      <div class="flex flex-wrap gap-2">
+        <button onclick="switchTab('analytics')" data-tab="analytics" class="tab-btn px-3.5 py-2 rounded-xl text-xs font-semibold bg-slate-900 text-white transition">Visitor Analytics &amp; Queries</button>
+        <button onclick="switchTab('upload')" data-tab="upload" class="tab-btn px-3.5 py-2 rounded-xl text-xs font-semibold bg-slate-100 text-slate-700 hover:bg-slate-200 transition">+ Upload New Catalog</button>
+        <button onclick="switchTab('settings')" data-tab="settings" class="tab-btn px-3.5 py-2 rounded-xl text-xs font-semibold bg-slate-100 text-slate-700 hover:bg-slate-200 transition">Exhibition Settings</button>
+        <button onclick="loadDashboard()" class="px-3 py-2 rounded-xl text-xs font-medium border border-slate-200 hover:bg-slate-50 text-slate-600 transition">Refresh</button>
+      </div>
+    </div>
+
+    <!-- TAB 1: ANALYTICS & QUERIES -->
+    <section id="tab-analytics" class="space-y-6">
+      <!-- KPIs -->
+      <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3">
+        <div class="bg-white border border-slate-200 rounded-2xl p-4">
+          <div class="text-xs text-slate-500 font-medium">Total Visits</div>
+          <div id="kpi-visits" class="text-2xl font-extrabold text-slate-900 mt-1">0</div>
+        </div>
+        <div class="bg-amber-50 border border-amber-200 rounded-2xl p-4">
+          <div class="text-xs text-amber-800 font-semibold">Post-Exhibition Visits</div>
+          <div id="kpi-post" class="text-2xl font-extrabold text-amber-700 mt-1">0</div>
+        </div>
+        <div class="bg-white border border-slate-200 rounded-2xl p-4">
+          <div class="text-xs text-slate-500 font-medium">PDF Downloads</div>
+          <div id="kpi-downloads" class="text-2xl font-extrabold text-indigo-700 mt-1">0</div>
+        </div>
+        <div class="bg-white border border-slate-200 rounded-2xl p-4">
+          <div class="text-xs text-slate-500 font-medium">Direct Queries</div>
+          <div id="kpi-queries" class="text-2xl font-extrabold text-emerald-700 mt-1">0</div>
+        </div>
+        <div class="bg-white border border-slate-200 rounded-2xl p-4">
+          <div class="text-xs text-slate-500 font-medium">Known Email Leads</div>
+          <div id="kpi-emails" class="text-2xl font-extrabold text-slate-900 mt-1">0</div>
+        </div>
+      </div>
+
+      <!-- Top Cities -->
+      <div class="bg-white border border-slate-200 rounded-2xl p-4 flex flex-wrap items-center gap-2">
+        <span class="text-xs font-bold uppercase tracking-wider text-slate-500 mr-2">Top Visitor Locations:</span>
+        <div id="top-cities" class="flex flex-wrap gap-2 text-xs text-slate-600">No location data yet.</div>
+      </div>
+
+      <!-- Visitor Activity Log -->
+      <div class="bg-white border border-slate-200 rounded-2xl overflow-hidden">
+        <div class="p-4 border-b border-slate-100 flex flex-wrap items-center justify-between gap-3">
+          <div>
+            <h2 class="font-bold text-base text-slate-900">Visitor Activity &amp; Post-Exhibition Tracking</h2>
+            <p class="text-xs text-slate-500">Tracks location, timestamp (IST), exhibition phase, email (when captured), downloads, and referrer/QR source.</p>
+          </div>
+          <div class="flex flex-wrap items-center gap-2">
+            <select id="filter-phase" onchange="renderEvents()" class="border border-slate-200 rounded-lg px-2.5 py-1.5 text-xs bg-white">
+              <option value="ALL">All Phases</option>
+              <option value="post_exhibition">Post-Exhibition Only</option>
+              <option value="during_exhibition">During Exhibition</option>
+              <option value="pre_exhibition">Pre-Exhibition</option>
+            </select>
+            <select id="filter-type" onchange="renderEvents()" class="border border-slate-200 rounded-lg px-2.5 py-1.5 text-xs bg-white">
+              <option value="ALL">All Actions</option>
+              <option value="visit">Visits</option>
+              <option value="download">Downloads</option>
+              <option value="view">Catalog Views</option>
+              <option value="query">Queries</option>
+            </select>
+            <input id="filter-search" oninput="renderEvents()" placeholder="Search email, city, brand..." class="border border-slate-200 rounded-lg px-2.5 py-1.5 text-xs w-44" />
+            <button onclick="exportCsv('events')" class="bg-slate-900 text-white text-xs font-semibold px-3 py-1.5 rounded-lg hover:bg-slate-800 transition">Export CSV</button>
+          </div>
+        </div>
+        <div class="overflow-x-auto">
+          <table class="w-full text-left text-xs">
+            <thead class="bg-slate-50 text-slate-500 uppercase text-[11px]">
+              <tr>
+                <th class="px-4 py-3">Time (IST)</th>
+                <th class="px-4 py-3">Phase</th>
+                <th class="px-4 py-3">Action</th>
+                <th class="px-4 py-3">Location</th>
+                <th class="px-4 py-3">Visitor / Email</th>
+                <th class="px-4 py-3">Catalog / Brand</th>
+                <th class="px-4 py-3">Source &amp; Device</th>
+              </tr>
+            </thead>
+            <tbody id="events-tbody" class="divide-y divide-slate-100"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Direct Queries Inbox -->
+      <div class="bg-white border border-slate-200 rounded-2xl overflow-hidden">
+        <div class="p-4 border-b border-slate-100 flex flex-wrap items-center justify-between gap-3">
+          <div>
+            <h2 class="font-bold text-base text-slate-900">Direct Queries &amp; Quote Requests</h2>
+            <p class="text-xs text-slate-500">All queries submitted directly from catalog.jinharsh.com (also forwarded to Odoo ERP).</p>
+          </div>
+          <button onclick="exportCsv('inquiries')" class="bg-slate-900 text-white text-xs font-semibold px-3 py-1.5 rounded-lg hover:bg-slate-800 transition">Export Queries CSV</button>
+        </div>
+        <div class="overflow-x-auto">
+          <table class="w-full text-left text-xs">
+            <thead class="bg-slate-50 text-slate-500 uppercase text-[11px]">
+              <tr>
+                <th class="px-4 py-3">Time (IST)</th>
+                <th class="px-4 py-3">Phase</th>
+                <th class="px-4 py-3">Contact</th>
+                <th class="px-4 py-3">Location</th>
+                <th class="px-4 py-3">Catalog</th>
+                <th class="px-4 py-3">Message</th>
+              </tr>
+            </thead>
+            <tbody id="inquiries-tbody" class="divide-y divide-slate-100"></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB 2: SMART CATALOG UPLOADER -->
+    <section id="tab-upload" class="hidden space-y-6">
+      <div class="grid grid-cols-1 lg:grid-cols-5 gap-6">
+        <!-- Upload Form -->
+        <div class="lg:col-span-3 bg-white border border-slate-200 rounded-2xl p-6 space-y-5">
+          <div>
+            <h2 class="text-lg font-bold text-slate-900">Upload New Product Catalog (PDF)</h2>
+            <p class="text-xs text-slate-500 mt-0.5">Select any PDF — title, brand, category, URL slug, interactive viewer, download button, and QR code are generated automatically.</p>
+          </div>
+
+          <form id="upload-form" class="space-y-4">
+            <label for="pdf-file-input" class="block border-2 border-dashed border-slate-300 hover:border-indigo-400 rounded-2xl p-6 text-center cursor-pointer bg-slate-50/70 transition">
+              <div class="text-sm font-semibold text-slate-800" id="file-drop-label">Click to select a PDF file (up to 128 MB)</div>
+              <div class="text-xs text-slate-500 mt-1">Auto-detects brand, category &amp; clean title from filename</div>
+              <input id="pdf-file-input" type="file" accept="application/pdf,.pdf" required class="hidden" />
+            </label>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <div>
+                <label class="block text-[11px] font-semibold text-slate-600 mb-1">Catalog Title *</label>
+                <input id="up-title" required placeholder="e.g. Rexnord Omega Elastomer Couplings" class="w-full border border-slate-200 rounded-xl px-3 py-2 text-xs outline-none focus:border-indigo-500" />
+              </div>
+              <div>
+                <label class="block text-[11px] font-semibold text-slate-600 mb-1">Brand / Principal *</label>
+                <input id="up-brand" required list="brand-suggestions" placeholder="e.g. Regal Rexnord" class="w-full border border-slate-200 rounded-xl px-3 py-2 text-xs outline-none focus:border-indigo-500" />
+                <datalist id="brand-suggestions">
+                  <option value="Timken"></option>
+                  <option value="Regal Rexnord"></option>
+                  <option value="Timken Lovejoy"></option>
+                  <option value="SKF"></option>
+                  <option value="Dodge"></option>
+                  <option value="ABB & Baldor"></option>
+                  <option value="Shell"></option>
+                  <option value="Lubrilog"></option>
+                  <option value="Groz"></option>
+                  <option value="Dräger"></option>
+                  <option value="Flexco"></option>
+                  <option value="Ador Fontech"></option>
+                  <option value="Pidilite"></option>
+                  <option value="JinHarsh"></option>
+                </datalist>
+              </div>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+              <div>
+                <label class="block text-[11px] font-semibold text-slate-600 mb-1">Category *</label>
+                <select id="up-category" class="w-full border border-slate-200 rounded-xl px-3 py-2 text-xs bg-white outline-none focus:border-indigo-500">
+                  <option value="Bearings & Housed Units">Bearings &amp; Housed Units</option>
+                  <option value="Couplings">Couplings &amp; Power Transmission</option>
+                  <option value="Motors & Drives">Motors &amp; Drives</option>
+                  <option value="Lubrication & Tools">Lubrication &amp; Tools</option>
+                  <option value="Industrial Lubricants">Industrial Lubricants</option>
+                  <option value="Safety & Gas Detection">Safety &amp; Gas Detection</option>
+                  <option value="Conveying Equipment">Conveying Equipment</option>
+                  <option value="Welding & Wear">Welding &amp; Wear</option>
+                  <option value="Adhesives & Coatings">Adhesives &amp; Coatings</option>
+                  <option value="Application Hub">Application Hub</option>
+                </select>
+              </div>
+              <div>
+                <label class="block text-[11px] font-semibold text-slate-600 mb-1">Badge Label</label>
+                <input id="up-badge" value="Exhibition 2026" class="w-full border border-slate-200 rounded-xl px-3 py-2 text-xs outline-none focus:border-indigo-500" />
+              </div>
+              <div>
+                <label class="block text-[11px] font-semibold text-slate-600 mb-1">Uploaded By</label>
+                <input id="up-by" placeholder="Your Name" class="w-full border border-slate-200 rounded-xl px-3 py-2 text-xs outline-none focus:border-indigo-500" />
+              </div>
+            </div>
+
+            <div>
+              <label class="block text-[11px] font-semibold text-slate-600 mb-1">Elaborative Description (shown in catalog viewer)</label>
+              <textarea id="up-desc" rows="3" placeholder="Key product series, applications, industries served, and technical highlights..." class="w-full border border-slate-200 rounded-xl px-3 py-2 text-xs outline-none focus:border-indigo-500"></textarea>
+            </div>
+
+            <button id="up-submit-btn" type="submit" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-semibold py-3 rounded-xl transition">Publish Catalog &amp; Generate QR Code</button>
+            <p id="up-status" class="hidden text-xs text-center font-medium"></p>
+          </form>
+        </div>
+
+        <!-- Instant Result + QR Preview -->
+        <div class="lg:col-span-2 space-y-4">
+          <div id="upload-success-card" class="hidden bg-white border border-emerald-200 rounded-2xl p-5 space-y-3 text-center">
+            <div class="text-xs font-bold uppercase tracking-wider text-emerald-700">Published Live!</div>
+            <div id="new-cat-title" class="font-bold text-sm text-slate-900"></div>
+            <div id="new-cat-qr" class="flex justify-center py-2"></div>
+            <div id="new-cat-url" class="text-[11px] text-slate-500 break-all bg-slate-50 p-2 rounded-lg"></div>
+            <div class="flex gap-2">
+              <a id="new-cat-open" href="#" target="_blank" class="flex-1 bg-slate-900 text-white text-xs font-semibold py-2 rounded-lg">Open Viewer ↗</a>
+              <button onclick="downloadNewQr()" class="flex-1 bg-indigo-600 text-white text-xs font-semibold py-2 rounded-lg">Download QR</button>
+            </div>
+          </div>
+
+          <div class="bg-white border border-slate-200 rounded-2xl p-5 space-y-3">
+            <h3 class="font-bold text-sm text-slate-900">Team-Uploaded Catalogs</h3>
+            <div id="custom-catalogs-list" class="space-y-2 text-xs text-slate-500">No custom catalogs uploaded yet.</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB 3: EXHIBITION SETTINGS -->
+    <section id="tab-settings" class="hidden max-w-xl">
+      <div class="bg-white border border-slate-200 rounded-2xl p-6 space-y-4">
+        <div>
+          <h2 class="text-lg font-bold text-slate-900">Exhibition Window &amp; Passcode Settings</h2>
+          <p class="text-xs text-slate-500 mt-0.5">Visits after the End Date are automatically tagged as <strong>Post-Exhibition</strong> so you can track follow-up interest.</p>
+        </div>
+        <form id="settings-form" class="space-y-3">
+          <div>
+            <label class="block text-[11px] font-semibold text-slate-600 mb-1">Exhibition Name</label>
+            <input id="set-name" required class="w-full border border-slate-200 rounded-xl px-3 py-2 text-xs" />
+          </div>
+          <div class="grid grid-cols-2 gap-3">
+            <div>
+              <label class="block text-[11px] font-semibold text-slate-600 mb-1">Start Date</label>
+              <input id="set-start" type="date" required class="w-full border border-slate-200 rounded-xl px-3 py-2 text-xs" />
+            </div>
+            <div>
+              <label class="block text-[11px] font-semibold text-slate-600 mb-1">End Date</label>
+              <input id="set-end" type="date" required class="w-full border border-slate-200 rounded-xl px-3 py-2 text-xs" />
+            </div>
+          </div>
+          <div>
+            <label class="block text-[11px] font-semibold text-slate-600 mb-1">New Team Passcode (leave blank to keep current)</label>
+            <input id="set-pass" type="password" placeholder="Optional new passcode" class="w-full border border-slate-200 rounded-xl px-3 py-2 text-xs" />
+          </div>
+          <button type="submit" class="bg-slate-900 hover:bg-slate-800 text-white text-xs font-semibold px-5 py-2.5 rounded-xl transition">Save Settings</button>
+          <p id="set-status" class="hidden text-xs font-medium"></p>
+        </form>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    let PASSCODE = sessionStorage.getItem('jh_team_pass') || '';
+    let DATA = null;
+    let LAST_UPLOADED_ID = '';
+
+    const BRAND_RULES = [
+      { match: /timken|srb|trb|borewell/i, brand: 'Timken', cat: 'Bearings & Housed Units' },
+      { match: /lovejoy|qf|quick.?flex/i, brand: 'Timken Lovejoy', cat: 'Couplings' },
+      { match: /rexnord|omega|viva|link.?belt|colour.?coat/i, brand: 'Regal Rexnord', cat: 'Couplings' },
+      { match: /groz|lube|grease/i, brand: 'Groz', cat: 'Lubrication & Tools' },
+      { match: /abb|baldor|motor|drive/i, brand: 'ABB & Baldor', cat: 'Motors & Drives' },
+      { match: /drager|dräger|gas|x-am|safety/i, brand: 'Dräger', cat: 'Safety & Gas Detection' },
+      { match: /flexco|convey|belt/i, brand: 'Flexco', cat: 'Conveying Equipment' },
+      { match: /shell|omala|tellus|gadus/i, brand: 'Shell', cat: 'Industrial Lubricants' },
+      { match: /lubrilog/i, brand: 'Lubrilog', cat: 'Industrial Lubricants' },
+      { match: /ador|weld/i, brand: 'Ador Fontech', cat: 'Welding & Wear' },
+      { match: /pidilite|zorrik|m-seal/i, brand: 'Pidilite', cat: 'Adhesives & Coatings' },
+      { match: /dodge/i, brand: 'Dodge', cat: 'Bearings & Housed Units' },
+    ];
+
+    function esc(s) {
+      return String(s ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+    }
+
+    function phaseBadge(p) {
+      if (p === 'post_exhibition') return '<span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-100 text-amber-800">Post-Exhibition</span>';
+      if (p === 'during_exhibition') return '<span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-100 text-emerald-800">During Exhibition</span>';
+      return '<span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-slate-100 text-slate-600">Pre-Exhibition</span>';
+    }
+
+    document.getElementById('login-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const pass = document.getElementById('passcode-input').value;
+      const err = document.getElementById('login-error');
+      err.classList.add('hidden');
+      const res = await fetch('/hub/api.php?action=auth', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ passcode: pass }),
+      });
+      if (res.ok) {
+        PASSCODE = pass;
+        sessionStorage.setItem('jh_team_pass', pass);
+        showDashboard();
+      } else {
+        err.textContent = 'Invalid passcode. Please try again.';
+        err.classList.remove('hidden');
+      }
+    });
+
+    function logout() {
+      sessionStorage.removeItem('jh_team_pass');
+      PASSCODE = '';
+      location.reload();
+    }
+
+    async function showDashboard() {
+      document.getElementById('login-gate').classList.add('hidden');
+      document.getElementById('dashboard').classList.remove('hidden');
+      document.getElementById('logout-btn').classList.remove('hidden');
+      await loadDashboard();
+    }
+
+    async function loadDashboard() {
+      const res = await fetch('/hub/api.php?action=analytics', {
+        headers: { 'X-Team-Passcode': PASSCODE },
+      });
+      if (res.status === 401) return logout();
+      DATA = await res.json();
+
+      document.getElementById('ex-name').textContent = DATA.config.exhibition_name;
+      document.getElementById('ex-dates').textContent = `Exhibition Window: ${DATA.config.start_date} to ${DATA.config.end_date}`;
+      document.getElementById('ex-phase-badge').outerHTML = `<span id="ex-phase-badge">${phaseBadge(DATA.current_phase)}</span>`;
+
+      document.getElementById('kpi-visits').textContent = DATA.summary.total_visits;
+      document.getElementById('kpi-post').textContent = DATA.summary.post_exhibition_visits;
+      document.getElementById('kpi-downloads').textContent = DATA.summary.total_downloads;
+      document.getElementById('kpi-queries').textContent = DATA.summary.total_inquiries;
+      document.getElementById('kpi-emails').textContent = DATA.summary.known_email_visitors;
+
+      const cities = Object.entries(DATA.summary.top_cities || {});
+      document.getElementById('top-cities').innerHTML = cities.length
+        ? cities.map(([city, cnt]) => `<span class="px-2.5 py-1 rounded-lg bg-slate-100 text-slate-700 font-medium">${esc(city)} (${cnt})</span>`).join('')
+        : '<span>No city data recorded yet.</span>';
+
+      document.getElementById('set-name').value = DATA.config.exhibition_name;
+      document.getElementById('set-start').value = DATA.config.start_date;
+      document.getElementById('set-end').value = DATA.config.end_date;
+
+      renderEvents();
+      renderInquiries();
+      renderCustomCatalogs();
+    }
+
+    function renderEvents() {
+      if (!DATA) return;
+      const phase = document.getElementById('filter-phase').value;
+      const type = document.getElementById('filter-type').value;
+      const q = document.getElementById('filter-search').value.trim().toLowerCase();
+
+      const rows = (DATA.events || []).filter((ev) => {
+        if (phase !== 'ALL' && ev.phase !== phase) return false;
+        if (type !== 'ALL' && ev.type !== type) return false;
+        if (q && !JSON.stringify(ev).toLowerCase().includes(q)) return false;
+        return true;
+      });
+
+      document.getElementById('events-tbody').innerHTML = rows.length
+        ? rows.slice(0, 200).map((ev) => `
+          <tr class="hover:bg-slate-50/70">
+            <td class="px-4 py-2.5 whitespace-nowrap text-slate-600">${esc(ev.timestamp_ist)}</td>
+            <td class="px-4 py-2.5 whitespace-nowrap">${phaseBadge(ev.phase)}</td>
+            <td class="px-4 py-2.5 whitespace-nowrap font-semibold uppercase text-[11px]">${esc(ev.type)}</td>
+            <td class="px-4 py-2.5">${esc([ev.city, ev.region, ev.country].filter(Boolean).join(', ') || 'Unknown')}</td>
+            <td class="px-4 py-2.5">${ev.email ? `<div class="font-semibold text-indigo-700">${esc(ev.email)}</div>` : '<span class="text-slate-400">Anonymous</span>'}${ev.company ? `<div class="text-[11px] text-slate-500">${esc(ev.company)}</div>` : ''}</td>
+            <td class="px-4 py-2.5">${ev.catalog_title ? `<div class="font-medium text-slate-800">${esc(ev.catalog_title)}</div>` : '<span class="text-slate-400">Main Hub</span>'}${ev.brand ? `<div class="text-[11px] text-slate-500">${esc(ev.brand)}</div>` : ''}</td>
+            <td class="px-4 py-2.5 text-slate-500"><div>${esc(ev.source || 'direct')} · ${esc(ev.device || '')}</div>${ev.referrer ? `<div class="text-[10px] truncate max-w-[180px]">${esc(ev.referrer)}</div>` : ''}</td>
+          </tr>
+        `).join('')
+        : '<tr><td colspan="7" class="px-4 py-8 text-center text-slate-400">No matching visitor events yet.</td></tr>';
+    }
+
+    function renderInquiries() {
+      if (!DATA) return;
+      const rows = DATA.inquiries || [];
+      document.getElementById('inquiries-tbody').innerHTML = rows.length
+        ? rows.map((r) => `
+          <tr class="hover:bg-slate-50/70">
+            <td class="px-4 py-2.5 whitespace-nowrap text-slate-600">${esc(r.timestamp_ist)}</td>
+            <td class="px-4 py-2.5 whitespace-nowrap">${phaseBadge(r.phase)}</td>
+            <td class="px-4 py-2.5"><div class="font-semibold text-slate-900">${esc(r.name)}</div><div class="text-indigo-700">${esc(r.email)}</div><div class="text-slate-500">${esc(r.phone)} ${r.company ? '· ' + esc(r.company) : ''}</div></td>
+            <td class="px-4 py-2.5">${esc([r.city, r.region, r.country].filter(Boolean).join(', '))}</td>
+            <td class="px-4 py-2.5">${esc(r.catalog_title || 'General')}</td>
+            <td class="px-4 py-2.5 max-w-xs text-slate-700">${esc(r.message)}</td>
+          </tr>
+        `).join('')
+        : '<tr><td colspan="6" class="px-4 py-8 text-center text-slate-400">No direct queries submitted yet.</td></tr>';
+    }
+
+    function renderCustomCatalogs() {
+      const list = DATA.custom_catalogs || [];
+      const el = document.getElementById('custom-catalogs-list');
+      el.innerHTML = list.length
+        ? list.map((c) => `
+          <div class="p-3 rounded-xl border border-slate-200 flex items-center justify-between gap-3">
+            <div class="min-w-0">
+              <div class="font-semibold text-slate-900 truncate">${esc(c.title)}</div>
+              <div class="text-[11px] text-slate-500">${esc(c.brand)} · ${esc(c.category)} · ${esc(c.pages)}</div>
+            </div>
+            <div class="flex items-center gap-2 shrink-0">
+              <a href="/?cat=${encodeURIComponent(c.id)}" target="_blank" class="text-indigo-600 font-semibold hover:underline">Open</a>
+              <button onclick="deleteCatalog('${esc(c.id)}')" class="text-rose-600 hover:underline">Delete</button>
+            </div>
+          </div>
+        `).join('')
+        : '<p class="text-xs text-slate-400">No team-uploaded catalogs yet.</p>';
+    }
+
+    async function deleteCatalog(id) {
+      if (!confirm('Remove this uploaded catalog?')) return;
+      await fetch('/hub/api.php?action=delete_catalog', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'X-Team-Passcode': PASSCODE },
+        body: JSON.stringify({ id }),
+      });
+      loadDashboard();
+    }
+
+    function switchTab(tab) {
+      ['analytics', 'upload', 'settings'].forEach((t) => {
+        document.getElementById(`tab-${t}`).classList.toggle('hidden', t !== tab);
+      });
+      document.querySelectorAll('.tab-btn').forEach((b) => {
+        const active = b.dataset.tab === tab;
+        b.className = `tab-btn px-3.5 py-2 rounded-xl text-xs font-semibold transition ${active ? 'bg-slate-900 text-white' : 'bg-slate-100 text-slate-700 hover:bg-slate-200'}`;
+      });
+    }
+
+    function exportCsv(type) {
+      window.location.href = `/hub/api.php?action=export_csv&type=${encodeURIComponent(type)}&passcode=${encodeURIComponent(PASSCODE)}`;
+    }
+
+    // Smart filename auto-detection
+    document.getElementById('pdf-file-input').addEventListener('change', (e) => {
+      const file = e.target.files[0];
+      if (!file) return;
+      document.getElementById('file-drop-label').textContent = `Selected: ${file.name} (${(file.size / 1048576).toFixed(1)} MB)`;
+      const rawName = file.name.replace(/\.pdf$/i, '').replace(/[_-]+/g, ' ').replace(/\s+/g, ' ').trim();
+      const cleanTitle = rawName.replace(/\b\w/g, (m) => m.toUpperCase());
+
+      if (!document.getElementById('up-title').value) {
+        document.getElementById('up-title').value = cleanTitle;
+      }
+      const matched = BRAND_RULES.find((r) => r.match.test(file.name));
+      if (matched) {
+        document.getElementById('up-brand').value = matched.brand;
+        document.getElementById('up-category').value = matched.cat;
+      }
+      if (!document.getElementById('up-desc').value) {
+        const brandVal = document.getElementById('up-brand').value || 'JinHarsh';
+        document.getElementById('up-desc').value = `Official ${brandVal} catalog (${cleanTitle}) with technical specifications, selection charts, and direct inquiry support from JinHarsh Industrial Solutions.`;
+      }
+    });
+
+    document.getElementById('upload-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const btn = document.getElementById('up-submit-btn');
+      const status = document.getElementById('up-status');
+      const file = document.getElementById('pdf-file-input').files[0];
+      if (!file) return;
+
+      const fd = new FormData();
+      fd.append('pdf', file);
+      fd.append('title', document.getElementById('up-title').value.trim());
+      fd.append('brand', document.getElementById('up-brand').value.trim());
+      fd.append('category', document.getElementById('up-category').value);
+      fd.append('badge', document.getElementById('up-badge').value.trim());
+      fd.append('uploaded_by', document.getElementById('up-by').value.trim());
+      fd.append('description', document.getElementById('up-desc').value.trim());
+
+      btn.disabled = true;
+      status.className = 'text-xs text-center font-medium text-slate-600';
+      status.textContent = 'Uploading PDF and generating viewer + QR code...';
+
+      try {
+        const res = await fetch('/hub/api.php?action=upload_catalog', {
+          method: 'POST',
+          headers: { 'X-Team-Passcode': PASSCODE },
+          body: fd,
+        });
+        const json = await res.json();
+        if (res.ok && json.ok) {
+          const cat = json.catalog;
+          const url = `${location.origin}/?cat=${encodeURIComponent(cat.id)}`;
+          LAST_UPLOADED_ID = cat.id;
+
+          document.getElementById('new-cat-title').textContent = `${cat.title} (${cat.brand})`;
+          document.getElementById('new-cat-url').textContent = url;
+          document.getElementById('new-cat-open').href = url;
+          const qrBox = document.getElementById('new-cat-qr');
+          qrBox.innerHTML = '';
+          new QRCode(qrBox, { text: url, width: 170, height: 170, colorDark: '#0f172a', colorLight: '#ffffff', correctLevel: QRCode.CorrectLevel.H });
+          document.getElementById('upload-success-card').classList.remove('hidden');
+
+          status.className = 'text-xs text-center font-semibold text-emerald-700';
+          status.textContent = 'Published live! Visitors can now view, download, and scan its QR code.';
+          e.target.reset();
+          document.getElementById('file-drop-label').textContent = 'Click to select a PDF file (up to 128 MB)';
+          loadDashboard();
+        } else {
+          status.className = 'text-xs text-center font-semibold text-rose-700';
+          status.textContent = json.error || 'Upload failed.';
+        }
+      } catch {
+        status.className = 'text-xs text-center font-semibold text-rose-700';
+        status.textContent = 'Network error while uploading.';
+      } finally {
+        btn.disabled = false;
+      }
+    });
+
+    function downloadNewQr() {
+      const el = document.querySelector('#new-cat-qr img') || document.querySelector('#new-cat-qr canvas');
+      if (!el) return;
+      const a = document.createElement('a');
+      a.href = el.tagName === 'CANVAS' ? el.toDataURL('image/png') : el.src;
+      a.download = `qr-${LAST_UPLOADED_ID || 'catalog'}.png`;
+      a.click();
+    }
+
+    document.getElementById('settings-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const status = document.getElementById('set-status');
+      const newPass = document.getElementById('set-pass').value.trim();
+      const res = await fetch('/hub/api.php?action=save_config', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'X-Team-Passcode': PASSCODE },
+        body: JSON.stringify({
+          exhibition_name: document.getElementById('set-name').value.trim(),
+          start_date: document.getElementById('set-start').value,
+          end_date: document.getElementById('set-end').value,
+          new_passcode: newPass,
+        }),
+      });
+      if (res.ok) {
+        if (newPass) {
+          PASSCODE = newPass;
+          sessionStorage.setItem('jh_team_pass', newPass);
+        }
+        status.className = 'text-xs font-semibold text-emerald-700';
+        status.textContent = 'Exhibition settings saved!';
+        document.getElementById('set-pass').value = '';
+        loadDashboard();
+      } else {
+        status.className = 'text-xs font-semibold text-rose-700';
+        status.textContent = 'Could not save settings.';
+      }
+    });
+
+    if (PASSCODE) showDashboard();
+  </script>
+</body>
+</html>

@@ -32,10 +32,16 @@
       </div>
 
       <div class="flex items-center gap-2 shrink-0">
-        <button onclick="openQrStudio()" id="qr-studio-btn" class="inline-flex items-center gap-1.5 text-xs font-semibold bg-indigo-50 text-indigo-700 hover:bg-indigo-100 border border-indigo-200/70 px-3 py-1.5 rounded-lg transition">
+        <button onclick="openQueryModal()" id="header-query-btn" class="inline-flex items-center gap-1.5 text-xs font-semibold bg-amber-500 hover:bg-amber-600 text-white px-3 py-1.5 rounded-lg transition">
+          <span>Send Query</span>
+        </button>
+        <button onclick="openQrStudio()" id="qr-studio-btn" class="hidden sm:inline-flex items-center gap-1.5 text-xs font-semibold bg-indigo-50 text-indigo-700 hover:bg-indigo-100 border border-indigo-200/70 px-3 py-1.5 rounded-lg transition">
           <span>QR Studio</span>
         </button>
-        <a href="https://catalog.jinharsh.co.in/index.php/Product_Range" target="_blank" class="hidden md:inline-flex items-center text-xs font-medium text-slate-600 hover:text-slate-900 px-3 py-1.5 rounded-lg hover:bg-slate-100 transition">
+        <a href="/hub/team.html" class="hidden md:inline-flex items-center text-xs font-medium text-slate-600 hover:text-slate-900 px-3 py-1.5 rounded-lg hover:bg-slate-100 transition">
+          Team Portal
+        </a>
+        <a href="https://catalog.jinharsh.co.in/index.php/Product_Range" target="_blank" class="hidden xl:inline-flex items-center text-xs font-medium text-slate-600 hover:text-slate-900 px-3 py-1.5 rounded-lg hover:bg-slate-100 transition">
           Technical Wiki ↗
         </a>
         <a href="https://www.jinharsh.com" target="_blank" class="text-xs font-semibold bg-slate-900 hover:bg-slate-800 text-white px-3.5 py-1.5 rounded-lg transition">
@@ -63,8 +69,8 @@
 
       <nav id="catalog-menu" class="flex-1 overflow-y-auto p-3 space-y-1.5"></nav>
 
-      <div class="p-3 border-t border-slate-100 bg-slate-50/70 text-[11px] text-slate-500 flex items-center justify-between">
-        <span>Need help selecting?</span>
+      <div class="p-3 border-t border-slate-100 bg-slate-50/70 text-[11px] text-slate-500 flex items-center justify-between gap-2">
+        <button onclick="openQueryModal()" class="font-semibold text-indigo-700 hover:underline">Send Inquiry / RFQ</button>
         <a href="https://wa.me/912240900000" target="_blank" class="font-semibold text-emerald-700 hover:underline">WhatsApp Sales ↗</a>
       </div>
     </aside>
@@ -84,15 +90,18 @@
         </div>
 
         <div class="flex flex-wrap items-center gap-2 shrink-0">
+          <button onclick="openQueryModal()" class="text-xs font-semibold bg-amber-50 text-amber-800 border border-amber-200 hover:bg-amber-100 px-3 py-2 rounded-lg transition">
+            Ask / Request Quote
+          </button>
           <button onclick="copyDirectLink()" id="copy-link-btn" class="text-xs font-medium bg-white border border-slate-200 hover:bg-slate-50 text-slate-700 px-3 py-2 rounded-lg transition">
             Copy QR Link
           </button>
           <button onclick="showSingleQr()" class="text-xs font-medium bg-white border border-slate-200 hover:bg-slate-50 text-slate-700 px-3 py-2 rounded-lg transition">
             Show QR
           </button>
-          <a id="download-pdf-btn" href="#" download target="_blank" class="inline-flex items-center gap-1.5 text-xs font-semibold bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-lg transition shadow-xs">
+          <button onclick="handleDownloadClick()" id="download-pdf-btn" class="inline-flex items-center gap-1.5 text-xs font-semibold bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-lg transition shadow-xs">
             Download PDF ↓
-          </a>
+          </button>
         </div>
       </div>
 
@@ -103,7 +112,7 @@
             <span id="viewer-mode-label">Interactive PDF Preview</span>
             <div class="flex items-center gap-3">
               <button onclick="toggleViewerMode()" id="viewer-mode-btn" class="text-indigo-600 hover:underline font-medium">Switch to Embedded Google Viewer</button>
-              <a id="open-raw-pdf" href="#" target="_blank" class="text-slate-600 hover:text-slate-900 font-medium">Open Fullscreen ↗</a>
+              <a id="open-raw-pdf" href="#" target="_blank" onclick="trackEvent('download', activeCat)" class="text-slate-600 hover:text-slate-900 font-medium">Open Fullscreen ↗</a>
             </div>
           </div>
           <iframe id="pdf-iframe" src="about:blank" class="w-full flex-1 min-h-[62vh] bg-slate-100" title="Catalog PDF Viewer"></iframe>
@@ -117,7 +126,10 @@
             <h2 class="text-lg font-bold text-slate-900">QR Code Studio — Exhibition Posters &amp; Business Cards</h2>
             <p class="text-xs text-slate-500 mt-0.5">Download high-resolution QR codes for the main hub or any individual catalog PDF. Scanning opens the interactive PDF directly with the full catalog menu alongside.</p>
           </div>
-          <button onclick="closeQrStudio()" class="text-xs font-semibold bg-slate-900 text-white px-4 py-2 rounded-lg hover:bg-slate-800 transition">← Back to PDF Viewer</button>
+          <div class="flex items-center gap-2">
+            <a href="/hub/team.html" class="text-xs font-semibold bg-indigo-50 text-indigo-700 border border-indigo-200 px-3.5 py-2 rounded-lg hover:bg-indigo-100 transition">+ Upload New Catalog</a>
+            <button onclick="closeQrStudio()" class="text-xs font-semibold bg-slate-900 text-white px-4 py-2 rounded-lg hover:bg-slate-800 transition">← Back to PDF Viewer</button>
+          </div>
         </div>
         <div id="qr-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4"></div>
       </section>
@@ -138,6 +150,53 @@
     </div>
   </div>
 
+  <!-- Optional Email Capture on PDF Download -->
+  <div id="download-email-modal" class="hidden fixed inset-0 z-50 bg-slate-900/50 flex items-center justify-center p-4" onclick="if(event.target===this)this.classList.add('hidden')">
+    <div class="bg-white rounded-2xl p-6 max-w-md w-full space-y-4 shadow-xl">
+      <div>
+        <div class="text-xs font-bold uppercase tracking-wider text-indigo-600">Instant Catalog Download</div>
+        <h3 id="dl-modal-title" class="font-bold text-base text-slate-900 mt-1"></h3>
+        <p class="text-xs text-slate-500 mt-1">Optionally share your email to receive updated pricing &amp; technical sheets from JinHarsh.</p>
+      </div>
+      <form id="dl-email-form" class="space-y-3">
+        <input id="dl-name" type="text" placeholder="Your Name (optional)" class="w-full border border-slate-200 rounded-lg px-3 py-2 text-xs outline-none focus:border-indigo-500" />
+        <input id="dl-email" type="email" placeholder="Work Email (optional)" class="w-full border border-slate-200 rounded-lg px-3 py-2 text-xs outline-none focus:border-indigo-500" />
+        <div class="flex flex-col sm:flex-row gap-2 pt-1">
+          <button type="submit" class="flex-1 bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-semibold py-2.5 px-4 rounded-lg transition">Save &amp; Download PDF ↓</button>
+          <button type="button" onclick="triggerActualDownload()" class="flex-1 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-medium py-2.5 px-4 rounded-lg transition">Skip &amp; Download</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Direct Query / RFQ Modal -->
+  <div id="query-modal" class="hidden fixed inset-0 z-50 bg-slate-900/50 flex items-center justify-center p-4" onclick="if(event.target===this)closeQueryModal()">
+    <div class="bg-white rounded-2xl p-6 max-w-lg w-full space-y-4 shadow-xl">
+      <div class="flex items-start justify-between gap-3">
+        <div>
+          <div class="text-xs font-bold uppercase tracking-wider text-amber-600">Direct Inquiry · JinHarsh Sales</div>
+          <h3 class="font-bold text-lg text-slate-900 mt-0.5">Send a Product Query</h3>
+          <p id="query-cat-label" class="text-xs text-slate-500 mt-0.5"></p>
+        </div>
+        <button onclick="closeQueryModal()" class="text-xs text-slate-400 hover:text-slate-700 px-2 py-1">✕</button>
+      </div>
+
+      <form id="query-form" class="space-y-3">
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <input id="q-name" required placeholder="Your Name *" class="border border-slate-200 rounded-lg px-3 py-2 text-xs outline-none focus:border-indigo-500" />
+          <input id="q-company" placeholder="Company / Plant Name" class="border border-slate-200 rounded-lg px-3 py-2 text-xs outline-none focus:border-indigo-500" />
+        </div>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <input id="q-email" required type="email" placeholder="Work Email *" class="border border-slate-200 rounded-lg px-3 py-2 text-xs outline-none focus:border-indigo-500" />
+          <input id="q-phone" required placeholder="Phone / WhatsApp *" class="border border-slate-200 rounded-lg px-3 py-2 text-xs outline-none focus:border-indigo-500" />
+        </div>
+        <textarea id="q-message" required rows="3" placeholder="Part numbers, application, quantity, or exhibition follow-up request..." class="w-full border border-slate-200 rounded-lg px-3 py-2 text-xs outline-none focus:border-indigo-500"></textarea>
+        <button id="q-submit-btn" type="submit" class="w-full bg-slate-900 hover:bg-slate-800 text-white text-xs font-semibold py-2.5 rounded-lg transition">Submit Query to JinHarsh Team</button>
+        <p id="q-status" class="hidden text-xs text-center font-medium"></p>
+      </form>
+    </div>
+  </div>
+
   <script>
     let CATALOGS = [];
     let activeBrand = 'ALL';
@@ -146,6 +205,51 @@
 
     function esc(s) {
       return String(s ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+    }
+
+    function getVisitor() {
+      try {
+        return JSON.parse(localStorage.getItem('jh_visitor') || '{}');
+      } catch {
+        return {};
+      }
+    }
+
+    function saveVisitor(info) {
+      const merged = { ...getVisitor(), ...info };
+      try {
+        localStorage.setItem('jh_visitor', JSON.stringify(merged));
+      } catch {}
+    }
+
+    function getVisitSource() {
+      const p = new URLSearchParams(location.search);
+      return p.get('utm_source') || p.get('src') || (p.get('cat') ? 'qr-direct' : 'direct');
+    }
+
+    function trackEvent(type, catObj) {
+      const visitor = getVisitor();
+      const payload = {
+        type,
+        catalog_id: catObj ? catObj.id : '',
+        catalog_title: catObj ? catObj.title : '',
+        brand: catObj ? catObj.brand : '',
+        email: visitor.email || '',
+        name: visitor.name || '',
+        company: visitor.company || '',
+        source: getVisitSource(),
+        referrer: document.referrer || '',
+        page_url: location.href,
+        device: /Mobi|Android|iPhone|iPad/i.test(navigator.userAgent) ? 'Mobile' : 'Desktop',
+      };
+      try {
+        fetch('/hub/api.php?action=track', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload),
+          keepalive: true,
+        }).catch(() => {});
+      } catch {}
     }
 
     function toggleSidebar(force) {
@@ -157,7 +261,11 @@
     }
 
     async function init() {
-      CATALOGS = await fetch('/hub/catalogs.json').then((r) => r.json());
+      try {
+        CATALOGS = await fetch('/hub/api.php?action=catalogs').then((r) => r.json());
+      } catch {
+        CATALOGS = await fetch('/hub/catalogs.json').then((r) => r.json());
+      }
       renderBrandPills();
       renderMenu();
 
@@ -166,6 +274,8 @@
       const found = CATALOGS.find((c) => c.id === catId) || CATALOGS[0];
       if (found) selectCatalog(found.id, false);
       if (params.get('qr') === '1') openQrStudio();
+
+      trackEvent('visit', found || null);
     }
 
     function renderBrandPills() {
@@ -217,7 +327,6 @@
       document.getElementById('active-badge').textContent = activeCat.pages || '';
       document.getElementById('active-title').textContent = activeCat.title;
       document.getElementById('active-desc').textContent = activeCat.description;
-      document.getElementById('download-pdf-btn').href = activeCat.pdfUrl;
       document.getElementById('open-raw-pdf').href = activeCat.pdfUrl;
       document.title = `${activeCat.title} — JINHARSH Catalog Hub`;
 
@@ -226,6 +335,7 @@
         url.searchParams.set('cat', activeCat.id);
         url.searchParams.delete('qr');
         history.replaceState({}, '', url.toString());
+        trackEvent('view', activeCat);
       }
 
       loadPdfFrame();
@@ -251,6 +361,105 @@
       useGoogleViewer = !useGoogleViewer;
       loadPdfFrame();
     }
+
+    function handleDownloadClick() {
+      if (!activeCat) return;
+      const v = getVisitor();
+      if (v.email) {
+        triggerActualDownload();
+        return;
+      }
+      document.getElementById('dl-modal-title').textContent = activeCat.title;
+      document.getElementById('download-email-modal').classList.remove('hidden');
+    }
+
+    function triggerActualDownload() {
+      document.getElementById('download-email-modal').classList.add('hidden');
+      if (!activeCat) return;
+      trackEvent('download', activeCat);
+      const a = document.createElement('a');
+      a.href = activeCat.pdfUrl;
+      a.download = `${activeCat.id}.pdf`;
+      a.target = '_blank';
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+    }
+
+    document.getElementById('dl-email-form').addEventListener('submit', (e) => {
+      e.preventDefault();
+      const name = document.getElementById('dl-name').value.trim();
+      const email = document.getElementById('dl-email').value.trim();
+      if (email || name) saveVisitor({ name, email });
+      triggerActualDownload();
+    });
+
+    function openQueryModal() {
+      const v = getVisitor();
+      if (v.name) document.getElementById('q-name').value = v.name;
+      if (v.email) document.getElementById('q-email').value = v.email;
+      if (v.company) document.getElementById('q-company').value = v.company;
+      if (v.phone) document.getElementById('q-phone').value = v.phone;
+      document.getElementById('query-cat-label').textContent = activeCat
+        ? `Catalog: ${activeCat.title} (${activeCat.brand})`
+        : 'General JinHarsh Catalog Inquiry';
+      document.getElementById('q-status').classList.add('hidden');
+      document.getElementById('query-modal').classList.remove('hidden');
+    }
+
+    function closeQueryModal() {
+      document.getElementById('query-modal').classList.add('hidden');
+    }
+
+    document.getElementById('query-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const btn = document.getElementById('q-submit-btn');
+      const status = document.getElementById('q-status');
+      const name = document.getElementById('q-name').value.trim();
+      const company = document.getElementById('q-company').value.trim();
+      const email = document.getElementById('q-email').value.trim();
+      const phone = document.getElementById('q-phone').value.trim();
+      const message = document.getElementById('q-message').value.trim();
+
+      saveVisitor({ name, company, email, phone });
+
+      btn.disabled = true;
+      status.className = 'text-xs text-center font-medium text-slate-600';
+      status.textContent = 'Sending your query...';
+
+      try {
+        const res = await fetch('/hub/api.php?action=inquiry', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            name,
+            company,
+            email,
+            phone,
+            message,
+            catalog_id: activeCat ? activeCat.id : '',
+            catalog_title: activeCat ? activeCat.title : '',
+            brand: activeCat ? activeCat.brand : '',
+            source: getVisitSource(),
+            device: /Mobi|Android|iPhone|iPad/i.test(navigator.userAgent) ? 'Mobile' : 'Desktop',
+          }),
+        });
+        if (res.ok) {
+          status.className = 'text-xs text-center font-semibold text-emerald-700';
+          status.textContent = 'Thank you! Your query has been sent to our JinHarsh team.';
+          document.getElementById('q-message').value = '';
+          setTimeout(closeQueryModal, 1800);
+        } else {
+          status.className = 'text-xs text-center font-semibold text-rose-700';
+          status.textContent = 'Could not submit right now. Please WhatsApp +91-22-40900000.';
+        }
+      } catch {
+        status.className = 'text-xs text-center font-semibold text-rose-700';
+        status.textContent = 'Network error. Please WhatsApp +91-22-40900000.';
+      } finally {
+        btn.disabled = false;
+      }
+    });
 
     function getDirectUrl(id) {
       return id ? `${location.origin}/?cat=${encodeURIComponent(id)}` : `${location.origin}/`;
