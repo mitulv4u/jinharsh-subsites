@@ -37,6 +37,15 @@ jobs:
               if [ "$site" = "catalog.jinharsh.com" ]; then
                 echo "Deploying $site -> /www/wwwroot/$site/hub"
                 rsync -rlvz --delete --no-perms --no-owner --no-group --omit-dir-times --exclude='.user.ini' --exclude='.well-known' --exclude='pdfs/' --exclude='data/' -e "ssh -i ~/.ssh/id_deploy" "sites/$site/" "deploy@159.89.94.209:/www/wwwroot/$site/hub/"
+              elif [ "$site" = "rolltech.in" ]; then
+                echo "Deploying $site -> /www/wwwroot/$site"
+                rsync -rlvz --delete --no-perms --no-owner --no-group --omit-dir-times --exclude='.user.ini' --exclude='.well-known' --exclude='Groz_JCB/' --exclude='Catalogs/' --exclude='*.psd' -e "ssh -i ~/.ssh/id_deploy" "sites/$site/" "deploy@159.89.94.209:/www/wwwroot/$site/"
+              elif [ "$site" = "rexnord.co.in" ]; then
+                echo "Deploying $site -> /www/wwwroot/$site"
+                rsync -rlvz --delete --no-perms --no-owner --no-group --omit-dir-times --exclude='.user.ini' --exclude='.well-known' --exclude='.git/' --exclude='*Catalogs*' --exclude='*Flyers*' --exclude='*flyers*' --exclude='Industrial Chains & Conveying components/' -e "ssh -i ~/.ssh/id_deploy" "sites/$site/" "deploy@159.89.94.209:/www/wwwroot/$site/"
+              elif [ "$site" = "jinharsh.com" ]; then
+                echo "Deploying $site -> /www/wwwroot/$site (overlay, no --delete)"
+                rsync -rlvz --no-perms --no-owner --no-group --omit-dir-times --exclude='.user.ini' --exclude='.well-known' --exclude='wp-config.php' --exclude='.htaccess' --exclude='README.md' -e "ssh -i ~/.ssh/id_deploy" "sites/$site/" "deploy@159.89.94.209:/www/wwwroot/$site/"
               else
                 echo "Deploying $site -> /www/wwwroot/$site"
                 rsync -rlvz --delete --no-perms --no-owner --no-group --omit-dir-times --exclude='.user.ini' --exclude='.well-known' -e "ssh -i ~/.ssh/id_deploy" "sites/$site/" "deploy@159.89.94.209:/www/wwwroot/$site/"

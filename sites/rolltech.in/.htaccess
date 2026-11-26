@@ -1,0 +1,43 @@
+# Rolltech.in Apache Config - Block WordPress, Route to Custom PHP
+
+# Block ALL WordPress admin/system endpoints - prevents CPU-killing PHP workers
+<FilesMatch "^wp-(login|cron|mail|signup|activate|trackback|comments-post|links-opml|blog-header|load|settings)\.php$">
+    Require all denied
+</FilesMatch>
+
+# Block xmlrpc (DDoS/brute force vector)
+<Files "xmlrpc.php">
+    Require all denied
+</Files>
+
+# Block wp-admin directory entirely
+RedirectMatch 403 ^/wp-admin/.*$
+
+# Block wp-json REST API (not needed for custom PHP site)
+RedirectMatch 403 ^/wp-json/.*$
+
+# Prevent direct access to wp-config
+<Files "wp-config.php">
+    Require all denied
+</Files>
+
+# Route index.php through our custom frontend
+DirectoryIndex index.php
+
+# Standard PHP routing
+Options -Indexes
+
+# Compression for faster load
+<IfModule mod_deflate.c>
+    AddOutputFilterByType DEFLATE text/html text/css application/javascript
+</IfModule>
+
+# Browser caching for images/assets
+<IfModule mod_expires.c>
+    ExpiresActive On
+    ExpiresByType image/webp "access plus 1 month"
+    ExpiresByType image/avif "access plus 1 month"
+    ExpiresByType image/png  "access plus 1 month"
+    ExpiresByType text/css   "access plus 1 week"
+    ExpiresByType application/javascript "access plus 1 week"
+</IfModule>
