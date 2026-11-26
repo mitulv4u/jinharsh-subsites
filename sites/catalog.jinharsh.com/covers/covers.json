@@ -1,0 +1,62 @@
+{
+ "jinharsh-master-catalog": {
+  "w": 720,
+  "h": 1018,
+  "pages": 19,
+  "size": 4611917
+ },
+ "timken-srb": {
+  "w": 720,
+  "h": 932,
+  "pages": 16,
+  "size": 887342
+ },
+ "lovejoy-qf-couplings": {
+  "w": 720,
+  "h": 932,
+  "pages": 4,
+  "size": 455565
+ },
+ "rexnord-omega-viva": {
+  "w": 720,
+  "h": 932,
+  "pages": 20,
+  "size": 1760379
+ },
+ "rexnord-omega-imperial": {
+  "w": 720,
+  "h": 932,
+  "pages": 18,
+  "size": 1022545
+ },
+ "groz-lubrication-tools": {
+  "w": 720,
+  "h": 932,
+  "pages": 48,
+  "size": 10275565
+ },
+ "groz-fluid-handling": {
+  "w": 720,
+  "h": 932,
+  "pages": 372,
+  "size": 82202939
+ },
+ "groz-lighting": {
+  "w": 720,
+  "h": 1018,
+  "pages": 48,
+  "size": 4992061
+ },
+ "shell-lubricants": {
+  "w": 720,
+  "h": 1018,
+  "pages": 1,
+  "size": 2448611
+ },
+ "flexco-conveying": {
+  "w": 720,
+  "h": 1018,
+  "pages": 1,
+  "size": 3025370
+ }
+}
