@@ -4,7 +4,7 @@
 // phone - the browser's own PDF box stayed blank on Android; the QR codes carry the Jinharsh logo; and the page is
 // styled with plain CSS instead of being built in the browser, so it shows much sooner.
 import { icon } from '/hub/vendor/icons.js';
-import { qrSvg, qrSvgFile, qrPng, saveBlob } from '/hub/assets/qr.js';
+import { qrSvg, qrSvgFile, qrPng, saveBlob } from '/hub/assets/qr.js?v=2';
 
 const $ = (s, el = document) => el.querySelector(s);
 const $$ = (s, el = document) => [...el.querySelectorAll(s)];
@@ -230,8 +230,8 @@ $('#open-raw-pdf').addEventListener('click', () => trackEvent('download', active
 let lib = null;
 async function pdfjs() {
   if (lib) return lib;
-  lib = await import('/hub/vendor/pdfjs/pdf.min.mjs');
-  lib.GlobalWorkerOptions.workerSrc = '/hub/vendor/pdfjs/pdf.worker.min.mjs';
+  lib = await import('/hub/vendor/pdfjs/pdf.min.js');
+  lib.GlobalWorkerOptions.workerSrc = '/hub/vendor/pdfjs/pdf.worker.min.js';
   return lib;
 }
 const PDF_OPTS = {
