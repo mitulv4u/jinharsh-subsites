@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact GAMET Bearings India — Jinharsh Industrial Solutions</title>
+    <link rel="stylesheet" href="index.css">
+
+    <style>
+        .contact-grid {
+            display: grid;
+            grid-template-columns: 1fr 1.5fr;
+            gap: 48px;
+            margin-top: 40px;
+            align-items: start;
+        }
+
+        @media (max-width: 900px) {
+            .contact-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .contact-info-card {
+            background: var(--bg-main);
+            border-radius: var(--radius-lg);
+            padding: 40px;
+            box-shadow: var(--shadow-sm);
+            border: 1px solid var(--border-color);
+        }
+
+        .contact-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 16px;
+            margin-bottom: 32px;
+        }
+
+        .contact-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .contact-icon-wrapper {
+            background: #e0e7ff;
+            color: var(--accent-primary);
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .contact-text h4 {
+            margin: 0 0 4px 0;
+            font-size: 1.1rem;
+            color: var(--text-primary);
+        }
+
+        .contact-text p,
+        .contact-text a {
+            margin: 0;
+            color: var(--text-secondary);
+            font-size: 1.05rem;
+            line-height: 1.6;
+            text-decoration: none;
+        }
+
+        .contact-text a:hover {
+            color: var(--accent-primary);
+            text-decoration: underline;
+        }
+
+        /* Form Styles */
+        .contact-form-wrapper {
+            background: white;
+            border-radius: var(--radius-lg);
+            padding: 40px;
+            box-shadow: var(--shadow-sm);
+            border: 1px solid var(--border-color);
+        }
+
+        .form-group {
+            margin-bottom: 24px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: var(--text-primary);
+            font-size: 0.95rem;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 14px 16px;
+            border: 1px solid #cbd5e1;
+            border-radius: var(--radius-sm);
+            font-family: inherit;
+            font-size: 1rem;
+            color: var(--text-primary);
+            background: #f8fafc;
+            transition: all 0.2s ease;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--accent-primary);
+            background: white;
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
+        }
+
+        @media (max-width: 600px) {
+            .form-row {
+                grid-template-columns: 1fr;
+                gap: 0;
+            }
+        }
+
+        .submit-btn {
+            background: var(--accent-primary);
+            color: white;
+            border: none;
+            padding: 16px 32px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            border-radius: var(--radius-sm);
+            cursor: pointer;
+            transition: background 0.2s ease;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .submit-btn:hover {
+            background: var(--accent-secondary);
+        }
+    </style>
+    <script src="lucide.min.js?v=2" defer></script>
+
+    <!-- SEO & Webmaster Validation Placeholders -->
+    <meta name='google-site-verification' content='REPLACE_WITH_YOUR_GOOGLE_VERIFICATION_CODE' />
+    <meta name='msvalidate.01' content='REPLACE_WITH_YOUR_BING_VERIFICATION_CODE' />
+
+    <!-- Open Graph Default Fallbacks -->
+    <meta property='og:type' content='website' />
+    <meta property='og:site_name' content='GAMET Bearings' />
+    <meta property='og:title' content='Contact GAMET Bearings India' />
+    <meta property='og:description' content='Contact GAMET bearings authorised India partner for quotes, technical support, and OEM replacements.' />
+    <meta property='og:image' content='images/typical_lathe_assembly.jpg' />
+
+    <!-- Google Analytics (gtag.js) Placeholder -->
+    <script async src='https://www.googletagmanager.com/gtag/js?id=G-DYKEW5CW9E'></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      // Replace G-DYKEW5CW9E with your actual Google Analytics Measurement ID
+      gtag('config', 'G-DYKEW5CW9E');
+    </script>
+</head>
+
+<body>
+    <!-- Global Full Page Loader -->
+    <div id="fullPageLoader" class="full-page-loader">
+        <div class="loader-content">
+            <div class="pdf-spinner large"></div>
+            <div id="loaderText">Loading GAMET...</div>
+        </div>
+    </div>
+
+
+    <header class="navbar">
+        <div class="container nav-content">
+            <a href="index.html" class="logo"
+                style="font-family: var(--font-heading); font-size: 1.8rem; font-weight: 800; color: var(--heading-font-color); text-decoration: none;">GAMET</a>
+            <nav class="nav-links">
+                <a href="index.html" class="nav-link ">Home</a>
+                <div class="nav-item dropdown">
+                    <span>Technical Resources <i data-lucide="chevron-down" style="width:16px;height:16px;"></i></span>
+                    <div class="dropdown-content">
+                        <a href="types.html" class="">Bearing Types</a>
+                        <a href="nomenclature.html" class="">Nomenclature</a>
+                        <a href="catalog.html" class="">Catalog Search</a>
+                        <a href="installation.html" class="">Installation Guide</a>
+                        <a href="oem.html" class="">OEM Machines List</a>
+                    </div>
+                </div>
+                <a href="catalog.html" class="nav-link" style="color:var(--accent-primary);font-weight:600;">Pricing</a>
+                <a href="genuine.html" class="nav-link " style="color:#dc2626;font-weight:600;">Buy Genuine</a>
+                <a href="contact.html" class="nav-link active">Contact Us</a>
+                <div id="btn-extra">
+                    <span></span>
+                    <span></span>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <div class="page-header"
+            style="padding-bottom: 80px; background: var(--bg-light); border-bottom: 1px solid var(--border-color);">
+            <div class="container" style="text-align: center;">
+                <span
+                    style="font-weight:700;color:var(--accent-primary);letter-spacing:2px;text-transform:uppercase;">Get
+                    in Touch</span>
+                <h1 style="font-size:3.2rem;font-weight:800;margin-top:16px;color:var(--text-primary);">
+                    Contact <span class="text-gradient">Gamet Bearings</span>
+                </h1>
+                <p
+                    style="margin: 24px auto 0; max-width: 700px; color: var(--text-secondary); font-size: 1.15rem; line-height: 1.8;">
+                    Have questions about precision tapered roller bearings, OEM spindle requirements, or need to verify
+                    stock? Reach out to Gamet's authorized Indian distributor.
+                </p>
+            </div>
+        </div>
+
+        <section class="container content-section" style="max-width: 1200px; padding: 100px 24px;">
+            <div class="contact-grid">
+
+                <!-- Info Column -->
+                <div class="contact-info-card">
+                    <h3 style="font-size: 1.8rem; margin-bottom: 32px; color: var(--text-primary);">Authorized Partner
+                    </h3>
+
+                    <div class="contact-item">
+                        <div class="contact-icon-wrapper">
+                            <i data-lucide="building-2"></i>
+                        </div>
+                        <div class="contact-text">
+                            <h4>Jinharsh Industrial Solutions Pvt. Ltd.</h4>
+                            <p>Head Office: 76/78 Nagdevi Street<br>Mumbai 400003, India</p>
+                        </div>
+                    </div>
+
+                    <div class="contact-item">
+                        <div class="contact-icon-wrapper">
+                            <i data-lucide="phone"></i>
+                        </div>
+                        <div class="contact-text">
+                            <h4>Phone Number</h4>
+                            <a href="tel:+912240900014">+91 22 40900014</a>
+                        </div>
+                    </div>
+
+                    <div class="contact-item">
+                        <div class="contact-icon-wrapper">
+                            <i data-lucide="mail"></i>
+                        </div>
+                        <div class="contact-text">
+                            <h4>Email Address</h4>
+                            <a href="mailto:gamet@jinharsh.com">gamet@jinharsh.com</a>
+                            <p style="font-size: 0.9rem; margin-top: 4px; opacity: 0.8;">For RFQs, technical support,
+                                and verification.</p>
+                        </div>
+                    </div>
+
+                    <div class="contact-item">
+                        <div class="contact-icon-wrapper">
+                            <i data-lucide="clock"></i>
+                        </div>
+                        <div class="contact-text">
+                            <h4>Business Hours</h4>
+                            <p>Monday - Saturday<br>10:00 AM - 6:00 PM IST</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Form Column -->
+                <div class="contact-form-wrapper">
+                    <h2 style="font-size: 2rem; margin-bottom: 12px; color: var(--text-primary);">Send an Inquiry</h2>
+                    <p style="color: var(--text-secondary); margin-bottom: 32px;">Please fill out the form below. For
+                        immediate assistance with urgent breakdowns, please call us directly.</p>
+
+                    <form action="mailto:gamet@jinharsh.com" method="GET" enctype="text/plain">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="name">Full Name</label>
+                                <input type="text" id="name" name="Name" class="form-control" placeholder="John Doe"
+                                    required>
+                            </div>
+                            <div class="form-group">
+                                <label for="company">Company Name</label>
+                                <input type="text" id="company" name="Company" class="form-control"
+                                    placeholder="Your Organization">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="subject">Subject / Part Number</label>
+                            <input type="text" id="subject" name="subject" class="form-control"
+                                placeholder="e.g. Quote Request for 160098X/160160H">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="message">Message</label>
+                            <textarea id="message" name="body" class="form-control" rows="6"
+                                placeholder="Please provide details about your application, requested quantities, or technical questions..."
+                                required></textarea>
+                        </div>
+
+                        <button type="submit" class="submit-btn">
+                            <i data-lucide="send" style="width: 20px; height: 20px;"></i> Send Message via Email
+                        </button>
+                    </form>
+                </div>
+
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="container footer-content">
+            <div class="footer-brand">
+                <div class="logo" style="display: flex; align-items: center; gap: 20px;">
+                    <div style="text-align: center;">
+                        <span
+                            style="display: block; font-size: 0.8rem; color: var(--text-muted); margin-bottom: 8px; text-transform: uppercase; letter-spacing: 1px;">New
+                            Brand Mark</span>
+                        <img loading="lazy" src="images/new_logo.jpg" alt="Gamet New Logo"
+                            style="height:32px;width:auto; border-radius: 4px;">
+                    </div>
+                    <div style="text-align: center;">
+                        <span
+                            style="display: block; font-size: 0.8rem; color: var(--text-muted); margin-bottom: 8px; text-transform: uppercase; letter-spacing: 1px;">Original
+                            Heritage Mark</span>
+                        <img loading="lazy" src="images/Old Gamet Logo.jpg" alt="Gamet Old Logo"
+                            style="height:32px;width:auto; border-radius: 4px; ">
+                    </div>
+                </div>
+                <p>High precision tapered roller bearings for demanding applications.</p>
+            </div>
+
+            <div class="footer-links" style="max-width: 400px;">
+                <h4>Authorized Partners</h4>
+                <div style="color: var(--text-secondary); font-size: 0.95rem; line-height: 1.7;">
+                    <strong style="color:var(--text-primary);">Jinharsh Industrial Solutions Pvt. Ltd.</strong><br>
+                    HO: 76/78 Nagdevi Street, Mumbai 400003<br>
+                    <span style="font-size: 0.85rem;">Branches: Mumbai &bull; Nagpur &bull; Surat &bull; Raipur &bull;
+                        Goa &bull; Sri Lanka</span>
+                </div>
+            </div>
+
+            <div class="footer-links">
+                <h4>Navigation</h4>
+                <a href="index.html">Home</a>
+                <a href="catalog.html">Catalog Search</a>
+                <a href="genuine.html">Buy Genuine</a>
+                <a href="contact.html">Contact Us</a>
+            </div>
+
+            <div class="footer-links">
+                <h4>Technical</h4>
+                <a href="installation.html">Installation Guide</a>
+                <a href="catalogs/Bearings Catalog Gamet TRB.pdf" download>Download PDF Catalog</a>
+            </div>
+        </div>
+        <div class="footer-bottom container">
+            <p>&copy; 2026 Gamet Bearings. Authorized Partner: Jinharsh Industrial Solutions Pvt. Ltd.</p>
+        </div>
+    </footer>
+
+    <!-- overlay content begin -->
+    <div id="extra-wrap">
+        <div id="btn-close">
+            <span></span>
+            <span></span>
+        </div>
+
+        <div id="extra-content">
+            <img loading="lazy" src="images/new_logo.jpg" alt="Gamet Bearings"
+                style="max-width: 180px; margin-bottom: 30px; border-radius: 4px;">
+
+            <div class="spacer-30-line"></div>
+
+            <h5>Technical Resources</h5>
+            <ul style="list-style: none; padding: 0;">
+                <li><a href="catalog.html">Catalog Search</a></li>
+                <li><a href="nomenclature.html">Part Number Nomenclature</a></li>
+                <li><a href="installation.html">Installation Guide</a></li>
+                <li><a href="oem.html">OEM Machines List</a></li>
+            </ul>
+
+            <div class="spacer-30-line"></div>
+
+            <h5>Contact Jinharsh</h5>
+            <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 12px; color: #cbd5e1;">
+                <i data-lucide="clock" style="width: 18px; height: 18px; opacity: 0.5;"></i> Monday - Saturday 10:00 -
+                18:00
+            </div>
+            <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 12px; color: #cbd5e1;">
+                <i data-lucide="map-pin" style="width: 18px; height: 18px; opacity: 0.5;"></i> Mumbai, India
+            </div>
+            <div style="display: flex; align-items: center; gap: 12px; color: #cbd5e1;">
+                <i data-lucide="mail" style="width: 18px; height: 18px; opacity: 0.5;"></i> gamet@jinharsh.com
+            </div>
+            <div style="display: flex; align-items: center; gap: 12px; color: #cbd5e1;">
+                <i data-lucide="phone" style="width: 18px; height: 18px; opacity: 0.5;"></i> +91 22 40900014
+            </div>
+
+            <div class="spacer-30-line"></div>
+
+            <h5>About Gamet</h5>
+            <p>Established in 1956, Gamet Bearings manufactures exclusively super precision tapered roller bearings.
+                Engineered for the world's most demanding machine tools with guaranteed sub-micron accuracy.</p>
+        </div>
+    </div>
+
+    <script>
+        lucide.createIcons();
+
+        // Slide-out panel logic
+        document.addEventListener('DOMContentLoaded', () => {
+            const btnExtra = document.getElementById('btn-extra');
+            const btnClose = document.getElementById('btn-close');
+            const extraWrap = document.getElementById('extra-wrap');
+
+            if (btnExtra && btnClose && extraWrap) {
+                btnExtra.addEventListener('click', () => {
+                    extraWrap.classList.add('open');
+                });
+
+                btnClose.addEventListener('click', () => {
+                    extraWrap.classList.remove('open');
+                });
+            }
+        });
+    </script>
+
+    <script>
+        window.addEventListener('load', () => {
+            const loader = document.getElementById('fullPageLoader');
+            if (loader) loader.classList.add('hidden');
+        });
+    </script>
+</body>
+
+</html>
