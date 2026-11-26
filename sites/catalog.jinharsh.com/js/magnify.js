@@ -85,7 +85,7 @@ function apply() {
     const chrome = /Chrome\/\d+/.test(navigator.userAgent || '');
     const clear = H.dataset.juGlass !== 'solid' && H.dataset.juGlass !== 'frosted';
     const on = chrome && clear && !perf.lite;
-    if (!on) { bars.forEach((b) => { b.style.backdropFilter = ''; b.style.webkitBackdropFilter = ''; }); return; }
+    if (!on) { bars.forEach((b) => { b.style.backdropFilter = ''; b.style.webkitBackdropFilter = ''; b.classList.remove('mag-on'); }); return; }
     if (!svg) {
       svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
       svg.setAttribute('width', '0'); svg.setAttribute('height', '0'); svg.setAttribute('aria-hidden', 'true');
@@ -107,6 +107,7 @@ function apply() {
     bars.forEach((b, i) => {
       const f = `url(#jdMag${i}) saturate(1.35) brightness(var(--mag-bright, 1))`;
       b.style.webkitBackdropFilter = f; b.style.backdropFilter = f;
+      b.classList.add('mag-on');   // a stronger tint with the magnifier, so pictures underneath stay calm (app.css)
     });
   } catch { /* the plain glass stays */ }
 }
