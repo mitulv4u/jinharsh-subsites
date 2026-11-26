@@ -34,7 +34,12 @@ jobs:
           CHANGED_SITES=$(git diff --name-only HEAD~1 HEAD -- sites/ | cut -d/ -f2 | sort -u)
           for site in $CHANGED_SITES; do
             if [ -d "sites/$site" ]; then
-              echo "Deploying $site -> /www/wwwroot/$site"
-              rsync -rlvz --delete --no-perms --no-owner --no-group --omit-dir-times --exclude='.user.ini' --exclude='.well-known' -e "ssh -i ~/.ssh/id_deploy" "sites/$site/" "deploy@159.89.94.209:/www/wwwroot/$site/"
+              if [ "$site" = "catalog.jinharsh.com" ]; then
+                echo "Deploying $site -> /www/wwwroot/$site/hub"
+                rsync -rlvz --delete --no-perms --no-owner --no-group --omit-dir-times --exclude='.user.ini' --exclude='.well-known' --exclude='pdfs/' -e "ssh -i ~/.ssh/id_deploy" "sites/$site/" "deploy@159.89.94.209:/www/wwwroot/$site/hub/"
+              else
+                echo "Deploying $site -> /www/wwwroot/$site"
+                rsync -rlvz --delete --no-perms --no-owner --no-group --omit-dir-times --exclude='.user.ini' --exclude='.well-known' -e "ssh -i ~/.ssh/id_deploy" "sites/$site/" "deploy@159.89.94.209:/www/wwwroot/$site/"
+              fi
             fi
           done
