@@ -1,0 +1,102 @@
+[
+  {
+    "id": "timken-srb",
+    "brand": "Timken",
+    "category": "Bearings",
+    "title": "Timken High-Performance Spherical Roller Bearings (SRB)",
+    "description": "EJ cage advantages, load ratings, Vibro-screen bearings, and common industrial interchange guide.",
+    "pdfUrl": "https://www.timken.com/wp-content/uploads/2017/04/High-Performance-SRB-Technical-White-Paper.pdf",
+    "badge": "Most Scanned",
+    "pages": "Technical White Paper"
+  },
+  {
+    "id": "lovejoy-qf-couplings",
+    "brand": "Timken Lovejoy",
+    "category": "Couplings",
+    "title": "Timken Lovejoy QF (Quick Flex) Coupling Brochure",
+    "description": "Elastomeric shaft couplings, high-torque inserts, and drop-in interchange for industrial drives.",
+    "pdfUrl": "https://www.lovejoy-inc.com/wp-content/uploads/2019/02/QF-Brochure.pdf",
+    "badge": "Exhibition Pick",
+    "pages": "Full Brochure"
+  },
+  {
+    "id": "lovejoy-qf-interchange",
+    "brand": "Timken Lovejoy",
+    "category": "Couplings",
+    "title": "Lovejoy QF vs. Elasto-Chain Interchange Guide",
+    "description": "Direct part-number cross-reference chart for plant maintenance and OEM replacements.",
+    "pdfUrl": "https://www.lovejoy-inc.com/wp-content/uploads/2019/02/QF-Interchange-Guide-for-Elasto-Chain.pdf",
+    "badge": "Cross-Reference",
+    "pages": "Interchange Chart"
+  },
+  {
+    "id": "rexnord-omega-viva",
+    "brand": "Regal Rexnord",
+    "category": "Couplings",
+    "title": "Rexnord Omega & Viva Elastomer Couplings",
+    "description": "Split-element elastomer couplings for pumps, compressors (Kaeser spares), and cooling towers.",
+    "pdfUrl": "/hub/pdfs/rexnord-omega-viva.pdf",
+    "badge": "Top Seller",
+    "pages": "Upload PDF to /hub/pdfs/"
+  },
+  {
+    "id": "rexnord-colour-coating",
+    "brand": "Regal Rexnord",
+    "category": "Bearings & Housed Units",
+    "title": "Steel Colour Coating Line Bearings (CB224M60H – FCB224M100H)",
+    "description": "Heavy-duty Rexnord Link-Belt spherical roller housed units for steel coil colour coating lines.",
+    "pdfUrl": "/hub/pdfs/colour-coating-bearings.pdf",
+    "badge": "Application Hub",
+    "pages": "Upload PDF to /hub/pdfs/"
+  },
+  {
+    "id": "timken-borewell-rigs",
+    "brand": "Timken",
+    "category": "Application Hub",
+    "title": "Borewell Drilling Rig Bearings & Drive Components",
+    "description": "Tapered, spherical, and thrust bearings engineered for rotary head & rig gearboxes.",
+    "pdfUrl": "/hub/pdfs/borewell-rig-bearings.pdf",
+    "badge": "Application Hub",
+    "pages": "Upload PDF to /hub/pdfs/"
+  },
+  {
+    "id": "groz-lubrication-tools",
+    "brand": "Groz",
+    "category": "Lubrication & Tools",
+    "title": "Groz Industrial Lubrication, Lube Rooms & Tools Catalog",
+    "description": "Grease guns, electric pumps, hose reels, DEF handling, gear pullers, and workshop tools.",
+    "pdfUrl": "/hub/pdfs/groz-industrial-catalog.pdf",
+    "badge": "Master Catalog",
+    "pages": "Upload PDF to /hub/pdfs/"
+  },
+  {
+    "id": "abb-baldor-motors",
+    "brand": "ABB & Baldor",
+    "category": "Motors & Drives",
+    "title": "ABB Industrial / EV Motors, Drives & Smart Sensors",
+    "description": "HT & LV motors, Baldor cooling tower drives, and condition monitoring sensors.",
+    "pdfUrl": "/hub/pdfs/abb-motors-drives.pdf",
+    "badge": "PT Range",
+    "pages": "Upload PDF to /hub/pdfs/"
+  },
+  {
+    "id": "drager-safety",
+    "brand": "Dräger",
+    "category": "Safety & Gas Detection",
+    "title": "Dräger Portable & Fixed Gas Detection Solutions",
+    "description": "Authorized industrial safety, gas monitors, and breathing apparatus overview.",
+    "pdfUrl": "/hub/pdfs/drager-safety-catalog.pdf",
+    "badge": "Safety",
+    "pages": "Upload PDF to /hub/pdfs/"
+  },
+  {
+    "id": "flexco-conveying",
+    "brand": "Flexco",
+    "category": "Conveying Equipment",
+    "title": "Flexco Belt Fasteners, Cleaners & Skirting Systems",
+    "description": "Complete conveyor belt maintenance, splices, and bulk material handling solutions.",
+    "pdfUrl": "/hub/pdfs/flexco-conveying-catalog.pdf",
+    "badge": "Conveying",
+    "pages": "Upload PDF to /hub/pdfs/"
+  }
+]

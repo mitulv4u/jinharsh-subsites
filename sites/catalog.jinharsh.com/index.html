@@ -3,237 +3,330 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>JinHarsh Master Product Catalog | Bearings, Couplings, Lubrication &amp; Industrial Solutions</title>
-  <meta
-    name="description"
-    content="Explore the JinHarsh Industrial Solutions (JIS) Master Product Catalog across 14 divisions and 50+ global OEM brands including Timken, Regal Rexnord, Shell, Dräger, Flexco, Groz, and ABB."
-  />
-  <meta property="og:title" content="JinHarsh Master Product Catalog — catalog.jinharsh.com" />
-  <meta
-    property="og:description"
-    content="Complete industrial catalog: Bearings, Housed Units, Couplings, Motors, Lubricants, Gas Detection, Welding, Conveyor Solutions &amp; Tools."
-  />
-  <meta property="og:type" content="website" />
-  <meta property="og:url" content="https://catalog.jinharsh.com" />
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link
-    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
-    rel="stylesheet"
-  />
-  <link rel="stylesheet" href="styles.css" />
+  <title>JINHARSH Catalog Hub — Interactive Industrial Catalogs &amp; PDF Downloads</title>
+  <meta name="description" content="Official JINHARSH interactive catalog hub. View and download Timken, Regal Rexnord, Lovejoy, ABB, Groz, Dräger, and Flexco industrial catalogs." />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    body { font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; }
+  </style>
 </head>
-<body>
-  <header class="site-header">
-    <div class="container header-inner">
-      <a href="#top" class="brand">
-        <span class="brand-mark">JIS</span>
-        <div>
-          <div class="brand-title">JinHarsh Master Catalog</div>
-          <div class="brand-sub">JinHarsh Industrial Solutions Pvt. Ltd.</div>
-        </div>
-      </a>
+<body class="bg-slate-50 text-slate-900 min-h-screen flex flex-col">
 
-      <nav class="nav-links" aria-label="Primary Navigation">
-        <a href="#catalog">Product Divisions</a>
-        <a href="#brands">OEM Brands</a>
-        <a href="#offices">Offices</a>
-        <a href="#inquiry">Request Quote</a>
-      </nav>
+  <!-- Top Header -->
+  <header class="sticky top-0 z-30 bg-white/95 backdrop-blur border-b border-slate-200">
+    <div class="w-full px-4 sm:px-6 h-14 flex items-center justify-between gap-3">
+      <div class="flex items-center gap-3 min-w-0">
+        <button onclick="toggleSidebar()" class="lg:hidden p-2 -ml-2 rounded-lg text-slate-600 hover:bg-slate-100" aria-label="Toggle Catalog Menu">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
+        </button>
+        <a href="/" class="flex items-center gap-2.5 min-w-0">
+          <div class="w-8 h-8 rounded-lg bg-slate-900 text-white font-bold flex items-center justify-center text-xs shrink-0">JH</div>
+          <div class="min-w-0">
+            <div class="font-bold text-sm text-slate-900 truncate">JINHARSH Catalog Hub</div>
+            <div class="text-[11px] text-slate-500 hidden sm:block truncate">Interactive PDF Viewer · Direct QR Downloads</div>
+          </div>
+        </a>
+      </div>
 
-      <a href="#inquiry" class="btn btn-primary">Request Quote</a>
+      <div class="flex items-center gap-2 shrink-0">
+        <button onclick="openQrStudio()" id="qr-studio-btn" class="inline-flex items-center gap-1.5 text-xs font-semibold bg-indigo-50 text-indigo-700 hover:bg-indigo-100 border border-indigo-200/70 px-3 py-1.5 rounded-lg transition">
+          <span>QR Studio</span>
+        </button>
+        <a href="https://catalog.jinharsh.co.in/index.php/Product_Range" target="_blank" class="hidden md:inline-flex items-center text-xs font-medium text-slate-600 hover:text-slate-900 px-3 py-1.5 rounded-lg hover:bg-slate-100 transition">
+          Technical Wiki ↗
+        </a>
+        <a href="https://www.jinharsh.com" target="_blank" class="text-xs font-semibold bg-slate-900 hover:bg-slate-800 text-white px-3.5 py-1.5 rounded-lg transition">
+          jinharsh.com ↗
+        </a>
+      </div>
     </div>
   </header>
 
-  <main id="top" class="container main-content">
-    <section class="hero">
-      <span class="hero-eyebrow">Established 1985 · Authorized Pan-India Industrial Distributor</span>
-      <h1>JinHarsh Master Product Catalog</h1>
-      <p class="hero-desc">
-        Browse 14 industrial product divisions and 50+ global OEM principals—from Timken bearings and Regal Rexnord couplings to Shell lubricants, Dräger safety systems, and Flexco conveyor solutions.
-      </p>
+  <!-- Main Layout: Persistent Catalog Menu + Interactive PDF Viewer -->
+  <div class="flex-1 flex relative">
+    <!-- Mobile Backdrop -->
+    <div id="sidebar-backdrop" onclick="toggleSidebar(false)" class="hidden fixed inset-0 bg-slate-900/40 z-30 lg:hidden"></div>
 
-      <div class="search-bar-wrap">
-        <input
-          id="catalog-search"
-          type="search"
-          class="search-input"
-          placeholder="Search products, part codes, or brands (e.g. Timken, Omega, Shell, Dräger, Flexco)..."
-          aria-label="Search JinHarsh product catalog"
-        />
-        <a href="#inquiry" class="btn btn-primary">Send RFQ</a>
-      </div>
-
-      <div class="hero-stats">
-        <div>
-          <div class="stat-value">14</div>
-          <div class="stat-label">Product Divisions</div>
+    <!-- Left Sidebar: Always-accessible Catalog & Brand Menu -->
+    <aside id="catalog-sidebar" class="fixed lg:static inset-y-0 left-0 z-40 w-80 max-w-[85vw] bg-white border-r border-slate-200 flex flex-col transform -translate-x-full lg:translate-x-0 transition-transform duration-200">
+      <div class="p-4 border-b border-slate-100 space-y-3">
+        <div class="flex items-center justify-between">
+          <span class="text-xs font-bold uppercase tracking-wider text-slate-500">All Product Catalogs</span>
+          <button onclick="toggleSidebar(false)" class="lg:hidden text-xs text-slate-500 hover:text-slate-900">Close</button>
         </div>
-        <div>
-          <div class="stat-value">50+</div>
-          <div class="stat-label">Global OEM Brands</div>
-        </div>
-        <div>
-          <div class="stat-value">39+ Yrs</div>
-          <div class="stat-label">Engineering Heritage</div>
-        </div>
-        <div>
-          <div class="stat-value">9</div>
-          <div class="stat-label">India Offices &amp; Service Points</div>
-        </div>
-      </div>
-    </section>
-
-    <section id="catalog">
-      <div class="section-head section-head-row">
-        <div>
-          <h2>Product Divisions</h2>
-          <p>Filter by division or click any card to pre-fill an inquiry for our engineering sales team.</p>
-        </div>
+        <input id="cat-search" type="search" oninput="renderMenu()" placeholder="Search brand, bearing, coupling..." class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-xs outline-none focus:border-indigo-500 focus:bg-white" />
+        <div id="brand-pills" class="flex flex-wrap gap-1.5"></div>
       </div>
 
-      <div class="filter-bar" role="tablist" aria-label="Product Division Categories">
-        <button type="button" class="filter-chip active" data-group="All">All (14)</button>
-        <button type="button" class="filter-chip" data-group="Bearings & PT">Bearings &amp; PT</button>
-        <button type="button" class="filter-chip" data-group="Motors & Automation">Motors &amp; Drives</button>
-        <button type="button" class="filter-chip" data-group="Lubrication">Lubrication</button>
-        <button type="button" class="filter-chip" data-group="Safety & Welding">Safety &amp; Welding</button>
-        <button type="button" class="filter-chip" data-group="Conveyors & Tools">Conveyors &amp; Tools</button>
-        <button type="button" class="filter-chip" data-group="Eco & FRP">Eco &amp; FRP</button>
+      <nav id="catalog-menu" class="flex-1 overflow-y-auto p-3 space-y-1.5"></nav>
+
+      <div class="p-3 border-t border-slate-100 bg-slate-50/70 text-[11px] text-slate-500 flex items-center justify-between">
+        <span>Need help selecting?</span>
+        <a href="https://wa.me/912240900000" target="_blank" class="font-semibold text-emerald-700 hover:underline">WhatsApp Sales ↗</a>
       </div>
+    </aside>
 
-      <div id="active-filter-banner" class="active-filter-banner">
-        <span id="active-filter-text"></span>
-        <button type="button" id="clear-brand-filter" class="btn btn-outline">Clear brand filter</button>
-      </div>
-
-      <div id="catalog-grid" class="catalog-grid"></div>
-
-      <div id="empty-state" class="empty-state">
-        <p>No catalog divisions match your current search or filter.</p>
-        <button type="button" id="reset-filters-btn" class="btn btn-outline">Reset Filters</button>
-      </div>
-    </section>
-
-    <section id="brands" class="brands-panel">
-      <div class="section-head">
-        <h2>Authorized OEM Principals &amp; Brands</h2>
-        <p>Click any brand to filter the catalog divisions carrying it.</p>
-      </div>
-      <div id="brand-pills" class="brand-pills"></div>
-    </section>
-
-    <section id="offices">
-      <div class="section-head">
-        <h2>Pan-India Support &amp; Direct Sales</h2>
-        <p>Technical sales, installation, condition monitoring, and dispatch across India &amp; Southeast Asia.</p>
-      </div>
-
-      <div class="offices-grid">
-        <div class="info-card">
-          <h3>Headquarters &amp; Branches</h3>
-          <p>Offices and service points serving major industrial corridors:</p>
-          <ul>
-            <li>Mumbai (HQ) &amp; Borivali</li>
-            <li>Surat (Jinharsh House) &amp; Hazira</li>
-            <li>Vadodara, Gandhidham, Goa</li>
-            <li>Nagpur, Indore, Raipur, Pen (Raigad)</li>
-          </ul>
-        </div>
-
-        <div class="info-card">
-          <h3>Direct Sales Desk</h3>
-          <p>Reach our regional teams for urgent stock checks and technical sizing:</p>
-          <ul>
-            <li>Rest of India: <strong>+91-22-40900000</strong></li>
-            <li>Gujarat Desk: <strong>+91-8000-104000</strong></li>
-            <li>CRM: <strong>crm@jinharsh.com</strong></li>
-            <li>Exports: <strong>internationalsales@jinharsh.com</strong></li>
-          </ul>
-        </div>
-
-        <div class="info-card">
-          <h3>Engineering Services</h3>
-          <p>Beyond supply aggregation, JIS provides end-to-end plant reliability:</p>
-          <ul>
-            <li>Installation &amp; Commissioning</li>
-            <li>Condition Monitoring &amp; Vibration Analysis</li>
-            <li>Annual Maintenance Contracts (AMC)</li>
-            <li>Centralized Lubrication &amp; Lube Rooms</li>
-          </ul>
-        </div>
-      </div>
-    </section>
-
-    <section id="inquiry" class="inquiry-section">
-      <h2>Request a Catalog Quote</h2>
-      <p class="inquiry-sub">
-        Your inquiry is routed directly to our JinHarsh Odoo ERP sales team for fast response.
-      </p>
-
-      <form id="odoo-inquiry-form" class="form-grid">
-        <input type="hidden" name="source_domain" value="catalog.jinharsh.com" />
-
-        <div class="form-row-2">
-          <div>
-            <label for="inquiry-name" class="field-label">Your Name *</label>
-            <input id="inquiry-name" required name="name" placeholder="Full Name" class="field-input" />
+    <!-- Main Viewer Area -->
+    <main class="flex-1 min-w-0 flex flex-col">
+      <!-- Active Catalog Toolbar -->
+      <div id="viewer-toolbar" class="bg-white border-b border-slate-200 px-4 sm:px-6 py-4 flex flex-wrap items-center justify-between gap-4">
+        <div class="min-w-0 flex-1">
+          <div class="flex items-center gap-2 flex-wrap">
+            <span id="active-brand" class="inline-flex items-center px-2 py-0.5 rounded-md text-[11px] font-semibold bg-indigo-50 text-indigo-700">Brand</span>
+            <span id="active-category" class="text-xs text-slate-500 font-medium">Category</span>
+            <span id="active-badge" class="inline-flex items-center px-2 py-0.5 rounded-md text-[11px] font-medium bg-slate-100 text-slate-600"></span>
           </div>
-          <div>
-            <label for="inquiry-company" class="field-label">Company Name *</label>
-            <input id="inquiry-company" required name="company" placeholder="Organization / Plant" class="field-input" />
+          <h1 id="active-title" class="text-lg sm:text-xl font-bold text-slate-900 mt-1 truncate">Select a Catalog</h1>
+          <p id="active-desc" class="text-xs text-slate-500 mt-0.5 line-clamp-2"></p>
+        </div>
+
+        <div class="flex flex-wrap items-center gap-2 shrink-0">
+          <button onclick="copyDirectLink()" id="copy-link-btn" class="text-xs font-medium bg-white border border-slate-200 hover:bg-slate-50 text-slate-700 px-3 py-2 rounded-lg transition">
+            Copy QR Link
+          </button>
+          <button onclick="showSingleQr()" class="text-xs font-medium bg-white border border-slate-200 hover:bg-slate-50 text-slate-700 px-3 py-2 rounded-lg transition">
+            Show QR
+          </button>
+          <a id="download-pdf-btn" href="#" download target="_blank" class="inline-flex items-center gap-1.5 text-xs font-semibold bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-lg transition shadow-xs">
+            Download PDF ↓
+          </a>
+        </div>
+      </div>
+
+      <!-- Interactive PDF Viewer Container -->
+      <div id="pdf-viewer-wrap" class="flex-1 p-3 sm:p-5 flex flex-col gap-3">
+        <div id="pdf-frame-box" class="flex-1 min-h-[68vh] bg-white border border-slate-200 rounded-xl overflow-hidden shadow-xs flex flex-col">
+          <div class="px-4 py-2 bg-slate-50 border-b border-slate-200/80 flex items-center justify-between text-xs text-slate-500">
+            <span id="viewer-mode-label">Interactive PDF Preview</span>
+            <div class="flex items-center gap-3">
+              <button onclick="toggleViewerMode()" id="viewer-mode-btn" class="text-indigo-600 hover:underline font-medium">Switch to Embedded Google Viewer</button>
+              <a id="open-raw-pdf" href="#" target="_blank" class="text-slate-600 hover:text-slate-900 font-medium">Open Fullscreen ↗</a>
+            </div>
           </div>
+          <iframe id="pdf-iframe" src="about:blank" class="w-full flex-1 min-h-[62vh] bg-slate-100" title="Catalog PDF Viewer"></iframe>
         </div>
+      </div>
 
-        <div class="form-row-2">
+      <!-- QR Poster & Business Card Studio (Hidden unless ?qr=1 or QR Studio clicked) -->
+      <section id="qr-studio-panel" class="hidden p-5 sm:p-8 space-y-6">
+        <div class="flex flex-wrap items-center justify-between gap-4">
           <div>
-            <label for="inquiry-email" class="field-label">Work Email *</label>
-            <input id="inquiry-email" required type="email" name="email" placeholder="name@company.com" class="field-input" />
+            <h2 class="text-lg font-bold text-slate-900">QR Code Studio — Exhibition Posters &amp; Business Cards</h2>
+            <p class="text-xs text-slate-500 mt-0.5">Download high-resolution QR codes for the main hub or any individual catalog PDF. Scanning opens the interactive PDF directly with the full catalog menu alongside.</p>
           </div>
-          <div>
-            <label for="inquiry-phone" class="field-label">Phone / WhatsApp *</label>
-            <input id="inquiry-phone" required name="phone" placeholder="+91 98XXXXXXXX" class="field-input" />
-          </div>
+          <button onclick="closeQrStudio()" class="text-xs font-semibold bg-slate-900 text-white px-4 py-2 rounded-lg hover:bg-slate-800 transition">← Back to PDF Viewer</button>
         </div>
+        <div id="qr-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4"></div>
+      </section>
+    </main>
+  </div>
 
-        <div>
-          <label for="inquiry-category" class="field-label">Product Division *</label>
-          <select id="inquiry-category" name="product_category" class="field-input" required>
-            <option value="Master Catalog General">All / General Catalog Inquiry</option>
-          </select>
-        </div>
-
-        <div>
-          <label for="inquiry-message" class="field-label">Requirements / Part Numbers *</label>
-          <textarea
-            id="inquiry-message"
-            required
-            name="message"
-            rows="4"
-            placeholder="Share bearing numbers, coupling sizes, lubricant grades, quantities, or request a PDF catalog..."
-            class="field-input"
-          ></textarea>
-        </div>
-
-        <button id="inquiry-submit-btn" type="submit" class="btn btn-primary">
-          Submit Inquiry
-        </button>
-        <p id="form-status" class="form-status"></p>
-      </form>
-    </section>
-  </main>
-
-  <footer class="site-footer">
-    <div class="container footer-inner">
-      <div>&copy; 2026 JinHarsh Industrial Solutions Private Limited (JIS). All rights reserved.</div>
-      <div>
-        <a href="https://www.jinharsh.com" target="_blank" rel="noopener">www.jinharsh.com</a>
-        &middot;
-        <a href="mailto:crm@jinharsh.com">crm@jinharsh.com</a>
+  <!-- Single QR Modal -->
+  <div id="single-qr-modal" class="hidden fixed inset-0 z-50 bg-slate-900/50 flex items-center justify-center p-4" onclick="if(event.target===this)this.classList.add('hidden')">
+    <div class="bg-white rounded-2xl p-6 max-w-sm w-full text-center space-y-4 shadow-xl">
+      <div class="text-xs font-semibold uppercase tracking-wider text-indigo-600">Direct Catalog QR Code</div>
+      <h3 id="modal-qr-title" class="font-bold text-sm text-slate-900"></h3>
+      <div id="modal-qr-box" class="flex justify-center py-2"></div>
+      <p id="modal-qr-url" class="text-[11px] text-slate-500 break-all bg-slate-50 p-2 rounded-lg"></p>
+      <div class="flex gap-2 justify-center">
+        <button onclick="downloadModalQr()" class="bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-semibold px-4 py-2 rounded-lg transition">Download QR PNG</button>
+        <button onclick="document.getElementById('single-qr-modal').classList.add('hidden')" class="bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-medium px-4 py-2 rounded-lg transition">Close</button>
       </div>
     </div>
-  </footer>
+  </div>
 
-  <script src="app.js"></script>
+  <script>
+    let CATALOGS = [];
+    let activeBrand = 'ALL';
+    let activeCat = null;
+    let useGoogleViewer = false;
+
+    function esc(s) {
+      return String(s ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+    }
+
+    function toggleSidebar(force) {
+      const sb = document.getElementById('catalog-sidebar');
+      const bd = document.getElementById('sidebar-backdrop');
+      const open = typeof force === 'boolean' ? force : sb.classList.contains('-translate-x-full');
+      sb.classList.toggle('-translate-x-full', !open);
+      bd.classList.toggle('hidden', !open);
+    }
+
+    async function init() {
+      CATALOGS = await fetch('/hub/catalogs.json').then((r) => r.json());
+      renderBrandPills();
+      renderMenu();
+
+      const params = new URLSearchParams(location.search);
+      const catId = params.get('cat');
+      const found = CATALOGS.find((c) => c.id === catId) || CATALOGS[0];
+      if (found) selectCatalog(found.id, false);
+      if (params.get('qr') === '1') openQrStudio();
+    }
+
+    function renderBrandPills() {
+      const brands = ['ALL', ...new Set(CATALOGS.map((c) => c.brand))];
+      document.getElementById('brand-pills').innerHTML = brands.map((b) => `
+        <button onclick="setBrand('${esc(b)}')" data-brand="${esc(b)}" class="bp-btn px-2.5 py-1 rounded-md text-[11px] font-medium ${b === activeBrand ? 'bg-slate-900 text-white' : 'bg-slate-100 text-slate-600 hover:bg-slate-200'} transition">
+          ${b === 'ALL' ? 'All Brands' : esc(b)}
+        </button>
+      `).join('');
+    }
+
+    function setBrand(b) {
+      activeBrand = b;
+      renderBrandPills();
+      renderMenu();
+    }
+
+    function renderMenu() {
+      const q = (document.getElementById('cat-search').value || '').trim().toLowerCase();
+      const filtered = CATALOGS.filter((c) => {
+        if (activeBrand !== 'ALL' && c.brand !== activeBrand) return false;
+        if (q && !`${c.title} ${c.brand} ${c.category} ${c.description}`.toLowerCase().includes(q)) return false;
+        return true;
+      });
+
+      document.getElementById('catalog-menu').innerHTML = filtered.map((c) => {
+        const isActive = activeCat && activeCat.id === c.id;
+        return `
+          <button onclick="selectCatalog('${esc(c.id)}', true)" class="w-full text-left p-3 rounded-xl border transition ${isActive ? 'bg-indigo-50/90 border-indigo-200 shadow-2xs' : 'bg-white border-slate-200/70 hover:border-slate-300 hover:bg-slate-50'}">
+            <div class="flex items-center justify-between gap-2">
+              <span class="text-[10px] font-bold uppercase tracking-wider ${isActive ? 'text-indigo-700' : 'text-slate-400'}">${esc(c.brand)}</span>
+              ${c.badge ? `<span class="text-[10px] px-1.5 py-0.5 rounded bg-slate-100 text-slate-600 font-medium">${esc(c.badge)}</span>` : ''}
+            </div>
+            <div class="text-xs font-semibold text-slate-900 mt-1 leading-snug">${esc(c.title)}</div>
+            <div class="text-[11px] text-slate-500 mt-0.5">${esc(c.category)}</div>
+          </button>
+        `;
+      }).join('') || '<p class="text-xs text-slate-400 p-3">No matching catalogs.</p>';
+    }
+
+    function selectCatalog(id, pushUrl) {
+      activeCat = CATALOGS.find((c) => c.id === id) || CATALOGS[0];
+      if (!activeCat) return;
+      closeQrStudio();
+      toggleSidebar(false);
+
+      document.getElementById('active-brand').textContent = activeCat.brand;
+      document.getElementById('active-category').textContent = activeCat.category;
+      document.getElementById('active-badge').textContent = activeCat.pages || '';
+      document.getElementById('active-title').textContent = activeCat.title;
+      document.getElementById('active-desc').textContent = activeCat.description;
+      document.getElementById('download-pdf-btn').href = activeCat.pdfUrl;
+      document.getElementById('open-raw-pdf').href = activeCat.pdfUrl;
+      document.title = `${activeCat.title} — JINHARSH Catalog Hub`;
+
+      if (pushUrl) {
+        const url = new URL(location.href);
+        url.searchParams.set('cat', activeCat.id);
+        url.searchParams.delete('qr');
+        history.replaceState({}, '', url.toString());
+      }
+
+      loadPdfFrame();
+      renderMenu();
+    }
+
+    function loadPdfFrame() {
+      if (!activeCat) return;
+      const absUrl = activeCat.pdfUrl.startsWith('http') ? activeCat.pdfUrl : `${location.origin}${activeCat.pdfUrl}`;
+      const iframe = document.getElementById('pdf-iframe');
+      if (useGoogleViewer) {
+        iframe.src = `https://docs.google.com/gview?embedded=true&url=${encodeURIComponent(absUrl)}`;
+        document.getElementById('viewer-mode-label').textContent = 'Embedded Google PDF Viewer';
+        document.getElementById('viewer-mode-btn').textContent = 'Switch to Native Browser Viewer';
+      } else {
+        iframe.src = activeCat.pdfUrl;
+        document.getElementById('viewer-mode-label').textContent = 'Native Interactive PDF Viewer';
+        document.getElementById('viewer-mode-btn').textContent = 'Trouble viewing? Try Embedded Viewer';
+      }
+    }
+
+    function toggleViewerMode() {
+      useGoogleViewer = !useGoogleViewer;
+      loadPdfFrame();
+    }
+
+    function getDirectUrl(id) {
+      return id ? `${location.origin}/?cat=${encodeURIComponent(id)}` : `${location.origin}/`;
+    }
+
+    function copyDirectLink() {
+      if (!activeCat) return;
+      navigator.clipboard.writeText(getDirectUrl(activeCat.id));
+      const btn = document.getElementById('copy-link-btn');
+      btn.textContent = 'Copied!';
+      setTimeout(() => { btn.textContent = 'Copy QR Link'; }, 1500);
+    }
+
+    function showSingleQr() {
+      if (!activeCat) return;
+      const url = getDirectUrl(activeCat.id);
+      document.getElementById('modal-qr-title').textContent = activeCat.title;
+      document.getElementById('modal-qr-url').textContent = url;
+      const box = document.getElementById('modal-qr-box');
+      box.innerHTML = '';
+      new QRCode(box, { text: url, width: 220, height: 220, colorDark: '#0f172a', colorLight: '#ffffff', correctLevel: QRCode.CorrectLevel.H });
+      document.getElementById('single-qr-modal').classList.remove('hidden');
+    }
+
+    function downloadModalQr() {
+      const img = document.querySelector('#modal-qr-box img') || document.querySelector('#modal-qr-box canvas');
+      if (!img) return;
+      const a = document.createElement('a');
+      a.href = img.tagName === 'CANVAS' ? img.toDataURL('image/png') : img.src;
+      a.download = `qr-${activeCat ? activeCat.id : 'jinharsh-catalog'}.png`;
+      a.click();
+    }
+
+    function openQrStudio() {
+      document.getElementById('viewer-toolbar').classList.add('hidden');
+      document.getElementById('pdf-viewer-wrap').classList.add('hidden');
+      document.getElementById('qr-studio-panel').classList.remove('hidden');
+
+      const entries = [
+        { id: 'main-hub', title: 'Main Exhibition Catalog Hub (All Brands)', brand: 'JINHARSH HQ', url: `${location.origin}/` },
+        ...CATALOGS.map((c) => ({ id: c.id, title: c.title, brand: c.brand, url: getDirectUrl(c.id) })),
+      ];
+
+      const grid = document.getElementById('qr-grid');
+      grid.innerHTML = entries.map((e, idx) => `
+        <div class="bg-white border border-slate-200 rounded-xl p-4 flex flex-col items-center text-center space-y-3">
+          <div class="text-[10px] font-bold uppercase tracking-wider text-indigo-600">${esc(e.brand)}</div>
+          <div class="text-xs font-semibold text-slate-900 line-clamp-2 min-h-[2rem]">${esc(e.title)}</div>
+          <div id="qr-card-${idx}" class="p-2 bg-white border border-slate-100 rounded-lg"></div>
+          <div class="text-[10px] text-slate-400 break-all">${esc(e.url)}</div>
+          <button onclick="downloadCardQr(${idx}, '${esc(e.id)}')" class="w-full text-xs font-semibold bg-slate-900 hover:bg-slate-800 text-white py-2 rounded-lg transition">Download PNG</button>
+        </div>
+      `).join('');
+
+      entries.forEach((e, idx) => {
+        new QRCode(document.getElementById(`qr-card-${idx}`), {
+          text: e.url, width: 160, height: 160, colorDark: '#0f172a', colorLight: '#ffffff', correctLevel: QRCode.CorrectLevel.H,
+        });
+      });
+    }
+
+    function downloadCardQr(idx, id) {
+      const el = document.querySelector(`#qr-card-${idx} img`) || document.querySelector(`#qr-card-${idx} canvas`);
+      if (!el) return;
+      const a = document.createElement('a');
+      a.href = el.tagName === 'CANVAS' ? el.toDataURL('image/png') : el.src;
+      a.download = `qr-${id}.png`;
+      a.click();
+    }
+
+    function closeQrStudio() {
+      document.getElementById('qr-studio-panel').classList.add('hidden');
+      document.getElementById('viewer-toolbar').classList.remove('hidden');
+      document.getElementById('pdf-viewer-wrap').classList.remove('hidden');
+    }
+
+    init();
+  </script>
 </body>
 </html>
