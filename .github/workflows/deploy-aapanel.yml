@@ -36,7 +36,7 @@ jobs:
             if [ -d "sites/$site" ]; then
               if [ "$site" = "catalog.jinharsh.com" ]; then
                 echo "Deploying $site -> /www/wwwroot/$site/hub"
-                rsync -rlvz --delete --no-perms --no-owner --no-group --omit-dir-times --exclude='.user.ini' --exclude='.well-known' --exclude='pdfs/' -e "ssh -i ~/.ssh/id_deploy" "sites/$site/" "deploy@159.89.94.209:/www/wwwroot/$site/hub/"
+                rsync -rlvz --delete --no-perms --no-owner --no-group --omit-dir-times --exclude='.user.ini' --exclude='.well-known' --exclude='pdfs/' --exclude='data/' -e "ssh -i ~/.ssh/id_deploy" "sites/$site/" "deploy@159.89.94.209:/www/wwwroot/$site/hub/"
               else
                 echo "Deploying $site -> /www/wwwroot/$site"
                 rsync -rlvz --delete --no-perms --no-owner --no-group --omit-dir-times --exclude='.user.ini' --exclude='.well-known' -e "ssh -i ~/.ssh/id_deploy" "sites/$site/" "deploy@159.89.94.209:/www/wwwroot/$site/"
