@@ -1,4 +1,4 @@
-// QR codes with the Jinharsh logo in the middle, drawn in the browser from the catalogue's permanent link (/?cat=<id>).
+// QR codes: drawn here in the browser from the document's permanent link.
 // The same link always gives the same QR, so a QR made today and one made next year are identical.
 import qrcode from '/hub/vendor/qrcode.js';
 

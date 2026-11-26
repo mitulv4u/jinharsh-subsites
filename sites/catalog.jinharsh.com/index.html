@@ -2,186 +2,93 @@
 <html class="ju" lang="en">
 <head>
   <!-- synced via jinharsh-subsites -->
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <!-- Made from the Jinharsh Catalogues app (github.com/adi6499/PDFUPLOADER) by tools/php-hub/build.mjs: change it there.
+       api.php, team.html, catalogs.json, pdfs/ and covers/ are this hub's own. -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <title>JINHARSH Catalog Hub — Interactive Industrial Catalogs &amp; PDF Downloads</title>
-  <meta name="description" content="Official JINHARSH interactive catalog hub. View and download Timken, Regal Rexnord, Lovejoy, ABB, Groz, Dräger, and Flexco industrial catalogs." />
-  <meta name="theme-color" content="#f4f4f6" />
-  <link rel="icon" href="/hub/assets/favicon-32.png" sizes="32x32" />
-  <link rel="apple-touch-icon" href="/hub/assets/apple-touch-icon.png" />
-  <!-- the list of catalogues is asked for straight away, while the rest of the page is still arriving -->
-  <script>window.CATALOGS_REQ = fetch('/hub/api.php?action=catalogs').then(function (r) { if (!r.ok) throw r; return r.json(); }); window.CATALOGS_REQ.catch(function () {});</script>
-  <link rel="stylesheet" href="/hub/vendor/jinharsh-ui.css" />
-  <link rel="stylesheet" href="/hub/assets/hub.css" />
-  <!-- light, like before (the kit would otherwise follow the phone's dark mode) -->
-  <script>try { if (localStorage.getItem('jui_dark') == null) localStorage.setItem('jui_dark', '0'); } catch (e) {}</script>
+  <meta name="description" content="Official JINHARSH interactive catalog hub. View and download Timken, Regal Rexnord, Lovejoy, ABB, Groz, Dräger, and Flexco industrial catalogs.">
+  <meta name="theme-color" content="#f4f4f6" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#0a0a0a" media="(prefers-color-scheme: dark)">
+  <link rel="icon" href="/hub/assets/favicon-32.png" sizes="32x32">
+  <link rel="apple-touch-icon" href="/hub/assets/apple-touch-icon.png">
+  <!-- asked for straight away, while the rest of the page is still arriving: the list of catalogues, a catalogue
+       page's cover picture, and only the scripts this page needs -->
+  <script>
+    window.CATALOGS_REQ = fetch('/hub/api.php?action=catalogs').then(function (r) { if (!r.ok) throw r; return r.json(); });
+    window.CATALOGS_REQ.catch(function () {});
+    (function () {
+      var m = /[?&]cat=([A-Za-z0-9-]{1,120})(&|$)/.exec(location.search), h = document.head;
+      function add(rel, href, as) { var l = document.createElement('link'); l.rel = rel; l.href = href; if (as) { l.as = as; l.setAttribute('fetchpriority', 'high'); } h.appendChild(l); }
+      if (m) add('preload', '/hub/covers/' + m[1] + '.webp', 'image');
+      (m ? ["/hub/js/boot.js","/hub/js/view.js","/hub/js/site.js","/hub/js/markup.js","/hub/js/backend.js","/hub/js/motion.js","/hub/js/particles.js","/hub/js/qr.js","/hub/js/copy.js","/hub/js/pdfkit.js","/hub/vendor/qrcode.js","/hub/vendor/icons.js?v=3","/hub/js/visitor.js","/hub/js/magnify.js","/hub/js/media.js"] : ["/hub/js/boot.js","/hub/js/hub.js","/hub/js/site.js","/hub/js/markup.js","/hub/js/backend.js","/hub/js/motion.js","/hub/js/particles.js","/hub/js/qr.js","/hub/js/copy.js","/hub/js/pdfkit.js","/hub/vendor/qrcode.js","/hub/vendor/icons.js?v=3","/hub/js/visitor.js","/hub/js/magnify.js","/hub/js/handoff.js"]).forEach(function (p) { add('modulepreload', p); });
+    })();
+  </script>
+  <link rel="stylesheet" href="/hub/vendor/jinharsh-ui.css">
+  <link rel="stylesheet" href="/hub/css/app.css">
+  <link rel="stylesheet" href="/hub/css/view.css">
+  <link rel="stylesheet" href="/hub/css/hub.css">
+  <script src="/hub/js/theme-boot.js"></script>
   <script src="/hub/vendor/jinharsh-ui.js"></script>
-  <link rel="preload" href="/hub/vendor/fonts/Geist-Latin.woff2" as="font" type="font/woff2" crossorigin />
-  <link rel="modulepreload" href="/hub/assets/hub.js?v=2" />
-  <link rel="modulepreload" href="/hub/assets/qr.js?v=2" />
-  <link rel="modulepreload" href="/hub/vendor/qrcode.js" />
-  <link rel="modulepreload" href="/hub/vendor/icons.js" />
+  <link rel="preload" href="/hub/vendor/fonts/Geist-Latin.woff2" as="font" type="font/woff2" crossorigin>
 </head>
-<body>
-
-  <!-- Top Header -->
-  <header class="ju-top ju-glass top">
-    <button class="ju-icon" id="menuBtn" type="button" aria-label="All catalogues" aria-controls="catalog-sidebar"></button>
-    <a href="/" class="brand">
-      <img src="/hub/assets/mark-96.png" alt="" width="34" height="34" />
-      <span><b>JINHARSH Total Catalog Hub</b><small>Interactive PDF Viewer · Direct QR Downloads</small></span>
-    </a>
-    <button class="ju-btn accent sm" type="button" data-query id="header-query-btn">Send Query</button>
-    <button class="ju-btn sm mid" type="button" id="qr-studio-btn">QR Studio</button>
-    <a class="ju-btn ghost sm wide" href="/hub/team.html">Team Portal</a>
-    <a class="ju-btn ghost sm wide" href="https://catalog.jinharsh.co.in/index.php/Product_Range" target="_blank" rel="noopener">Technical Wiki ↗</a>
-    <a class="ju-btn primary sm mid" href="https://www.jinharsh.com" target="_blank" rel="noopener">jinharsh.com ↗</a>
+<body class="viewer">
+<template id="t-view">
+<header class="ju-top ju-glass">
+    <div class="top-in">
+      <button class="ju-icon" id="menuTop" type="button" aria-label="All catalogues" title="All catalogues"></button>
+      <a class="brand" id="brand" href="/" rel="noopener">
+        <img src="/hub/assets/mark-96.png" alt="" width="38" height="38">
+        <span><b>Jinharsh</b><small>Industrial Solutions</small></span>
+      </a>
+      <button class="ju-icon" id="themeTop" type="button" aria-label="Light or dark" title="Light or dark"></button>
+      <button class="ju-icon" id="shareTop" type="button" aria-label="Share" hidden></button>
+    </div>
   </header>
-
-  <div class="hub">
-    <!-- Left: the menu of every catalogue (slides in on phones) -->
-    <div class="veil" id="sidebar-backdrop"></div>
-    <aside class="side" id="catalog-sidebar" aria-label="All product catalogs">
-      <div class="side-head">
-        <div class="row">
-          <p class="ju-eyebrow">All Product Catalogs</p>
-          <button class="ju-icon side-close" type="button" id="sideClose" aria-label="Close the menu"></button>
-        </div>
-        <label class="search"><span class="sr">Search catalogues</span><span id="searchIcon"></span>
-          <input id="cat-search" type="search" placeholder="Search brand, bearing, coupling…" autocomplete="off" /></label>
-        <div class="pills" id="brand-pills" role="group" aria-label="Brands"></div>
-      </div>
-      <nav class="menu" id="catalog-menu"></nav>
-      <div class="side-foot">
-        <button type="button" data-query>Send Inquiry / RFQ</button>
-        <a href="https://wa.me/912240900000" target="_blank" rel="noopener">WhatsApp Sales ↗</a>
-      </div>
-    </aside>
-
-    <!-- Right: the catalogue -->
-    <main class="main" id="main">
-      <section id="viewer" class="waiting">
-        <div class="v-head" id="viewer-toolbar">
-          <div class="v-text">
-            <div class="v-meta"><span class="brand-pill" id="active-brand" hidden></span><span id="active-category"></span><span class="ju-pill" id="active-badge" hidden></span></div>
-            <h1 id="active-title">Select a Catalog</h1>
-            <p id="active-desc"></p>
-          </div>
-          <div class="v-actions">
-            <button class="ju-btn accent" type="button" id="download-pdf-btn">Download PDF</button>
-            <button class="ju-btn" type="button" data-query>Ask / Request Quote</button>
-            <button class="ju-btn" type="button" id="share-btn" aria-label="Share"><span class="lbl">Share</span></button>
-            <button class="ju-btn icon-only" type="button" id="copy-link-btn" aria-label="Copy QR link" title="Copy QR link"></button>
-            <button class="ju-btn icon-only" type="button" id="show-qr-btn" aria-label="Show QR" title="Show QR"></button>
-          </div>
-        </div>
-
-        <!-- the pages, drawn on any phone (catalogues on other websites keep the Google viewer) -->
-        <div class="reader" id="pdf-viewer-wrap">
-          <div class="rbar">
-            <span class="pos" id="viewer-mode-label">Opening…</span>
-            <span class="zoom-only" id="zoomBox" hidden>
-              <button class="ju-icon" type="button" id="zOut" aria-label="Smaller"></button>
-              <span class="zv" id="zVal">100%</span>
-              <button class="ju-icon" type="button" id="zIn" aria-label="Bigger"></button>
-            </span>
-            <span class="sep"></span>
-            <span class="links">
-              <button class="lnk" type="button" id="viewer-mode-btn">Try Google viewer</button>
-              <a class="lnk plain" id="open-raw-pdf" href="#" target="_blank" rel="noopener">Open Fullscreen ↗</a>
-            </span>
-          </div>
-          <div class="pages-scroll" id="pagesBox"><div class="pages" id="pages"></div></div>
-          <iframe id="pdf-iframe" class="frame" title="Catalog PDF Viewer" hidden></iframe>
-        </div>
-      </section>
-
-      <!-- QR Poster & Business Card Studio (?qr=1 or the QR Studio button) -->
-      <section id="qr-studio-panel" hidden>
-        <div class="studio-head">
-          <div>
-            <h2>QR Code Studio — Exhibition Posters &amp; Business Cards</h2>
-            <p>Every code carries the Jinharsh logo. Download a picture (PNG) for screens and posters, or a print file (SVG) for the print shop. Scanning opens the catalogue with the full catalog menu alongside.</p>
-          </div>
-          <div class="acts">
-            <button class="ju-btn sm accent" type="button" id="qr-all-btn">Download all (ZIP)</button>
-            <a class="ju-btn sm" href="/hub/team.html">+ Upload New Catalog</a>
-            <button class="ju-btn sm primary" type="button" id="qr-close-btn">← Back to PDF Viewer</button>
-          </div>
-        </div>
-        <div class="qr-grid" id="qr-grid"></div>
-      </section>
-    </main>
-  </div>
-
-  <!-- Single QR -->
-  <div class="ju-overlay" id="single-qr-modal" hidden>
-    <div class="ju-sheet" role="dialog" aria-modal="true" aria-labelledby="modal-qr-title">
-      <button class="ju-icon sheet-x" type="button" data-close aria-label="Close"></button>
-      <div class="sheet-eyebrow">Direct Catalog QR Code</div>
-      <h3 id="modal-qr-title"></h3>
-      <div class="qr-box" id="modal-qr-box"></div>
-      <p class="qr-url" id="modal-qr-url"></p>
-      <div class="sheet-acts">
-        <button class="ju-btn accent" type="button" id="qr-png-btn">Download PNG</button>
-        <button class="ju-btn" type="button" id="qr-svg-btn">SVG for print</button>
-        <button class="ju-btn" type="button" id="qr-copy-btn">Copy link</button>
-      </div>
+  <main id="app" class="vwrap"></main>
+</template>
+<template id="t-hub">
+<header class="ju-top ju-glass">
+    <div class="top-in">
+      <a class="brand" href="/">
+        <img src="/hub/assets/mark-96.png" alt="" width="38" height="38">
+        <span><b>Jinharsh</b><small>Catalogues</small></span>
+      </a>
+      <button class="ju-btn accent sm hub-upload" id="hubUpload" type="button" hidden></button>
+      <button class="ju-icon" id="hubQr" type="button" aria-label="QR Studio: every QR code" title="QR Studio: every QR code"></button>
+      <button class="ju-icon" id="themeTop" type="button" aria-label="Light or dark" title="Light or dark"></button>
+      <button class="ju-icon" id="hubShare" type="button" aria-label="Share" title="Share"></button>
     </div>
-  </div>
-
-  <!-- Share -->
-  <div class="ju-overlay" id="share-modal" hidden>
-    <div class="ju-sheet" role="dialog" aria-modal="true" aria-labelledby="share-title">
-      <button class="ju-icon sheet-x" type="button" data-close aria-label="Close"></button>
-      <div class="sheet-eyebrow">Share this catalogue</div>
-      <h3 id="share-title"></h3>
-      <p class="sub" id="share-url"></p>
-      <div class="share-list" id="share-list"></div>
-    </div>
-  </div>
-
-  <!-- Optional email on PDF download -->
-  <div class="ju-overlay" id="download-email-modal" hidden>
-    <div class="ju-sheet" role="dialog" aria-modal="true" aria-labelledby="dl-modal-title">
-      <button class="ju-icon sheet-x" type="button" data-close aria-label="Close"></button>
-      <div class="sheet-eyebrow">Instant Catalog Download</div>
-      <h3 id="dl-modal-title"></h3>
-      <p class="sub">Optionally share your email to receive updated pricing &amp; technical sheets from JinHarsh.</p>
-      <form class="form" id="dl-email-form">
-        <input id="dl-name" type="text" placeholder="Your Name (optional)" autocomplete="name" />
-        <input id="dl-email" type="email" placeholder="Work Email (optional)" autocomplete="email" />
-        <div class="sheet-acts" style="margin-top:4px">
-          <button class="ju-btn accent" type="submit">Save &amp; Download PDF</button>
-          <button class="ju-btn" type="button" id="dl-skip">Skip &amp; Download</button>
-        </div>
-      </form>
-    </div>
-  </div>
-
-  <!-- Direct Query / RFQ -->
-  <div class="ju-overlay" id="query-modal" hidden>
-    <div class="ju-sheet" role="dialog" aria-modal="true" aria-labelledby="query-title">
-      <button class="ju-icon sheet-x" type="button" data-close aria-label="Close"></button>
-      <div class="sheet-eyebrow">Direct Inquiry · JinHarsh Sales</div>
-      <h3 id="query-title">Send a Product Query</h3>
-      <p class="sub" id="query-cat-label"></p>
-      <form class="form" id="query-form">
-        <div class="two">
-          <input id="q-name" required placeholder="Your Name *" autocomplete="name" />
-          <input id="q-company" placeholder="Company / Plant Name" autocomplete="organization" />
-        </div>
-        <div class="two">
-          <input id="q-email" required type="email" placeholder="Work Email *" autocomplete="email" />
-          <input id="q-phone" required placeholder="Phone / WhatsApp *" autocomplete="tel" inputmode="tel" />
-        </div>
-        <textarea id="q-message" required rows="3" placeholder="Part numbers, application, quantity, or exhibition follow-up request..."></textarea>
-        <button class="ju-btn primary" id="q-submit-btn" type="submit">Submit Query to JinHarsh Team</button>
-        <p class="status" id="q-status" hidden></p>
-      </form>
-    </div>
-  </div>
-
-  <script type="module" src="/hub/assets/hub.js?v=2"></script>
+  </header>
+  <input type="file" id="hubFile" accept="application/pdf,.pdf" multiple hidden>
+  <div class="drop-veil" id="dropVeil" hidden><div class="card"><span id="dropIcon"></span><b>Drop to upload</b><span class="ju-muted">PDF files only</span></div></div>
+  <main class="vwrap" id="app">
+    <section class="hub-hero">
+      <div class="ju-eyebrow" id="hubEyebrow">Jinharsh Industrial Solutions</div>
+      <h1>Catalogues</h1>
+      <p class="lead">Every product catalogue in one place. Read it online, download it, or share it.</p>
+      <label class="hub-search">
+        <span class="sr">Search catalogues</span>
+        <span id="searchIcon"></span>
+        <input id="q" type="search" placeholder="Search: bearings, couplings, Timken…" autocomplete="off">
+      </label>
+    </section>
+    <div class="chips" id="chips" role="group" aria-label="Brands"></div>
+    <section class="cards" id="cards" aria-live="polite"></section>
+    <div id="contact"></div>
+  </main>
+</template>
+<script>
+  // the frame of the page straight away: a catalogue (/?cat=<id>, with its cover) or the front page
+  (function () {
+    var m = /[?&]cat=([A-Za-z0-9-]{1,120})(&|$)/.exec(location.search), b = document.body, kind = m ? 'view' : 'hub';
+    b.className = m ? 'viewer' : 'viewer hub';
+    b.dataset.shell = kind;
+    b.insertBefore(document.getElementById('t-' + kind).content.cloneNode(true), document.currentScript);
+    if (m) document.getElementById('app').innerHTML = '<section class="v-hero"><div class="v-cover"><img src="/hub/covers/' + m[1] +
+      '.webp" alt="" width="720" height="1018" fetchpriority="high" onerror="var s=this.closest(\'.v-hero\');if(s)s.remove()"></div></section>';
+  })();
+</script>
+<script type="module" src="/hub/js/boot.js"></script>
 </body>
 </html>
