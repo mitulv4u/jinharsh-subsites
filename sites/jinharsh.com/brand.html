@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Brand Details | Jinharsh</title>
+  <meta name="description" content="Explore official OEM brand products, specifications, and technical support from JinHarsh Industrial Solutions.">
+  <meta property="og:title" content="Brand Details | Jinharsh">
+  <meta property="og:description" content="Explore official OEM brand products, specifications, and technical support from JinHarsh Industrial Solutions.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://www.jinharsh.com/brand.html">
+  <link rel="canonical" href="https://www.jinharsh.com/brand.html">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Rubik:ital,wght@0,300..900;1,300..900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/styles.css">
+  <script defer src="js/data.js"></script>
+  <script defer src="js/quote-cart.js"></script>
+  <script defer src="js/components.js"></script>
+</head>
+<body class="flex flex-col min-h-screen bg-[var(--color-primary)] overflow-x-hidden">
+
+  <div id="main-header"></div>
+
+  <main class="flex-grow pt-20">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+      <a href="brands.html" class="inline-flex items-center gap-2 text-xs font-bold text-[#5a5a5a] hover:text-[var(--color-accent)] uppercase tracking-wider">
+        ← Back to All Brands
+      </a>
+    </div>
+
+    <section id="brand-hero" class="py-12 bg-white border-y border-[#E7E7E7]">
+      <!-- Injected via script -->
+    </section>
+
+    <section class="py-16 bg-[#F8F8F8]">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <h3 class="text-2xl font-black text-[#121212] uppercase mb-8">Brand Product Lines</h3>
+        <div id="subbrands-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          <!-- Injected via script -->
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <div id="main-footer"></div>
+  <div id="floating-chat-container"></div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const urlParams = new URLSearchParams(window.location.search);
+      const slug = urlParams.get('slug');
+      
+      if (!slug || typeof catalogData === 'undefined') return;
+
+      const brand = catalogData.brands.find(b => b.slug === slug);
+      if (!brand) {
+        document.getElementById('brand-hero').innerHTML = `<div class="text-center text-red-500 font-bold py-12">Brand not found.</div>`;
+        return;
+      }
+
+      document.title = `${brand.name} | Jinharsh`;
+
+      document.getElementById('brand-hero').innerHTML = `
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 items-center">
+            <div class="bg-gray-50 border border-[#E7E7E7] p-8 flex items-center justify-center rounded">
+              <img src="${brand.image}" alt="${brand.name}" class="max-h-32 max-w-full object-contain" onerror="this.src='public/images/catalog/homepage.png'" />
+            </div>
+            <div class="lg:col-span-2 space-y-4">
+              <div class="inline-block bg-green-100 text-green-800 text-xs font-bold px-3 py-1 uppercase rounded">
+                Authorized Partner
+              </div>
+              <h1 class="text-3xl md:text-5xl font-black text-[#121212] uppercase">${brand.name}</h1>
+              <p class="text-[#5a5a5a] text-sm leading-relaxed">${brand.desc || ''}</p>
+              ${brand.url ? `<a href="https://${brand.url}" target="_blank" class="inline-flex items-center gap-2 text-xs font-bold text-[var(--color-accent)] uppercase">Visit Official Website ↗</a>` : ''}
+            </div>
+          </div>
+        </div>
+      `;
+
+      const subGrid = document.getElementById('subbrands-grid');
+      if (brand.subBrands && brand.subBrands.length > 0) {
+        subGrid.innerHTML = brand.subBrands.map(sb => `
+          <div class="indust-card p-6 bg-white border border-[#E7E7E7]">
+            <img src="${sb.productImage || sb.logo || brand.image}" class="h-40 w-full object-contain mb-4" onerror="this.src='public/images/catalog/homepage.png'" />
+            <h4 class="font-bold text-[#121212] uppercase mb-2">${sb.name}</h4>
+            <a href="quote.html" class="indust-button w-full py-2 text-xs font-bold uppercase mt-4">Inquire Line</a>
+          </div>
+        `).join('');
+      } else {
+        subGrid.innerHTML = `
+          <div class="col-span-full bg-white p-8 border border-[#E7E7E7] text-center text-[#5a5a5a]">
+            Explore the full range of ${brand.name} products across our catalog sections.
+            <div class="mt-4">
+              <a href="portfolio.html" class="indust-button px-6 py-2 text-xs uppercase">Browse Portfolio</a>
+            </div>
+          </div>
+        `;
+      }
+    });
+  </script>
+</body>
+</html>
