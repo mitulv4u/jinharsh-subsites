@@ -1,0 +1,922 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GAMET Bearing Installation Guide — Storage, Handling & Fitting</title>
+
+    <meta name="keywords"
+        content="Gamet Bearings, High Precision Tapered Roller Bearings, Spindle Bearings, Machine Tool Bearings, Inch Variation Bearings, Metric Bearings, Gamet Types, Plain, Flanged, Spring Preload, Lathe Spindle, CNC Spindle, Colchester Bearings, HB Bearings, Exact Replacement">
+    <meta name="robots" content="index, follow">
+    <meta name="description"
+        content="Official GAMET bearing installation guide. Proper storage, handling, fitting procedures and preload adjustment for super precision tapered roller bearings.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Urbanist:wght@600;700;800&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="index.css">
+    <style>
+        .toc {
+            background: var(--bg-section);
+            border-radius: var(--radius-xl);
+            padding: 32px 40px;
+            margin-bottom: 48px;
+            border: 1px solid var(--border-color);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .toc h4 {
+            font-size: 1.2rem;
+            margin-bottom: 16px;
+        }
+
+        .toc ol {
+            padding-left: 20px;
+            line-height: 2;
+        }
+
+        .toc a {
+            color: var(--accent-primary);
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        .toc a:hover {
+            text-decoration: underline;
+        }
+
+        .install-section {
+            margin-bottom: 64px;
+            scroll-margin-top: 100px;
+            background: white;
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-lg);
+            padding: 24px 32px;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .install-section h2 {
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-bottom: 0px;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .step-icon {
+            width: 42px;
+            height: 42px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .install-section p,
+        .install-section li {
+            line-height: 1.85;
+            font-size: 0.96rem;
+            color: var(--text-secondary);
+        }
+
+        .install-section ul,
+        .install-section ol {
+            padding-left: 22px;
+            margin: 14px 0;
+        }
+
+        .install-section li {
+            margin-bottom: 8px;
+        }
+
+        .warn-box {
+            background: #fff7ed;
+            border-left: 4px solid #f97316;
+            border-radius: 0 8px 8px 0;
+            padding: 14px 18px;
+            margin: 20px 0;
+            font-size: 0.92rem;
+            color: #7c2d12;
+        }
+
+        .tip-box {
+            background: #f0fdf4;
+            border-left: 4px solid #22c55e;
+            border-radius: 0 8px 8px 0;
+            padding: 14px 18px;
+            margin: 20px 0;
+            font-size: 0.92rem;
+            color: #14532d;
+        }
+
+        .info-box {
+            background: #eff6ff;
+            border-left: 4px solid #3b82f6;
+            border-radius: 0 8px 8px 0;
+            padding: 14px 18px;
+            margin: 20px 0;
+            font-size: 0.92rem;
+            color: #1e3a5f;
+        }
+
+        .step-card {
+            background: var(--bg-main);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-md);
+            padding: 20px 24px;
+            margin-bottom: 16px;
+            display: flex;
+            gap: 16px;
+            align-items: flex-start;
+        }
+
+        .step-num {
+            width: 36px;
+            height: 36px;
+            background: var(--accent-primary);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+            font-size: 0.9rem;
+            flex-shrink: 0;
+        }
+
+        .step-body strong {
+            display: block;
+            margin-bottom: 6px;
+            font-size: 0.96rem;
+        }
+
+        .step-body p {
+            font-size: 0.95rem;
+            color: var(--text-secondary);
+            margin: 0;
+            line-height: 1.7;
+        }
+
+        table.preload-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            font-size: 0.88rem;
+        }
+
+        table.preload-table th {
+            background: var(--accent-primary);
+            color: white;
+            padding: 10px 14px;
+            text-align: left;
+        }
+
+        table.preload-table td {
+            padding: 9px 14px;
+            border-bottom: 1px solid #f1f5f9;
+        }
+
+        table.preload-table tr:nth-child(even) td {
+            background: #f8fafc;
+        }
+
+        .accordion-header {
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 0;
+            text-align: left;
+        }
+
+        .accordion-header h2 {
+            margin-bottom: 0 !important;
+        }
+
+        .accordion-icon {
+            transition: transform 0.3s ease;
+            color: var(--accent-primary);
+        }
+
+        .accordion-header.active .accordion-icon {
+            transform: rotate(180deg);
+        }
+
+        .accordion-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.4s ease-out, margin-top 0.4s ease-out, opacity 0.4s ease-out;
+            opacity: 0;
+        }
+
+        .accordion-content.open {
+            opacity: 1;
+            margin-top: 20px;
+        }
+    </style>
+    <script src="lucide.min.js?v=2" defer></script>
+
+    <!-- SEO & Webmaster Validation Placeholders -->
+    <meta name='google-site-verification' content='REPLACE_WITH_YOUR_GOOGLE_VERIFICATION_CODE' />
+    <meta name='msvalidate.01' content='REPLACE_WITH_YOUR_BING_VERIFICATION_CODE' />
+
+    <!-- Open Graph Default Fallbacks -->
+    <meta property='og:type' content='website' />
+    <meta property='og:site_name' content='GAMET Bearings' />
+    <meta property='og:title' content='GAMET Bearing Installation Guide' />
+    <meta property='og:description' content='Official GAMET bearing installation guide. Proper storage, handling, fitting procedures and preload adjustment.' />
+    <meta property='og:image' content='images/typical_lathe_assembly.jpg' />
+
+    <!-- Google Analytics (gtag.js) Placeholder -->
+    <script async src='https://www.googletagmanager.com/gtag/js?id=G-DYKEW5CW9E'></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      // Replace G-DYKEW5CW9E with your actual Google Analytics Measurement ID
+      gtag('config', 'G-DYKEW5CW9E');
+    </script>
+</head>
+
+<body>
+    <!-- Global Full Page Loader -->
+    <div id="fullPageLoader" class="full-page-loader">
+        <div class="loader-content">
+            <div class="pdf-spinner large"></div>
+            <div id="loaderText">Loading GAMET...</div>
+        </div>
+    </div>
+
+
+    <header class="navbar">
+        <div class="container nav-content">
+            <a href="index.html" class="logo" style="font-family: var(--font-heading); font-size: 1.8rem; font-weight: 800; color: var(--heading-font-color); text-decoration: none;">GAMET</a>
+            <nav class="nav-links">
+                <a href="index.html" class="nav-link ">Home</a>
+                <div class="nav-item dropdown">
+                    <span>Technical Resources <i data-lucide="chevron-down" style="width:16px;height:16px;"></i></span>
+                    <div class="dropdown-content">
+                        <a href="types.html" class="">Bearing Types</a>
+                        <a href="nomenclature.html" class="">Nomenclature</a>
+                        <a href="catalog.html" class="">Catalog Search</a>
+                        <a href="installation.html" class="active">Installation Guide</a>
+                        <a href="oem.html" class="">OEM Machines List</a>
+                    </div>
+                </div>
+                <a href="catalog.html" class="nav-link" style="color:var(--accent-primary);font-weight:600;">Pricing</a>
+                <a href="genuine.html" class="nav-link " style="color:#dc2626;font-weight:600;">Buy Genuine</a>
+                <a href="contact.html" class="nav-link ">Contact Us</a>
+                <div id="btn-extra">
+                    <span></span>
+                    <span></span>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <div class="page-header"
+            style="padding-bottom: 80px; background: var(--bg-light); border-bottom: 1px solid var(--border-color);">
+            <div class="container" style="text-align: center;">
+                <span
+                    style="font-weight:700;color:var(--accent-primary);letter-spacing:2px;text-transform:uppercase;">Technical
+                    Guide</span>
+                <h1 style="font-size:3.2rem;font-weight:800;margin-top:16px;color:var(--text-primary);">
+                    Installation <span class="text-gradient">Procedure</span></h1>
+                <p
+                    style="margin: 24px auto 0; max-width: 700px; color: var(--text-secondary); font-size: 1.15rem; line-height: 1.8;">
+                    Complete
+                    guidance for storage, handling, preparation, fitting, lubrication, pre-load setting, and running-in
+                    of Gamet Super Precision Tapered Roller Bearings.</p>
+                <div style="margin-top:40px;display:flex;gap:16px;flex-wrap:wrap;justify-content:center;">
+                    <a href="catalog.html" class="btn btn-outline"
+                        style="color:var(--text-primary);border: 2px solid var(--text-primary); padding: 14px 34px; border-radius: var(--radius-sm); font-size: 1.1rem; text-decoration: none;">View
+                        Catalog</a>
+                    <a href="catalogs/Bearings Catalog Gamet TRB.pdf" download class="btn btn-primary"
+                        style="padding: 16px 36px; border-radius: var(--radius-sm); font-size: 1.1rem; text-decoration: none;">Download
+                        PDF Catalog</a>
+                </div>
+            </div>
+        </div>
+
+        <section class="container content-section" style="max-width: 900px; padding: 100px 24px;">
+
+            <div
+                style="display: grid; grid-template-columns: 1fr 1fr; gap: 32px; align-items: start; margin-bottom: 40px;">
+                <!-- Table of Contents -->
+                <div class="toc" style="margin-bottom: 0;">
+                    <h4>📋 On This Page</h4>
+                    <ol>
+                        <li><a href="#components">Component Parts & Features</a></li>
+                        <li><a href="#storage">Storage & Packaging</a></li>
+                        <li><a href="#handling">Handling & Pre-Installation Checks</a></li>
+                        <li><a href="#housing">Housing & Shaft Preparation</a></li>
+                        <li><a href="#fitting">Fitting the Bearing</a></li>
+                        <li><a href="#lubrication">Lubrication</a></li>
+                        <li><a href="#preload">Pre-Load Setting</a></li>
+                        <li><a href="#runin">Running-In Procedure</a></li>
+                        <li><a href="#maintenance">Maintenance & Replacement</a></li>
+                    </ol>
+                </div>
+
+                <div
+                    style="border-radius: var(--radius-lg); overflow: hidden; box-shadow: var(--shadow-sm); height: 100%;">
+                    <img loading="lazy" src="envato/professional-technician-checking-and-repairing-par-2026-01-09-12-23-26-utc.jpg"
+                        alt="Professional Technician"
+                        style="width: 100%; height: 100%; object-fit: cover; min-height: 250px;">
+                </div>
+            </div>
+
+            <!-- SECTION 0: Component Parts -->
+            <div class="install-section" id="components">
+                <h2>Component Parts of Gamet Tapered Roller Bearing</h2>
+                <p>Gamet bearings consist of four basic components – the inner race (cone), the outer race (cup),
+                    tapered rollers, and cage. The cone, rollers, and cage form an assembly which is separable from the
+                    cup.</p>
+                <ul>
+                    <li><strong>Cup</strong> - Outer Race</li>
+                    <li><strong>Cone</strong> - Inner Race</li>
+                    <li><strong>Rollers</strong> - Hollow, unique to Gamet</li>
+                    <li><strong>Cage</strong> - Aluminium, one piece</li>
+                    <li><strong>Spacer</strong> - Double row bearings only</li>
+                    <li><strong>Circlip</strong> - Retains cage & roller ass’y</li>
+                </ul>
+
+                <h3 style="margin-top: 32px; font-size: 1.4rem; color: var(--text-primary);">Principles & Specific
+                    Features</h3>
+                <p>The geometry of tapered roller bearings provides certain unique features: most importantly, the long
+                    line contact between roller and race gives high load-carrying capacity and high bearing stiffness.
+                    The ‘on apex’ design ensures a true rolling motion of the rollers on the raceways, at every point
+                    along the roller body.</p>
+                <p>Other specific features of Gamet tapered roller bearings include:</p>
+                <ul>
+                    <li><strong>Precision</strong> – Gamet bearings are manufactured only in a high precision class.
+                    </li>
+                    <li><strong>Hollow Rollers</strong> – This assists the flow of lubricant through the bearing to
+                        provide cooling.</li>
+                    <li><strong>Roller Roundness and Calibration</strong> – A true roundness of rollers ensures equal
+                        load sharing within the bearing and contributes significantly to the overall precision of the
+                        bearings. Gamet Rollers are ground between centres to achieve near-perfect roundness. Rollers
+                        are then calibrated precisely into matched sets.</li>
+                    <li><strong>Bearing Cage</strong> – The cage has a low coefficient of friction. It is guided on the
+                        inner race to provide radial stability and is designed to pass sufficient oil across the races
+                        to maintain lubrication, the remainder being diverted through the centre of the roller.
+                        Depending on rotational speed, grease lubrication may be used as an alternative to oil.</li>
+                </ul>
+            </div>
+
+            <!-- SECTION 1: Storage -->
+            <div class="install-section" id="storage">
+
+                <button class="accordion-header" onclick="toggleAccordion(this)">
+                    <h2 style="margin: 0; padding: 8px 0;">
+                        <div class="step-icon" style="background:#eff6ff;">📦</div>
+                        1. Storage & Packaging
+                    </h2>
+                    <i data-lucide="chevron-down" class="accordion-icon" style="width:28px;height:28px;"></i>
+                </button>
+                <div class="accordion-content">
+
+                    <p style="margin-top: 24px;">After inspection, all Gamet bearings are treated with a
+                        <strong>corrosion preventative
+                            oil</strong>
+                        (except pre-greased bearings). Initial packaging consists of heavy-gauge PVC bags that are
+                        heat-sealed and then placed in protective boxes.
+                    </p>
+                    <ul>
+                        <li>Bearings can be stored for long periods if packaging is <strong>undamaged</strong></li>
+                        <li>Storage area must be <strong>dry</strong> and not subject to extremes of temperature</li>
+                        <li>Do <strong>not</strong> open packaging until immediately before fitting</li>
+                        <li>Store horizontally — do not stack heavy items on bearing boxes</li>
+                        <li>Avoid storage near equipment that generates vibration</li>
+                    </ul>
+                    <div class="tip-box">
+                        <strong>✅ Best Practice:</strong> Always check the packaging integrity before installation. A
+                        compromised bag may allow moisture ingress, accelerating corrosion.
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- SECTION 2: Handling -->
+            <div class="install-section" id="handling">
+
+                <button class="accordion-header" onclick="toggleAccordion(this)">
+                    <h2 style="margin: 0; padding: 8px 0;">
+                        <div class="step-icon" style="background:#fefce8;">🧤</div>
+                        2. Handling & Pre-Installation Checks
+                    </h2>
+                    <i data-lucide="chevron-down" class="accordion-icon" style="width:28px;height:28px;"></i>
+                </button>
+                <div class="accordion-content">
+
+                    <div class="warn-box" style="margin-top: 24px;">
+                        <strong>⚠️ Warning:</strong> Never use impact tools directly on bearing races. Use only
+                        appropriate
+                        presses or induction heaters.
+                    </div>
+                    <p>Gamet super precision bearings are manufactured to extremely close tolerances. Careless handling
+                        can
+                        cause damage that is not visible to the naked eye but severely compromises bearing performance.
+                    </p>
+                    <ul>
+                        <li>Handle with clean, dry hands or lint-free gloves</li>
+                        <li>Never expose bearings to grit, dust, or metal particles</li>
+                        <li>Inspect races and rollers visually — any pitting, scoring, or flaking requires rejection
+                        </li>
+                        <li>Verify part number matches the drawing before fitting</li>
+                        <li>For <strong>GE/HE</strong> spacer types: verify the preload code matches the machine
+                            specification</li>
+                    </ul>
+
+                    <div class="step-card">
+                        <div class="step-num">1</div>
+                        <div class="step-body"><strong>Remove corrosion preventative</strong>
+                            <p>Flush with clean solvent (white spirit or equivalent). Ensure complete removal before
+                                applying operating lubricant.</p>
+                        </div>
+                    </div>
+                    <div class="step-card">
+                        <div class="step-num">2</div>
+                        <div class="step-body"><strong>Visual inspection</strong>
+                            <p>Inspect rollers and races under good lighting. Look for rust spots, scores, or surface
+                                irregularities. Measure bore and OD if in doubt.</p>
+                        </div>
+                    </div>
+                    <div class="step-card">
+                        <div class="step-num">3</div>
+                        <div class="step-body"><strong>Confirm matched set</strong>
+                            <p>Single Row Plain (cone + cup) are sold as matched sets. Never mix cone and cup from
+                                different
+                                matching pairs unless specified.</p>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- SECTION 3: Housing & shaft -->
+            <div class="install-section" id="housing">
+
+                <button class="accordion-header" onclick="toggleAccordion(this)">
+                    <h2 style="margin: 0; padding: 8px 0;">
+                        <div class="step-icon" style="background:#fdf4ff;">🔧</div>
+                        3. Housing & Shaft Preparation
+                    </h2>
+                    <i data-lucide="chevron-down" class="accordion-icon" style="width:28px;height:28px;"></i>
+                </button>
+                <div class="accordion-content">
+
+                    <p style="margin-top: 24px;">The performance of a super precision bearing is directly dependent on
+                        the quality of fit of the
+                        housing bore and shaft diameter.</p>
+                    <ul>
+                        <li><strong>Shaft tolerance:</strong> Typically k5 or m5 for interference fits (inner ring
+                            rotating
+                            load)</li>
+                        <li><strong>Housing tolerance:</strong> Typically H6/K6 to allow removal of the cup</li>
+                        <li>Cleanness is paramount — remove all burrs, swarf and grinding particles</li>
+                        <li>Measure housing bore and shaft journal at multiple points to check roundness and
+                            straightness
+                        </li>
+                        <li>Apply a thin film of clean oil to the housing bore and shaft journal before fitting</li>
+                    </ul>
+                    <div class="info-box">
+                        <strong>ℹ️ Note:</strong> For Double-Row G and H type bearings, the housing shoulder height must
+                        not
+                        exceed the <em>E</em> dimension (envelope flange height). Reference the bearing diagram and
+                        dimension tables in the catalog.
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- SECTION 4: Fitting -->
+            <div class="install-section" id="fitting">
+
+                <button class="accordion-header" onclick="toggleAccordion(this)">
+                    <h2 style="margin: 0; padding: 8px 0;">
+                        <div class="step-icon" style="background:#f0fdf4;">⚙️</div>
+                        4. Typical Assembly Procedure (H & P Type)
+                    </h2>
+                    <i data-lucide="chevron-down" class="accordion-icon" style="width:28px;height:28px;"></i>
+                </button>
+                <div class="accordion-content">
+
+                    <p style="margin-top: 24px;">The following procedure covers the assembly of Gamet H & P Type
+                        bearings to a typical lathe
+                        spindle,
+                        as specified by Gamet's official guidelines.</p>
+                    <div class="warn-box">
+                        <strong>⚠️ Important:</strong> Ensure all parts are thoroughly cleaned and adhere to handling
+                        instructions before starting.
+                    </div>
+
+                    <div class="step-card">
+                        <div class="step-num">1</div>
+                        <div class="step-body"><strong>Initial Preparation & Heating</strong>
+                            <p>Adjust front cap to ensure front bearing cup is securely seated. Adjust and lock rear
+                                spacer
+                                (If fitted or required). Heat both bearing cones to a maximum of 80⁰ - 100⁰ C, using an
+                                induction heater.</p>
+                        </div>
+                    </div>
+                    <div class="step-card">
+                        <div class="step-num">2</div>
+                        <div class="step-body"><strong>Seating the Bearings</strong>
+                            <p>When heat is achieved, push firmly onto the spindle to ensure they are seated correctly
+                                against the abutting shoulder. Ensure rear bearing cup is perfectly clean, push lightly
+                                by
+                                hand into rear housing. Fit rear cap adjusting lightly to seat bearings.</p>
+                        </div>
+                    </div>
+                    <div class="step-card">
+                        <div class="step-num">3</div>
+                        <div class="step-body"><strong>Initial Dial Indicator Setup</strong>
+                            <p>Stand spindle vertically and mount dial indicator. Rotate spindle several times and
+                                obtain a
+                                steady zero-reading on the dial gauge. Back-off the front measuring face until
+                                approximately
+                                3-4 mm clearance. Re-set dial gauge to zero. <em>Note: Do not rotate spindle after
+                                    backing-off the measuring face.</em></p>
+                        </div>
+                    </div>
+                    <div class="step-card">
+                        <div class="step-num">4</div>
+                        <div class="step-body"><strong>Applying Load</strong>
+                            <p>Reverse Spindle in fixture. Using a suitable weight (equivalent to radial load + radial
+                                load/2), push outer race progressively to remove any existing slop between bearing
+                                rollers
+                                and tracks.</p>
+                        </div>
+                    </div>
+                    <div class="step-card">
+                        <div class="step-num">5</div>
+                        <div class="step-body"><strong>Measuring Displacement</strong>
+                            <p>Rotate spindle several times to allow rollers to re-seat themselves, to give an accurate
+                                indicated value. Continue measuring the displacement over all 3 struts, note mean,
+                                repeat
+                                until value is identical to within 1-2 microns. Record identical value.</p>
+                        </div>
+                    </div>
+                    <div class="step-card">
+                        <div class="step-num">6</div>
+                        <div class="step-body"><strong>Lubrication & Headstock Fitment</strong>
+                            <p>Apply 2-3 drops of oil to each bearing roller assembly. Re-grease bearings thoroughly.
+                                Fit
+                                spindle into headstock, ensure rear bearing cup is securely clamped to housing face, via
+                                the
+                                two outer caps.</p>
+                        </div>
+                    </div>
+                    <div class="step-card">
+                        <div class="step-num">7</div>
+                        <div class="step-body"><strong>Determining Pack Size</strong>
+                            <p><em>Note: Ensure spindle rotates freely by hand, prior to attempting final
+                                    adjustment.</em>
+                                Measure required gap to determine required pack-size.</p>
+                        </div>
+                    </div>
+                    <div class="step-card">
+                        <div class="step-num">8</div>
+                        <div class="step-body"><strong>Final Lock & Verification</strong>
+                            <p>Measure pack and carefully grind to correct size. Remove spacer and lock-nut. Fit
+                                correct-size pack, replace spacer and securely lock by tightening lock-nut as per
+                                instructions. Ensure spindle rotates freely by hand and measure axial run-out if
+                                requested/required.</p>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- SECTION 5: Lubrication -->
+            <div class="install-section" id="lubrication">
+
+                <button class="accordion-header" onclick="toggleAccordion(this)">
+                    <h2 style="margin: 0; padding: 8px 0;">
+                        <div class="step-icon" style="background:#fff7ed;">🛢️</div>
+                        5. Lubrication
+                    </h2>
+                    <i data-lucide="chevron-down" class="accordion-icon" style="width:28px;height:28px;"></i>
+                </button>
+                <div class="accordion-content">
+
+                    <p style="margin-top: 24px;">Correct lubrication is the most critical factor in achieving optimum
+                        bearing life. Gamet bearings
+                        are
+                        designed for either oil or grease lubrication depending on application requirements.</p>
+
+                    <h3 style="margin:24px 0 12px;font-size:1.05rem;">Grease Lubrication</h3>
+                    <ul>
+                        <li>Use <strong>NLGI Grade 2</strong> high quality lithium-based grease</li>
+                        <li>Fill approximately <strong>30–40%</strong> of free space in the bearing and housing</li>
+                        <li>Do not over-grease — excess causes churning, heat, and premature failure</li>
+                        <li>Re-grease at manufacturer recommended intervals (typically every 2,000–4,000 hours depending
+                            on
+                            speed and load)</li>
+                    </ul>
+
+                    <h3 style="margin:24px 0 12px;font-size:1.05rem;">Oil Lubrication (recommended for spindle
+                        applications)
+                    </h3>
+                    <ul>
+                        <li>Circulating oil system preferred for continuous duty machine tool spindles</li>
+                        <li>ISO VG 32 or VG 46 mineral or synthetic spindle oil depending on speed</li>
+                        <li>Oil temperature should not exceed <strong>70°C</strong> at the bearing; check with
+                            thermocouples
+                            if possible</li>
+                        <li>Oil flow must be adequate to carry away heat — consult machine designer for flow rates</li>
+                        <li>Filter oil to at least <strong>10 microns</strong> — contamination is the primary cause of
+                            premature bearing failure</li>
+                    </ul>
+
+                    <div class="tip-box">
+                        <strong>✅ Tip:</strong> For Q-type (extra precision) and high-speed applications, air-oil mist
+                        lubrication may be specified. Follow machine builder's specification.
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- SECTION 6: Pre-Load -->
+            <div class="install-section" id="preload">
+
+                <button class="accordion-header" onclick="toggleAccordion(this)">
+                    <h2 style="margin: 0; padding: 8px 0;">
+                        <div class="step-icon" style="background:#eff6ff;">↔️</div>
+                        6. Pre-Load Setting
+                    </h2>
+                    <i data-lucide="chevron-down" class="accordion-icon" style="width:28px;height:28px;"></i>
+                </button>
+                <div class="accordion-content">
+
+                    <p style="margin-top: 24px;">Pre-load is the controlled elimination of internal clearance in the
+                        bearing pair. It increases
+                        stiffness, reduces runout, and extends bearing life when set correctly. Incorrect pre-load —
+                        especially excessive pre-load — greatly reduces bearing life.</p>
+
+                    <h3 style="margin:24px 0 12px;font-size:1.05rem;">Understanding the Preload Code (HE/GE Type)</h3>
+                    <p>For bearings with the <strong>E suffix</strong> (spacer variants — HE and GE types), the preload
+                        is
+                        determined by the internal spacer. The numeric code after "E" denotes the preload offset:</p>
+
+                    <table class="preload-table">
+                        <thead>
+                            <tr>
+                                <th>Part Suffix</th>
+                                <th>Preload Level</th>
+                                <th>Space Offset</th>
+                                <th>Typical Use</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><code>HE0 / GE0</code></td>
+                                <td>Zero / Nominal</td>
+                                <td>±0 µm</td>
+                                <td>Standard general purpose</td>
+                            </tr>
+                            <tr>
+                                <td><code>HE+10 / GE+10</code></td>
+                                <td>Light</td>
+                                <td>+10 µm</td>
+                                <td>Higher speed, lower load</td>
+                            </tr>
+                            <tr>
+                                <td><code>HE+20 / GE+20</code></td>
+                                <td>Medium</td>
+                                <td>+20 µm</td>
+                                <td>Medium speed/load</td>
+                            </tr>
+                            <tr>
+                                <td><code>HE+30 / GE+30</code></td>
+                                <td>Heavy</td>
+                                <td>+30 µm</td>
+                                <td>Heavy cutting, low speed</td>
+                            </tr>
+                            <tr>
+                                <td><code>HE+40 / GE+40</code></td>
+                                <td>Extra Heavy</td>
+                                <td>+40 µm</td>
+                                <td>Very heavy duty</td>
+                            </tr>
+                            <tr>
+                                <td><code>HE-10 / GE-10</code></td>
+                                <td>Reduced</td>
+                                <td>-10 µm</td>
+                                <td>Very high speed, minimal load</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <h3 style="margin:24px 0 12px;font-size:1.05rem;">Axial Adjustment (non-spacer types)</h3>
+                    <ul>
+                        <li>Use a calibrated torque wrench or dial gauge to measure running torque / axial deflection
+                        </li>
+                        <li>Tighten the locknut progressively until the specified preload deflection is reached</li>
+                        <li>Verify with a dial indicator: rotate the shaft, measure axial float — target is zero or
+                            specified value</li>
+                        <li>Check that the shaft rotates freely by hand — binding indicates over-preload</li>
+                    </ul>
+
+                </div>
+            </div>
+
+            <!-- SECTION 7: Run-In -->
+            <div class="install-section" id="runin">
+
+                <button class="accordion-header" onclick="toggleAccordion(this)">
+                    <h2 style="margin: 0; padding: 8px 0;">
+                        <div class="step-icon" style="background:#fdf4ff;">🔄</div>
+                        7. Running-In Procedure
+                    </h2>
+                    <i data-lucide="chevron-down" class="accordion-icon" style="width:28px;height:28px;"></i>
+                </button>
+                <div class="accordion-content">
+
+                    <p style="margin-top: 24px;">A controlled running-in period allows oil films to fully establish,
+                        surface micro-contacts to
+                        smooth,
+                        and temperature to stabilise.</p>
+
+                    <div class="step-card">
+                        <div class="step-num">1</div>
+                        <div class="step-body"><strong>Stage 1: 25% speed, 30 minutes, no load</strong>
+                            <p>Monitor temperature every 5 minutes. Temperature should stabilise. If it continues rising
+                                sharply, stop and investigate over-lubrication or over-preload.</p>
+                        </div>
+                    </div>
+                    <div class="step-card">
+                        <div class="step-num">2</div>
+                        <div class="step-body"><strong>Stage 2: 50% speed, 30 minutes, no load</strong>
+                            <p>Check for abnormal noise. A smooth hum is normal. Grinding, squealing, or irregular noise
+                                indicates a problem.</p>
+                        </div>
+                    </div>
+                    <div class="step-card">
+                        <div class="step-num">3</div>
+                        <div class="step-body"><strong>Stage 3: 75% speed, 1 hour, light load</strong>
+                            <p>Begin light cutting passes or equivalent load. Check vibration levels with a vibration
+                                analyser if available.</p>
+                        </div>
+                    </div>
+                    <div class="step-card">
+                        <div class="step-num">4</div>
+                        <div class="step-body"><strong>Stage 4: Full speed, full load</strong>
+                            <p>Bearing temperature should stabilise at 20–40°C above ambient. Steady-state within ±5°C
+                                indicates a well-fitted bearing.</p>
+                        </div>
+                    </div>
+
+                    <div class="warn-box">
+                        <strong>⚠️ Temperature Alert:</strong> If bearing temperature exceeds 80°C during run-in, stop
+                        immediately. Excessive temperature indicates insufficient lubrication, over-preload, or an
+                        undersized bearing for the application.
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- SECTION 8: Maintenance -->
+            <div class="install-section" id="maintenance">
+
+                <button class="accordion-header" onclick="toggleAccordion(this)">
+                    <h2 style="margin: 0; padding: 8px 0;">
+                        <div class="step-icon" style="background:#fef2f2;">🔁</div>
+                        8. Maintenance & Replacement
+                    </h2>
+                    <i data-lucide="chevron-down" class="accordion-icon" style="width:28px;height:28px;"></i>
+                </button>
+                <div class="accordion-content">
+
+                    <ul style="margin-top: 24px;">
+                        <li><strong>Inspect</strong> at every major machine service interval (typically 4,000–8,000
+                            hours)
+                        </li>
+                        <li>Check for: increased vibration, rising operating temperature, unusual noise, reduced spindle
+                            accuracy</li>
+                        <li>When replacing bearings, always replace the complete matched set (cone + cup, or both cones
+                            for
+                            double-row)</li>
+                        <li>Clean housing thoroughly before fitting new bearings</li>
+                        <li>Check housing bore and shaft for wear — replace if dimensions are outside tolerance</li>
+                        <li>Record bearing replacement date and part number in the machine maintenance log</li>
+                    </ul>
+                    <div class="info-box">
+                        <strong>ℹ️ Genuine Parts:</strong> Always specify genuine Gamet or HB-branded bearings from
+                        authorised partners. Sub-standard copies lack the precision ground surfaces required for machine
+                        tool spindle duty. <a href="genuine.html" style="color:var(--accent-primary);font-weight:600;">→
+                            How
+                            to identify genuine Gamet bearings</a>
+                    </div>
+
+                </div>
+            </div>
+
+        </section>
+    </main>
+
+            <footer class="footer">
+        <div class="container footer-content">
+            <div class="footer-brand">
+                <div class="logo" style="display: flex; align-items: center; gap: 20px;">
+                    <div style="text-align: center;">
+                        <span style="display: block; font-size: 0.8rem; color: var(--text-muted); margin-bottom: 8px; text-transform: uppercase; letter-spacing: 1px;">New Brand Mark</span>
+                        <img loading="lazy" src="images/new_logo.jpg" alt="Gamet New Logo" style="height:32px;width:auto; border-radius: 4px;">
+                    </div>
+                    <div style="text-align: center;">
+                        <span style="display: block; font-size: 0.8rem; color: var(--text-muted); margin-bottom: 8px; text-transform: uppercase; letter-spacing: 1px;">Original Heritage Mark</span>
+                        <img loading="lazy" src="images/Old Gamet Logo.jpg" alt="Gamet Old Logo" style="height:32px;width:auto; border-radius: 4px; ">
+                    </div>
+                </div>
+                <p>High precision tapered roller bearings for demanding applications.</p>
+            </div>
+            
+            <div class="footer-links" style="max-width: 400px;">
+                <h4>Authorized Partners</h4>
+                <div style="color: var(--text-secondary); font-size: 0.95rem; line-height: 1.7;">
+                    <strong style="color:var(--text-primary);">Jinharsh Industrial Solutions Pvt. Ltd.</strong><br>
+                    HO: 76/78 Nagdevi Street, Mumbai 400003<br>
+                    <span style="font-size: 0.85rem;">Branches: Mumbai &bull; Nagpur &bull; Surat &bull; Raipur &bull; Goa &bull; Sri Lanka</span>
+                </div>
+            </div>
+
+            <div class="footer-links">
+                <h4>Navigation</h4>
+                <a href="index.html">Home</a>
+                <a href="catalog.html">Catalog Search</a>
+                <a href="genuine.html">Buy Genuine</a>
+                <a href="contact.html">Contact Us</a>
+            </div>
+            
+            <div class="footer-links">
+                <h4>Technical</h4>
+                <a href="installation.html">Installation Guide</a>
+                <a href="catalogs/Bearings Catalog Gamet TRB.pdf" download>Download PDF Catalog</a>
+            </div>
+        </div>
+        <div class="footer-bottom container">
+            <p>&copy; 2026 Gamet Bearings. Authorized Partner: Jinharsh Industrial Solutions Pvt. Ltd.</p>
+        </div>
+    </footer>
+
+
+    <script>
+        function toggleAccordion(btn) {
+            btn.classList.toggle('active');
+            const content = btn.nextElementSibling;
+            if (content.style.maxHeight && content.style.maxHeight !== '0px') {
+                content.style.maxHeight = '0px';
+                content.classList.remove('open');
+            } else {
+                content.classList.add('open');
+                content.style.maxHeight = content.scrollHeight + 100 + 'px';
+                // Adjust after transition for responsive resizing
+                setTimeout(() => { if (content.classList.contains('open')) content.style.maxHeight = 'none'; }, 400);
+            }
+        }
+
+        // Open the first section by default
+        document.addEventListener('DOMContentLoaded', () => {
+            const firstBtn = document.querySelector('.accordion-header');
+            if (firstBtn) toggleAccordion(firstBtn);
+
+            // Re-init lucide icons since we added new ones
+            lucide.createIcons();
+
+            // Handle toc links
+            document.querySelectorAll('.toc a').forEach(a => {
+                a.addEventListener('click', (e) => {
+                    const id = a.getAttribute('href').substring(1);
+                    const section = document.getElementById(id);
+                    if (section) {
+                        const btn = section.querySelector('.accordion-header');
+                        if (btn && !btn.classList.contains('active')) {
+                            toggleAccordion(btn);
+                        }
+                    }
+                });
+            });
+        });
+    </script>
+
+
+    <script>
+        window.addEventListener('load', () => {
+            const loader = document.getElementById('fullPageLoader');
+            if (loader) loader.classList.add('hidden');
+        });
+    </script>
+</body>
+
+</html>
