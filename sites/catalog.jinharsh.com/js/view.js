@@ -3,7 +3,7 @@
 import { icon } from '/hub/vendor/icons.js?v=3';
 import { pdfjs, PDF_OPTS, fmtSize } from './pdfkit.js';
 import * as M from './motion.js';
-import { esc, ui, contactHtml, shareSheet, qrSheet, blankCover, idle, warmModule } from './site.js';
+import { esc, ui, contactHtml, shareSheet, qrSheet, blankCover, idle, warmModule, wireNav } from './site.js';
 import { bindImage, swallow, formPage, perf } from './particles.js';
 import { track, needsDetails, beforeDownload } from './visitor.js';
 import { mediaHtml as renderMedia, wireMedia } from './media.js';
@@ -24,6 +24,7 @@ const mediaHtml = () => renderMedia(D && D.media, D && D.code);
 wireMedia();
 
 ui(() => { $('#brand b').textContent = SITE.company?.short || 'Jinharsh'; $('#brand small').textContent = 'Catalogues'; });
+ui(() => wireNav(SITE, D ? { code: D.code, title: D.title } : {}));   // a site's extra top-bar buttons, if it has any
 // the menu of every catalogue, from the top bar
 ui(() => {
   const b = $('#menuTop');

@@ -2,7 +2,7 @@
 // Links from the old catalog.jinharsh.com hub keep working: /?cat=<name> opens that catalogue.
 import { icon } from '/hub/vendor/icons.js?v=3';
 import * as M from './motion.js';
-import { esc, ui, contactHtml, shareSheet, qrSheet, toast } from './site.js';
+import { esc, ui, contactHtml, shareSheet, qrSheet, toast, wireNav } from './site.js';
 import { cardHtml as card, sortCatalogs, brandsOf, hubEyebrow, chipsHtml } from './markup.js';
 import { saveFiles } from './handoff.js';
 import { track } from './visitor.js';
@@ -25,6 +25,8 @@ const studio = (from = null) => import('./studio.js')
   .then((m) => m.openStudio({ catalogs: S.all, publicUrl: S.publicUrl, site: S.site, printable: S.printable, from }))
   .catch(() => toast('Could not open QR Studio. Please try again.'));
 $('#hubQr').addEventListener('click', (e) => studio(e.currentTarget));
+// a labelled QR Studio button in the top bar (a site's extra buttons) opens it here too, without reloading
+document.addEventListener('click', (e) => { const a = e.target.closest('[data-studio]'); if (!a) return; e.preventDefault(); studio(a); });
 
 // ---------- Upload, for the team ----------
 // Shown to whoever may use the team page (signed in, or the office Wi-Fi copy where it is open).
@@ -74,6 +76,7 @@ async function load() {
   sortCatalogs(S.all);
   const brands = brandsOf(S.all);
   $('#contact').innerHTML = contactHtml(S.site, '');
+  ui(() => wireNav(S.site));   // a site's extra top-bar buttons, if it has any
   if (SERVED) {   // already on screen: nothing to draw, unless someone typed a search before this script arrived
     $('#cards').removeAttribute('data-ready');
     if ($('#q').value.trim()) { S.q = $('#q').value; draw(); }

@@ -25,6 +25,51 @@ enableHoverScatter();    // big QR codes: the grains scatter away from the mouse
 // Until it is pressed the page follows the phone's own setting; afterwards the choice is kept on this device.
 // The sun / moon button: Light (the default) -> Follow the sun -> Dark. The icon shows the choice now; the new look
 // spreads out in a circle from the button. (theme-boot.js does the work, including following the sun.)
+// ---------- extra top-bar buttons ----------
+// A site can ask for them in site.json: "nav": { "query": true, "studio": true, "links": [{ "label", "href", "external" }] }
+// (the PHP catalogue hub shows its Send Query, QR Studio, Team Portal, Technical Wiki and website buttons this way).
+// Wide screens show them all; on phones Send query stays and the rest sit behind one small menu button.
+export function wireNav(SITE, { code = '', title = '' } = {}) {
+  const nav = SITE && SITE.nav;
+  const bar = document.querySelector('.ju-top .top-in');
+  if (!nav || !bar || bar.querySelector('.top-nav')) return;
+  const items = [];
+  if (nav.studio) items.push({ label: 'QR Studio', href: '/?qr=1', studio: true, ic: 'qr-code' });
+  for (const l of nav.links || []) items.push({ label: l.label, href: l.href, external: !!l.external, ic: l.external ? 'external-link' : 'users' });
+  const attrs = (it) => `href="${esc(it.href)}"${it.studio ? ' data-studio' : ''}${it.external ? ' target="_blank" rel="noopener"' : ''}`;
+  const el = document.createElement('nav');
+  el.className = 'top-nav';
+  el.setAttribute('aria-label', 'More from the hub');
+  el.innerHTML = (nav.query ? `<button class="ju-btn sm accent nav-q" type="button" aria-label="Send a query">${icon('message-square-text')}<span>Send query</span></button>` : '')
+    + items.map((it) => `<a class="ju-btn sm ghost nav-l" ${attrs(it)}>${esc(it.label)}${it.external ? ' ↗' : ''}</a>`).join('')
+    + (items.length ? `<button class="ju-icon nav-more" type="button" aria-label="More" aria-haspopup="menu" aria-expanded="false">${icon('layout-grid')}</button>` : '');
+  bar.insertBefore(el, bar.querySelector('#hubUpload, #hubQr, #themeTop') || null);
+  if (nav.studio) { const q = document.getElementById('hubQr'); if (q) q.hidden = true; }   // (the labelled one replaces it)
+  const qb = el.querySelector('.nav-q');
+  if (qb) qb.addEventListener('click', (e) => querySheet({ code, title, from: e.currentTarget }));
+  const more = el.querySelector('.nav-more');
+  if (!more) return;
+  let pop = null;
+  const close = () => { if (!pop) return; pop.remove(); pop = null; more.setAttribute('aria-expanded', 'false'); document.removeEventListener('pointerdown', away, true); document.removeEventListener('keydown', onKey); };
+  const away = (e) => { if (pop && !pop.contains(e.target) && !more.contains(e.target)) close(); };
+  const onKey = (e) => { if (e.key === 'Escape') close(); };
+  more.addEventListener('click', () => {
+    if (pop) { close(); return; }
+    pop = document.createElement('div');
+    pop.className = 'nav-pop ju-glass ju-menu';
+    pop.setAttribute('role', 'menu');
+    pop.innerHTML = items.map((it) => `<a role="menuitem" ${attrs(it)}>${icon(it.ic)}<span>${esc(it.label)}</span></a>`).join('');
+    const b = more.getBoundingClientRect();
+    pop.style.top = Math.round(b.bottom + 8) + 'px';
+    pop.style.right = Math.max(8, Math.round(innerWidth - b.right)) + 'px';
+    document.body.appendChild(pop);
+    more.setAttribute('aria-expanded', 'true');
+    pop.addEventListener('click', (e) => { if (e.target.closest('a')) setTimeout(close, 0); });
+    document.addEventListener('pointerdown', away, true);
+    document.addEventListener('keydown', onKey);
+  });
+}
+
 export const THEME_ICON = { light: 'sun', sun: 'sunset', dark: 'moon' };
 const THEME_TIP = { light: 'Light', sun: 'Follow the sun: light by day, a warm sunset, dark at night', dark: 'Dark' };
 function wireTheme() {
