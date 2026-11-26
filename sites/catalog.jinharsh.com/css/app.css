@@ -204,6 +204,10 @@
 html.vt-theme::view-transition-old(root), html.vt-theme::view-transition-new(root) { animation: none; mix-blend-mode: normal; }
 .ju .ju-btn .i { transition: transform .2s var(--ease); }
 .ju-overlay .ju-sheet { animation-duration: var(--sp-gentle-ms, .34s); animation-timing-function: var(--sp-gentle, var(--spring)); }
+/* a window taller than the screen scrolls inside itself (on phones the kit already does this), e.g. QR Studio on a laptop */
+@media (min-width: 761px) {
+  .ju .ju-overlay .ju-sheet:not(.card-sheet) { max-height: calc(100vh - 40px); max-height: calc(100dvh - 40px); overflow-y: auto; overscroll-behavior: contain; }
+}
 .thumb { transition: transform .2s var(--ease); }
 
 /* ---------- team sign-in ---------- */
