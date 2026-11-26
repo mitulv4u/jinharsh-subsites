@@ -44,32 +44,8 @@
       </div>
 
       <!-- Google Sign-In -->
-      <div class="space-y-2">
-        <div id="g_id_onload"
-             data-client_id="232694715908-2575cktv96o2l83tsi5oo4u3cs5g0anc.apps.googleusercontent.com"
-             data-callback="handleGoogleCredential"
-             data-auto_prompt="false">
-        </div>
-        <div class="g_id_signin flex justify-center"
-             data-type="standard"
-             data-size="large"
-             data-theme="outline"
-             data-text="signin_with"
-             data-shape="rectangular"
-             data-width="320">
-        </div>
-      </div>
-
-      <div class="relative flex items-center py-1">
-        <div class="flex-grow border-t border-slate-200"></div>
-        <span class="flex-shrink mx-3 text-[11px] text-slate-400 uppercase font-semibold">Or Passcode</span>
-        <div class="flex-grow border-t border-slate-200"></div>
-      </div>
-
-      <form id="login-form" class="space-y-3">
-        <input id="passcode-input" type="password" required placeholder="Team Passcode" class="w-full border border-slate-200 rounded-xl px-3.5 py-2.5 text-sm outline-none focus:border-indigo-500" />
-        <button type="submit" class="w-full bg-slate-900 hover:bg-slate-800 text-white text-sm font-semibold py-2.5 rounded-xl transition">Unlock with Passcode</button>
-      </form>
+      <div id="g_id_signin" class="flex justify-center min-h-[44px]"></div>
+      <p id="login-status" class="hidden text-xs text-slate-600 text-center font-medium"></p>
       <p id="login-error" class="hidden text-xs text-rose-600 text-center font-medium"></p>
     </div>
   </main>
@@ -355,47 +331,54 @@
       return '<span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-slate-100 text-slate-600">Pre-Exhibition</span>';
     }
 
-    async function handleGoogleCredential(response) {
-      const err = document.getElementById('login-error');
-      err.classList.add('hidden');
-      const res = await fetch('/hub/api.php?action=google_auth', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ credential: response.credential }),
-      });
-      const json = await res.json();
-      if (res.ok && json.ok) {
-        TOKEN = json.token;
-        USER = json.user;
-        sessionStorage.setItem('jh_team_token', TOKEN);
-        showDashboard();
+    function renderGoogleBtn() {
+      if (window.google && window.google.accounts && window.google.accounts.id) {
+        google.accounts.id.initialize({
+          client_id: '232694715908-2575cktv96o2l83tsi5oo4u3cs5g0anc.apps.googleusercontent.com',
+          hd: 'jinharsh.com',
+          callback: handleGoogleCredential,
+        });
+        google.accounts.id.renderButton(document.getElementById('g_id_signin'), {
+          theme: 'outline',
+          size: 'large',
+          width: 320,
+          text: 'signin_with',
+        });
       } else {
-        err.textContent = json.error || 'Google Sign-In failed.';
-        err.classList.remove('hidden');
+        setTimeout(renderGoogleBtn, 120);
       }
     }
 
-    document.getElementById('login-form').addEventListener('submit', async (e) => {
-      e.preventDefault();
-      const pass = document.getElementById('passcode-input').value;
+    async function handleGoogleCredential(response) {
       const err = document.getElementById('login-error');
+      const status = document.getElementById('login-status');
       err.classList.add('hidden');
-      const res = await fetch('/hub/api.php?action=auth', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ passcode: pass }),
-      });
-      const json = await res.json();
-      if (res.ok && json.ok) {
-        TOKEN = json.token;
-        USER = json.user;
-        sessionStorage.setItem('jh_team_token', TOKEN);
-        showDashboard();
-      } else {
-        err.textContent = json.error || 'Invalid passcode.';
+      status.textContent = 'Verifying your @jinharsh.com account...';
+      status.classList.remove('hidden');
+
+      try {
+        const res = await fetch('/hub/api.php?action=google_auth', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ credential: response.credential }),
+        });
+        const json = await res.json();
+        status.classList.add('hidden');
+        if (res.ok && json.ok) {
+          TOKEN = json.token;
+          USER = json.user;
+          sessionStorage.setItem('jh_team_token', TOKEN);
+          showDashboard();
+        } else {
+          err.textContent = json.error || 'Google Sign-In failed.';
+          err.classList.remove('hidden');
+        }
+      } catch (e) {
+        status.classList.add('hidden');
+        err.textContent = 'Network error during Google Sign-In.';
         err.classList.remove('hidden');
       }
-    });
+    }
 
     function logout() {
       sessionStorage.removeItem('jh_team_token');
@@ -659,7 +642,11 @@
       }
     });
 
-    if (TOKEN) showDashboard();
+    if (TOKEN) {
+      showDashboard();
+    } else {
+      renderGoogleBtn();
+    }
   </script>
 </body>
 </html>
