@@ -21,7 +21,7 @@
       var m = /[?&]cat=([A-Za-z0-9-]{1,120})(&|$)/.exec(location.search), h = document.head;
       function add(rel, href, as) { var l = document.createElement('link'); l.rel = rel; l.href = href; if (as) { l.as = as; l.setAttribute('fetchpriority', 'high'); } h.appendChild(l); }
       if (m) add('preload', '/hub/covers/' + m[1] + '.webp', 'image');
-      (m ? ["/hub/js/boot.js","/hub/js/view.js","/hub/js/site.js","/hub/js/markup.js","/hub/js/backend.js","/hub/js/motion.js","/hub/js/particles.js","/hub/js/qr.js","/hub/js/copy.js","/hub/js/pdfkit.js","/hub/vendor/qrcode.js","/hub/vendor/icons.js?v=3","/hub/js/visitor.js","/hub/js/magnify.js","/hub/js/media.js"] : ["/hub/js/boot.js","/hub/js/hub.js","/hub/js/site.js","/hub/js/markup.js","/hub/js/backend.js","/hub/js/motion.js","/hub/js/particles.js","/hub/js/qr.js","/hub/js/copy.js","/hub/js/pdfkit.js","/hub/vendor/qrcode.js","/hub/vendor/icons.js?v=3","/hub/js/visitor.js","/hub/js/magnify.js","/hub/js/handoff.js"]).forEach(function (p) { add('modulepreload', p); });
+      (m ? ["/hub/js/boot.js","/hub/js/view.js","/hub/js/site.js","/hub/js/markup.js","/hub/js/backend.js","/hub/js/motion.js","/hub/js/particles.js","/hub/js/qr.js","/hub/js/copy.js","/hub/js/pdfkit.js","/hub/vendor/qrcode.js","/hub/vendor/icons.js?v=3","/hub/js/visitor.js","/hub/js/media.js"] : ["/hub/js/boot.js","/hub/js/hub.js","/hub/js/site.js","/hub/js/markup.js","/hub/js/backend.js","/hub/js/motion.js","/hub/js/particles.js","/hub/js/qr.js","/hub/js/copy.js","/hub/js/pdfkit.js","/hub/vendor/qrcode.js","/hub/vendor/icons.js?v=3","/hub/js/visitor.js","/hub/js/handoff.js"]).forEach(function (p) { add('modulepreload', p); });
     })();
   </script>
   <link rel="stylesheet" href="/hub/vendor/jinharsh-ui.css">

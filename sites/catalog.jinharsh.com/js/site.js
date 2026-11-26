@@ -11,12 +11,10 @@ export const warmModule = (href) => { try { if (document.querySelector(`link[rel
 idle(() => warmModule('/hub/js/card.js'), 2500);
 import { copyText, showCopied, flashLink } from './copy.js';
 import { querySheet, setSite, track } from './visitor.js';
-import { enableMagnifier } from './magnify.js';
 import { esc, byName, brandHue, blankCover } from './markup.js';
 import { teamPath } from './backend.js';
 export { esc, byName, brandHue, blankCover };   // (made in markup.js, which the server uses too)
-// the top bar is a clear magnifying glass over the page (see magnify.js)
-try { enableMagnifier('.ju-top'); } catch { /* cosmetic */ }
+// (the top bar's glass is CSS only: soft blur, light tint, bright rim - app.css "liquid glass")
 
 enableHoverScatter();    // big QR codes: the grains scatter away from the mouse or finger
 
