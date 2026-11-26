@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Technical Catalog Library | Jinharsh</title>
+  <meta name="description" content="JinHarsh Technical Product Catalog — Search industrial bearings, couplings, lubricants, safety & tooling.">
+  <meta property="og:title" content="Technical Catalog Library | Jinharsh">
+  <meta property="og:description" content="JinHarsh Technical Product Catalog — Search industrial bearings, couplings, lubricants, safety & tooling.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://www.jinharsh.com/technical-catalog.html">
+  <link rel="canonical" href="https://www.jinharsh.com/technical-catalog.html">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Rubik:ital,wght@0,300..900;1,300..900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/styles.css">
+  <script defer src="js/data.js"></script>
+  <script defer src="js/quote-cart.js"></script>
+  <script defer src="js/components.js"></script>
+</head>
+<body class="flex flex-col min-h-screen bg-[var(--color-primary)] overflow-x-hidden">
+
+  <div id="main-header"></div>
+
+  <main class="flex-grow pt-20">
+    <section class="py-16 bg-[#F8F8F8] border-b border-[#E7E7E7]">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center fade-in-up">
+        <div class="inline-flex items-center gap-2 px-4 py-2 bg-white border border-[#E7E7E7] text-[var(--color-accent-dark)] text-sm font-bold uppercase tracking-widest mb-4 shadow-sm">
+          Official Library
+        </div>
+        <h1 class="text-4xl md:text-6xl font-black text-[#121212] uppercase tracking-tighter mb-4">
+          Technical Catalogs
+        </h1>
+        <p class="text-base text-[#5a5a5a] max-w-2xl mx-auto font-light">
+          Search and download official manufacturer brochures, dimensions, maintenance flyers, and engineering specs.
+        </p>
+      </div>
+    </section>
+
+    <section class="py-12 bg-white">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        
+        <!-- Controls -->
+        <div class="flex flex-col sm:flex-row gap-4 mb-8 bg-[#F8F8F8] p-4 border border-[#E7E7E7]">
+          <input 
+            type="text" 
+            id="search-input" 
+            placeholder="Search catalog by name or brand..." 
+            class="flex-1 px-4 py-3 border border-[#E7E7E7] bg-white text-sm focus:outline-none focus:border-[var(--color-accent)]"
+            oninput="filterCatalogs()"
+          />
+          <select 
+            id="brand-filter" 
+            class="px-4 py-3 border border-[#E7E7E7] bg-white text-sm focus:outline-none focus:border-[var(--color-accent)] uppercase font-bold"
+            onchange="filterCatalogs()"
+          >
+            <option value="">All Principal Brands</option>
+            <!-- Filled dynamically -->
+          </select>
+        </div>
+
+        <!-- Catalog List -->
+        <div id="catalogs-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          <!-- Injected via script -->
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <div id="main-footer"></div>
+  <div id="floating-chat-container"></div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      // Check query params for initial search
+      const urlParams = new URLSearchParams(window.location.search);
+      const searchParam = urlParams.get('search');
+      if (searchParam) {
+        document.getElementById('search-input').value = searchParam;
+      }
+
+      // Populate brand filter options
+      if (typeof officialCatalogsData !== 'undefined') {
+        const brands = [...new Set(officialCatalogsData.map(c => c.brand))].sort();
+        const filterSelect = document.getElementById('brand-filter');
+        brands.forEach(b => {
+          const opt = document.createElement('option');
+          opt.value = b;
+          opt.textContent = b;
+          filterSelect.appendChild(opt);
+        });
+      }
+
+      filterCatalogs();
+    });
+
+    function filterCatalogs() {
+      const search = document.getElementById('search-input').value.toLowerCase();
+      const selectedBrand = document.getElementById('brand-filter').value;
+      const grid = document.getElementById('catalogs-grid');
+
+      if (typeof officialCatalogsData === 'undefined') return;
+
+      const filtered = officialCatalogsData.filter(cat => {
+        const matchesSearch = cat.name.toLowerCase().includes(search) || cat.brand.toLowerCase().includes(search);
+        const matchesBrand = !selectedBrand || cat.brand === selectedBrand;
+        return matchesSearch && matchesBrand;
+      });
+
+      if (filtered.length === 0) {
+        grid.innerHTML = `<div class="col-span-full text-center text-[#5a5a5a] py-12">No technical catalogs match your search criteria.</div>`;
+        return;
+      }
+
+      grid.innerHTML = filtered.map(cat => `
+        <div class="indust-card p-6 bg-white border border-[#E7E7E7] flex flex-col justify-between h-full">
+          <div>
+            <div class="flex items-center justify-between mb-4">
+              <span class="bg-gray-100 text-[#121212] font-black text-xs px-2.5 py-1 uppercase rounded">
+                ${cat.brand}
+              </span>
+              <span class="text-[10px] text-[#5a5a5a] font-bold uppercase">${cat.fileSize || 'PDF'}</span>
+            </div>
+            <h4 class="font-bold text-[#121212] text-sm uppercase line-clamp-2 mb-4">${cat.name}</h4>
+          </div>
+          <a href="public${cat.url}" target="_blank" class="indust-button w-full py-2.5 text-xs font-bold uppercase mt-4">
+            📄 Download PDF
+          </a>
+        </div>
+      `).join('');
+    }
+  </script>
+</body>
+</html>

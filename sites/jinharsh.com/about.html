@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>About Us | Jinharsh</title>
+  <meta name="description" content="About JinHarsh Group — Over 40 years of industrial engineering, rotating equipment reliability, and authorized OEM distribution across India.">
+  <meta property="og:title" content="About Us | Jinharsh">
+  <meta property="og:description" content="About JinHarsh Group — Over 40 years of industrial engineering, rotating equipment reliability, and authorized OEM distribution across India.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://www.jinharsh.com/about.html">
+  <link rel="canonical" href="https://www.jinharsh.com/about.html">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Rubik:ital,wght@0,300..900;1,300..900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/styles.css">
+  <script defer src="js/data.js"></script>
+  <script defer src="js/quote-cart.js"></script>
+  <script defer src="js/components.js"></script>
+</head>
+<body class="flex flex-col min-h-screen bg-[var(--color-primary)] overflow-x-hidden">
+
+  <div id="main-header"></div>
+
+  <main class="flex-grow pt-20">
+    <!-- Hero Section -->
+    <section class="py-20 bg-[#F8F8F8] border-b border-[#E7E7E7]">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center fade-in-up">
+        <div class="inline-flex items-center gap-2 px-4 py-2 bg-white border border-[#E7E7E7] text-[var(--color-accent-dark)] text-sm font-bold uppercase tracking-widest mb-4 shadow-sm">
+          Company Overview
+        </div>
+        <h1 class="text-4xl md:text-6xl font-black text-[#121212] uppercase tracking-tighter mb-6">
+          Providing Industrial Excellence Since 1985
+        </h1>
+        <p class="text-lg text-[#5a5a5a] max-w-3xl mx-auto font-light leading-relaxed">
+          Founded by Jayprakash Vasa & Girish Vasa, Jinharsh has grown into a leading industrial partner distributing top-tier power transmission, bearings, and lubrication solutions across India.
+        </p>
+      </div>
+    </section>
+
+    <!-- Legacy Profile Section -->
+    <section class="py-24 bg-white">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center mb-20">
+          <div class="fade-in-up">
+            <h2 class="text-3xl font-black text-[#121212] uppercase tracking-wide mb-6">
+              Four Decades of Engineering Legacy
+            </h2>
+            <p class="text-[#5a5a5a] leading-relaxed mb-6 font-light">
+              Starting in 1985 with Timken distribution, Jinharsh expanded its footprint to become an authorized channel partner for over 24 global leaders including FAG, Rexnord, NTN, Dodge, Rollix, Groz, and Shell.
+            </p>
+            <div class="inline-block bg-[var(--color-accent)]/10 border-l-4 border-[var(--color-accent)] p-4 text-sm font-bold text-[#121212] mb-8">
+              ISO 9001:2015 Certified Operations for High Quality & Operational Precision
+            </div>
+            <div class="grid grid-cols-2 gap-4">
+              <div class="border border-[#E7E7E7] p-4 rounded-sm">
+                <div class="font-black text-2xl text-[var(--color-accent-dark)]">Pan-India</div>
+                <div class="text-xs text-[#5a5a5a] uppercase tracking-wider font-bold">Branch Network</div>
+              </div>
+              <div class="border border-[#E7E7E7] p-4 rounded-sm">
+                <div class="font-black text-2xl text-[var(--color-accent-dark)]">125Cr+</div>
+                <div class="text-xs text-[#5a5a5a] uppercase tracking-wider font-bold">Annual Turnover</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="relative fade-in-up">
+            <img src="public/images/catalog/homepage.png" alt="Company Legacy" class="w-full rounded-lg shadow-xl border-4 border-white" />
+          </div>
+        </div>
+
+        <!-- Timeline Section -->
+        <div class="mt-20 fade-in-up">
+          <div class="text-center mb-12">
+            <h3 class="text-2xl md:text-4xl font-black text-[#121212] uppercase tracking-wide">Growth Timeline</h3>
+            <p class="text-[#5a5a5a] text-sm mt-2">Key milestones across our history</p>
+          </div>
+
+          <div id="timeline-container" class="space-y-6 max-w-4xl mx-auto">
+            <!-- Injected by script below -->
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <div id="main-footer"></div>
+  <div id="floating-chat-container"></div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const container = document.getElementById('timeline-container');
+      if (container && typeof companyData !== 'undefined' && companyData.timeline) {
+        container.innerHTML = companyData.timeline.map(item => `
+          <div class="flex items-start gap-4 p-4 bg-[#F8F8F8] border border-[#E7E7E7] rounded-sm hover:border-[var(--color-accent)] transition-colors">
+            <div class="bg-[var(--color-accent-dark)] text-white font-black px-3 py-1 rounded text-sm shrink-0">${item.year}</div>
+            <div class="text-[#121212] text-sm leading-relaxed">${item.event}</div>
+          </div>
+        `).join('');
+      }
+    });
+  </script>
+</body>
+</html>

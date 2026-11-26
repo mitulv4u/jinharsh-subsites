@@ -44,8 +44,8 @@ jobs:
                 echo "Deploying $site -> /www/wwwroot/$site"
                 rsync -rlvz --delete --no-perms --no-owner --no-group --omit-dir-times --exclude='.user.ini' --exclude='.well-known' --exclude='.git/' --exclude='*Catalogs*' --exclude='*Flyers*' --exclude='*flyers*' --exclude='Industrial Chains & Conveying components/' -e "ssh -i ~/.ssh/id_deploy" "sites/$site/" "deploy@159.89.94.209:/www/wwwroot/$site/"
               elif [ "$site" = "jinharsh.com" ]; then
-                echo "Deploying $site -> /www/wwwroot/$site (overlay, no --delete)"
-                rsync -rlvz --no-perms --no-owner --no-group --omit-dir-times --exclude='.user.ini' --exclude='.well-known' --exclude='wp-config.php' --exclude='.htaccess' --exclude='README.md' -e "ssh -i ~/.ssh/id_deploy" "sites/$site/" "deploy@159.89.94.209:/www/wwwroot/$site/"
+                echo "Deploying $site -> /www/wwwroot/$site"
+                rsync -rlvz --delete --no-perms --no-owner --no-group --omit-dir-times --exclude='.user.ini' --exclude='.well-known' --exclude='public/' -e "ssh -i ~/.ssh/id_deploy" "sites/$site/" "deploy@159.89.94.209:/www/wwwroot/$site/"
               elif [ "$site" = "hb-gamet.com" ]; then
                 echo "Deploying $site -> /www/wwwroot/$site"
                 rsync -rlvz --delete --no-perms --no-owner --no-group --omit-dir-times --exclude='.user.ini' --exclude='.well-known' --exclude='.venv/' --exclude='envato/' -e "ssh -i ~/.ssh/id_deploy" "sites/$site/" "deploy@159.89.94.209:/www/wwwroot/$site/"

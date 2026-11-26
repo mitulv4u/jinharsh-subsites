@@ -1,0 +1,3575 @@
+const catalogData = {
+    "categories": [
+        {
+            "id": "power-transmission",
+            "title": "Power Transmission",
+            "desc": "Transfer mechanical power to machinery including bearings, gearboxes, couplings, belts, and chains.",
+            "image": "/images/ai/portfolio_power_transmission.png",
+            "products": [
+                {
+                    "name": "Gear Couling",
+                    "brands": [
+                        "Falk",
+                        "Rexnord"
+                    ],
+                    "image": "/images/official_products/housed-units-and-couplings/Gear_Couling.png",
+                    "slug": "gear-couling"
+                },
+                {
+                    "name": "Ball Housed Unit",
+                    "brands": [
+                        "Timken",
+                        "Dodge"
+                    ],
+                    "image": "/images/official_products/housed-units-and-couplings/Ball_Housed_Unit.png",
+                    "slug": "ball-housed-unit"
+                },
+                {
+                    "name": "Grid Coupling",
+                    "brands": [
+                        "Falk"
+                    ],
+                    "image": "/images/official_products/housed-units-and-couplings/Grid_Coupling.png",
+                    "slug": "grid-coupling"
+                },
+                {
+                    "name": "Split Bearing",
+                    "brands": [
+                        "Rexnord Link-Belt",
+                        "Cooper"
+                    ],
+                    "image": "/images/official_products/housed-units-and-couplings/Split_Bearing.png",
+                    "slug": "split-bearing"
+                },
+                {
+                    "name": "Solid Housed Unit",
+                    "brands": [
+                        "Timken",
+                        "Dodge"
+                    ],
+                    "image": "/images/official_products/housed-units-and-couplings/Solid_Housed_Unit.png",
+                    "slug": "solid-housed-unit"
+                },
+                {
+                    "name": "Snt_Snf Plummer Block",
+                    "brands": [
+                        "Timken"
+                    ],
+                    "image": "/images/official_products/housed-units-and-couplings/SNT_SNF_Plummer_Block.png",
+                    "slug": "snt-snf-plummer-block"
+                },
+                {
+                    "name": "Shrink Disc",
+                    "brands": [
+                        "Tschan"
+                    ],
+                    "image": "/images/official_products/housed-units-and-couplings/Shrink_Disc.png",
+                    "slug": "shrink-disc"
+                },
+                {
+                    "name": "Quickflex Coupling (2)",
+                    "brands": [
+                        "Timken"
+                    ],
+                    "image": "/images/official_products/housed-units-and-couplings/Quickflex_Coupling__2_.png",
+                    "slug": "quickflex-coupling-2"
+                },
+                {
+                    "name": "Quickflex Coupling",
+                    "brands": [
+                        "Timken"
+                    ],
+                    "image": "/images/official_products/housed-units-and-couplings/Quickflex_Coupling.png",
+                    "slug": "quickflex-coupling"
+                },
+                {
+                    "name": "Sleeve Oil Bearing",
+                    "brands": [
+                        "Shell",
+                        "Mobil"
+                    ],
+                    "image": "/images/official_products/housed-units-and-couplings/Sleeve_Oil_Bearing.png",
+                    "slug": "sleeve-oil-bearing"
+                },
+                {
+                    "name": "Omega & Viva",
+                    "brands": [
+                        "Rexnord"
+                    ],
+                    "image": "/images/official_products/housed-units-and-couplings/Omega___Viva.png",
+                    "slug": "omega-viva"
+                },
+                {
+                    "name": "Revolvo Split Beraing",
+                    "brands": [],
+                    "image": "/images/official_products/housed-units-and-couplings/Revolvo_Split_Beraing.png",
+                    "slug": "revolvo-split-beraing"
+                },
+                {
+                    "name": "Ss Polymer Housed Unit",
+                    "brands": [
+                        "Timken",
+                        "Dodge"
+                    ],
+                    "image": "/images/official_products/housed-units-and-couplings/SS_Polymer_Housed_Unit.png",
+                    "slug": "ss-polymer-housed-unit"
+                },
+                {
+                    "name": "Torque Limiter",
+                    "brands": [
+                        "Rexnord"
+                    ],
+                    "image": "/images/official_products/housed-units-and-couplings/Torque_Limiter.png",
+                    "slug": "torque-limiter"
+                },
+                {
+                    "name": "Hydax",
+                    "brands": [
+                        "Hydax"
+                    ],
+                    "image": "/images/official_products/housed-units-and-couplings/Hydax.png",
+                    "slug": "hydax"
+                },
+                {
+                    "name": "Disc Coupling",
+                    "brands": [
+                        "Rexnord",
+                        "Tschan"
+                    ],
+                    "image": "/images/official_products/housed-units-and-couplings/Disc_Coupling.png",
+                    "slug": "disc-coupling"
+                },
+                {
+                    "name": "Magnaloy",
+                    "brands": [
+                        "Magnaloy"
+                    ],
+                    "image": "/images/official_products/housed-units-and-couplings/Magnaloy.png",
+                    "slug": "magnaloy"
+                },
+                {
+                    "name": "Altra",
+                    "brands": [
+                        "Altra"
+                    ],
+                    "image": "/images/official_products/housed-units-and-couplings/Altra.png",
+                    "slug": "altra"
+                }
+            ]
+        },
+        {
+            "id": "motors-gearboxes-brakes",
+            "title": "Motors, Gearboxes & Brakes",
+            "desc": "Providing efficient mechanical power and controlled stopping.",
+            "image": "/images/ai/portfolio_motors.png",
+            "products": [
+                {
+                    "name": "Centrifugal Fan",
+                    "brands": [
+                        "ABB"
+                    ],
+                    "image": "/images/official_products/motors-and-automation/Centrifugal_Fan.png",
+                    "slug": "centrifugal-fan"
+                },
+                {
+                    "name": "Breaker",
+                    "brands": [
+                        "ABB"
+                    ],
+                    "image": "/images/official_products/motors-and-automation/Breaker.png",
+                    "slug": "breaker"
+                },
+                {
+                    "name": "Drive",
+                    "brands": [
+                        "ABB"
+                    ],
+                    "image": "/images/official_products/motors-and-automation/Drive.png",
+                    "slug": "drive"
+                },
+                {
+                    "name": "Slip Ring Motor",
+                    "brands": [
+                        "ABB",
+                        "Baldor"
+                    ],
+                    "image": "/images/official_products/motors-and-automation/Slip_Ring_Motor.png",
+                    "slug": "slip-ring-motor"
+                },
+                {
+                    "name": "Axial Flow Fan",
+                    "brands": [
+                        "ABB"
+                    ],
+                    "image": "/images/official_products/motors-and-automation/Axial_Flow_Fan.png",
+                    "slug": "axial-flow-fan"
+                },
+                {
+                    "name": "Backstop",
+                    "brands": [
+                        "Falk",
+                        "Rexnord"
+                    ],
+                    "image": "/images/official_products/motors-and-automation/Backstop.png",
+                    "slug": "backstop"
+                },
+                {
+                    "name": "Gearbox",
+                    "brands": [
+                        "Radicon",
+                        "Elecon",
+                        "PBL"
+                    ],
+                    "image": "/images/official_products/motors-and-automation/Gearbox.png",
+                    "slug": "gearbox"
+                },
+                {
+                    "name": "Ht Motor",
+                    "brands": [
+                        "ABB",
+                        "Baldor"
+                    ],
+                    "image": "/images/official_products/motors-and-automation/HT_Motor.png",
+                    "slug": "ht-motor"
+                },
+                {
+                    "name": "Explosion Proof Motor",
+                    "brands": [
+                        "ABB",
+                        "Baldor"
+                    ],
+                    "image": "/images/official_products/motors-and-automation/Explosion_Proof_Motor.png",
+                    "slug": "explosion-proof-motor"
+                },
+                {
+                    "name": "Propeller Fan",
+                    "brands": [
+                        "ABB"
+                    ],
+                    "image": "/images/official_products/motors-and-automation/Propeller_Fan.png",
+                    "slug": "propeller-fan"
+                },
+                {
+                    "name": "Helical Inline Geared Motor",
+                    "brands": [
+                        "ABB",
+                        "Baldor"
+                    ],
+                    "image": "/images/official_products/motors-and-automation/Helical_Inline_Geared_Motor.png",
+                    "slug": "helical-inline-geared-motor"
+                },
+                {
+                    "name": "Lt Motor",
+                    "brands": [
+                        "ABB",
+                        "Baldor"
+                    ],
+                    "image": "/images/official_products/motors-and-automation/LT_Motor.png",
+                    "slug": "lt-motor"
+                },
+                {
+                    "name": "Nema Motor",
+                    "brands": [
+                        "ABB",
+                        "Baldor"
+                    ],
+                    "image": "/images/official_products/motors-and-automation/Nema_Motor.png",
+                    "slug": "nema-motor"
+                },
+                {
+                    "name": "Plc",
+                    "brands": [
+                        "ABB"
+                    ],
+                    "image": "/images/official_products/motors-and-automation/PLC.png",
+                    "slug": "plc"
+                },
+                {
+                    "name": "Inline Shaft Mounted Geared Motor",
+                    "brands": [
+                        "ABB",
+                        "Baldor"
+                    ],
+                    "image": "/images/official_products/motors-and-automation/Inline_Shaft_Mounted_Geared_Motor.png",
+                    "slug": "inline-shaft-mounted-geared-motor"
+                },
+                {
+                    "name": "Right Angle Helical Bevel Geared Motor",
+                    "brands": [
+                        "ABB",
+                        "Baldor"
+                    ],
+                    "image": "/images/official_products/motors-and-automation/Right_Angle_Helical_Bevel_Geared_Motor.png",
+                    "slug": "right-angle-helical-bevel-geared-motor"
+                }
+            ]
+        },
+        {
+            "id": "bearings",
+            "title": "Bearings",
+            "desc": "Premium Bearings for supporting rotational shafts with minimum friction.",
+            "image": "/images/catalog/ucp.png",
+            "products": [
+                {
+                    "name": "Combined Bearing",
+                    "brands": [
+                        "Various Premium Brands"
+                    ],
+                    "image": "/images/official_products/bearings/Combined_Bearing.png",
+                    "slug": "combined-bearing"
+                },
+                {
+                    "name": "Angular Contact Ball Bearing",
+                    "brands": [
+                        "Timken"
+                    ],
+                    "image": "/images/official_products/bearings/Angular_Contact_Ball_Bearing.png",
+                    "slug": "angular-contact-ball-bearing"
+                },
+                {
+                    "name": "Ap Bearing",
+                    "brands": [
+                        "Timken"
+                    ],
+                    "image": "/images/official_products/bearings/AP_Bearing.png",
+                    "slug": "ap-bearing"
+                },
+                {
+                    "name": "Metric Duplex Bearing",
+                    "brands": [],
+                    "image": "/images/official_products/bearings/Metric_Duplex_Bearing.png",
+                    "slug": "metric-duplex-bearing"
+                },
+                {
+                    "name": "Cylindrical Roller Bearing",
+                    "brands": [
+                        "Timken"
+                    ],
+                    "image": "/images/official_products/bearings/Cylindrical_Roller_Bearing.png",
+                    "slug": "cylindrical-roller-bearing"
+                },
+                {
+                    "name": "Spherical Roller Bearing   Steel Cage",
+                    "brands": [
+                        "Timken"
+                    ],
+                    "image": "/images/official_products/bearings/Spherical_Roller_Bearing_-_Steel_Cage.png",
+                    "slug": "spherical-roller-bearing-steel-cage"
+                },
+                {
+                    "name": "Linear Rail & Bearing Blocks",
+                    "brands": [
+                        "Rexnord Link-Belt",
+                        "Rollway"
+                    ],
+                    "image": "/images/official_products/bearings/Linear_Rail___Bearing_Blocks.png",
+                    "slug": "linear-rail-bearing-blocks"
+                },
+                {
+                    "name": "Needle Roller Beraing",
+                    "brands": [
+                        "Timken"
+                    ],
+                    "image": "/images/official_products/bearings/Needle_Roller_Beraing.png",
+                    "slug": "needle-roller-beraing"
+                },
+                {
+                    "name": "Four Row   Taper Roller Bearing",
+                    "brands": [
+                        "Timken"
+                    ],
+                    "image": "/images/official_products/bearings/Four_Row_-_Taper_Roller_Bearing.png",
+                    "slug": "four-row-taper-roller-bearing"
+                },
+                {
+                    "name": "Ball Bearing",
+                    "brands": [
+                        "Timken"
+                    ],
+                    "image": "/images/official_products/bearings/Ball_Bearing.png",
+                    "slug": "ball-bearing"
+                },
+                {
+                    "name": "Rod End Bearing",
+                    "brands": [
+                        "Timken"
+                    ],
+                    "image": "/images/official_products/bearings/Rod_End_Bearing.png",
+                    "slug": "rod-end-bearing"
+                },
+                {
+                    "name": "Spherical Roller Bearing   Brass Cage",
+                    "brands": [
+                        "Timken"
+                    ],
+                    "image": "/images/official_products/bearings/Spherical_Roller_Bearing_-_Brass_Cage.png",
+                    "slug": "spherical-roller-bearing-brass-cage"
+                },
+                {
+                    "name": "Eccentric Bearing",
+                    "brands": [
+                        "Various Premium Brands"
+                    ],
+                    "image": "/images/official_products/bearings/Eccentric_Bearing.png",
+                    "slug": "eccentric-bearing"
+                },
+                {
+                    "name": "Taper Roller Bearing",
+                    "brands": [
+                        "Timken"
+                    ],
+                    "image": "/images/official_products/bearings/Taper_Roller_Bearing.png",
+                    "slug": "taper-roller-bearing"
+                },
+                {
+                    "name": "Spherical Plain Bearing",
+                    "brands": [
+                        "Timken"
+                    ],
+                    "image": "/images/official_products/bearings/Spherical_Plain_Bearing.png",
+                    "slug": "spherical-plain-bearing"
+                },
+                {
+                    "name": "Thrust Bearing",
+                    "brands": [
+                        "Timken"
+                    ],
+                    "image": "/images/official_products/bearings/Thrust_Bearing.png",
+                    "slug": "thrust-bearing"
+                },
+                {
+                    "name": "Slewing Ring Bearing",
+                    "brands": [
+                        "Rollix"
+                    ],
+                    "image": "/images/official_products/bearings/Slewing_Ring_Bearing.png",
+                    "slug": "slewing-ring-bearing"
+                }
+            ]
+        },
+        {
+            "id": "housed-units",
+            "title": "Housed Units",
+            "desc": "Bearing assemblies enclosed in protective housings.",
+            "image": "/images/catalog/ucp.png",
+            "products": [
+                {
+                    "name": "General Housed Units",
+                    "brands": [
+                        "Timken",
+                        "Dodge"
+                    ],
+                    "image": "/images/catalog/ucp.png",
+                    "slug": "general-housed-units"
+                }
+            ]
+        },
+        {
+            "id": "lubricants",
+            "title": "Lubricants",
+            "desc": "Industrial lubricants, greases, and fluids.",
+            "image": "/images/catalog/grease_mix.jpg",
+            "products": [
+                {
+                    "name": "Shell Tellus",
+                    "brands": [
+                        "Shell"
+                    ],
+                    "image": "/images/official_products/lubricants/Shell_Tellus.png",
+                    "slug": "shell-tellus"
+                },
+                {
+                    "name": "Shell Tonna",
+                    "brands": [
+                        "Shell"
+                    ],
+                    "image": "/images/official_products/lubricants/Shell_Tonna.png",
+                    "slug": "shell-tonna"
+                },
+                {
+                    "name": "Shell Omala",
+                    "brands": [
+                        "Shell"
+                    ],
+                    "image": "/images/official_products/lubricants/Shell_Omala.png",
+                    "slug": "shell-omala"
+                },
+                {
+                    "name": "Shell Spirax",
+                    "brands": [
+                        "Shell"
+                    ],
+                    "image": "/images/official_products/lubricants/Shell_Spirax.png",
+                    "slug": "shell-spirax"
+                },
+                {
+                    "name": "Shell Rimula",
+                    "brands": [
+                        "Shell"
+                    ],
+                    "image": "/images/official_products/lubricants/Shell_Rimula.png",
+                    "slug": "shell-rimula"
+                },
+                {
+                    "name": "Shell Corena",
+                    "brands": [
+                        "Shell"
+                    ],
+                    "image": "/images/official_products/lubricants/Shell_Corena.png",
+                    "slug": "shell-corena"
+                },
+                {
+                    "name": "Shell Gadus",
+                    "brands": [
+                        "Shell"
+                    ],
+                    "image": "/images/official_products/lubricants/Shell_Gadus.png",
+                    "slug": "shell-gadus"
+                },
+                {
+                    "name": "Water Resistant Grease",
+                    "brands": [
+                        "Shell",
+                        "Kluber"
+                    ],
+                    "image": "/images/official_products/lubricants/Water_Resistant_Grease.png",
+                    "slug": "water-resistant-grease"
+                },
+                {
+                    "name": "Gear Fluid",
+                    "brands": [
+                        "Shell",
+                        "Mobil"
+                    ],
+                    "image": "/images/official_products/lubricants/Gear_Fluid.png",
+                    "slug": "gear-fluid"
+                },
+                {
+                    "name": "Perfluorinated Oils",
+                    "brands": [
+                        "Shell",
+                        "Mobil"
+                    ],
+                    "image": "/images/official_products/lubricants/Perfluorinated_oils.png",
+                    "slug": "perfluorinated-oils"
+                }
+            ]
+        },
+        {
+            "id": "speciality-products",
+            "title": "Speciality Products",
+            "desc": "A comprehensive range of speciality products including advanced adhesives, sealants, threadlockers, and retaining compounds for critical industrial maintenance and assembly applications.",
+            "image": "/images/catalog/grease_mix.jpg",
+            "products": [
+                {
+                    "name": "Coupling Cover",
+                    "brands": [],
+                    "image": "/images/official_products/industrial-equipment-insulation/Coupling_Cover.png",
+                    "slug": "coupling-cover"
+                },
+                {
+                    "name": "Twin Leaf Boring Bar",
+                    "brands": [],
+                    "image": "/images/official_products/industrial-equipment-insulation/Twin_Leaf_Boring_Bar.png",
+                    "slug": "twin-leaf-boring-bar"
+                },
+                {
+                    "name": "Cylindrical Head Tooling",
+                    "brands": [],
+                    "image": "/images/official_products/industrial-equipment-insulation/Cylindrical_Head_Tooling.png",
+                    "slug": "cylindrical-head-tooling"
+                },
+                {
+                    "name": "Fine Boring Units",
+                    "brands": [],
+                    "image": "/images/official_products/industrial-equipment-insulation/Fine_Boring_Units.png",
+                    "slug": "fine-boring-units"
+                },
+                {
+                    "name": "Adaptor Moving",
+                    "brands": [],
+                    "image": "/images/official_products/industrial-equipment-insulation/Adaptor_Moving.png",
+                    "slug": "adaptor-moving"
+                },
+                {
+                    "name": "Milling Cutter",
+                    "brands": [],
+                    "image": "/images/official_products/industrial-equipment-insulation/Milling_Cutter.png",
+                    "slug": "milling-cutter"
+                },
+                {
+                    "name": "Hydraulic Pallet Trolleys",
+                    "brands": [],
+                    "image": "/images/official_products/industrial-equipment-insulation/Hydraulic_Pallet_Trolleys.png",
+                    "slug": "hydraulic-pallet-trolleys"
+                },
+                {
+                    "name": "Thouwrap Sleeve",
+                    "brands": [],
+                    "image": "/images/official_products/industrial-equipment-insulation/Thouwrap_Sleeve.png",
+                    "slug": "thouwrap-sleeve"
+                },
+                {
+                    "name": "Induction Heater",
+                    "brands": [
+                        "Timken"
+                    ],
+                    "image": "/images/official_products/industrial-equipment-insulation/Induction_Heater.png",
+                    "slug": "induction-heater"
+                },
+                {
+                    "name": "Puller",
+                    "brands": [
+                        "Timken"
+                    ],
+                    "image": "/images/official_products/industrial-equipment-insulation/Puller.png",
+                    "slug": "puller"
+                },
+                {
+                    "name": "Hydraulic Power Pack",
+                    "brands": [
+                        "Dräger",
+                        "MSA"
+                    ],
+                    "image": "/images/official_products/industrial-equipment-insulation/Hydraulic_Power_Pack.png",
+                    "slug": "hydraulic-power-pack"
+                },
+                {
+                    "name": "Hydraulic Power Pack (2)",
+                    "brands": [
+                        "Dräger",
+                        "MSA"
+                    ],
+                    "image": "/images/official_products/industrial-equipment-insulation/Hydraulic_Power_Pack__2_.png",
+                    "slug": "hydraulic-power-pack-2"
+                }
+            ]
+        },
+        {
+            "id": "lubrication-equipment",
+            "title": "Lubrication Equipment & Systems",
+            "desc": "From manual greasing to centralized lube systems.",
+            "image": "/images/catalog/greaseguns.png",
+            "products": [
+                {
+                    "name": "Td68   Metal Truck Drain",
+                    "brands": [],
+                    "image": "/images/official_products/lubrication-equipments/TD68_-_Metal_Truck_Drain.png",
+                    "slug": "td68-metal-truck-drain"
+                },
+                {
+                    "name": "Coupler To Coupler Extension",
+                    "brands": [
+                        "Groz"
+                    ],
+                    "image": "/images/official_products/lubrication-equipments/Coupler_to_Coupler_Extension.png",
+                    "slug": "coupler-to-coupler-extension"
+                },
+                {
+                    "name": "Drum Dolly",
+                    "brands": [
+                        "Groz"
+                    ],
+                    "image": "/images/official_products/lubrication-equipments/Drum_Dolly.png",
+                    "slug": "drum-dolly"
+                },
+                {
+                    "name": "Drum Trolley",
+                    "brands": [
+                        "Groz"
+                    ],
+                    "image": "/images/official_products/lubrication-equipments/Drum_Trolley.png",
+                    "slug": "drum-trolley"
+                },
+                {
+                    "name": "Drum Faucet_ Tap",
+                    "brands": [
+                        "Groz"
+                    ],
+                    "image": "/images/official_products/lubrication-equipments/Drum_Faucet__Tap.png",
+                    "slug": "drum-faucet-tap"
+                },
+                {
+                    "name": "Drum Wrench",
+                    "brands": [
+                        "Groz"
+                    ],
+                    "image": "/images/official_products/lubrication-equipments/Drum_Wrench.png",
+                    "slug": "drum-wrench"
+                },
+                {
+                    "name": "Grease Gun Hose",
+                    "brands": [
+                        "Shell",
+                        "Kluber"
+                    ],
+                    "image": "/images/official_products/lubrication-equipments/Grease_Gun_Hose.png",
+                    "slug": "grease-gun-hose"
+                },
+                {
+                    "name": "Mini Grease Gun Pistol Action",
+                    "brands": [
+                        "Shell",
+                        "Kluber"
+                    ],
+                    "image": "/images/official_products/lubrication-equipments/Mini_Grease_Gun_Pistol_Action.png",
+                    "slug": "mini-grease-gun-pistol-action"
+                },
+                {
+                    "name": "Oil Pump Kit",
+                    "brands": [
+                        "Shell",
+                        "Mobil"
+                    ],
+                    "image": "/images/official_products/lubrication-equipments/Oil_Pump_Kit.png",
+                    "slug": "oil-pump-kit"
+                },
+                {
+                    "name": "Grease Ratio Pump Air Operated",
+                    "brands": [
+                        "Shell",
+                        "Kluber"
+                    ],
+                    "image": "/images/official_products/lubrication-equipments/Grease_Ratio_Pump_Air_Operated.png",
+                    "slug": "grease-ratio-pump-air-operated"
+                },
+                {
+                    "name": "Oil Pump Rotary Action",
+                    "brands": [
+                        "Shell",
+                        "Mobil"
+                    ],
+                    "image": "/images/official_products/lubrication-equipments/Oil_Pump_Rotary_Action.png",
+                    "slug": "oil-pump-rotary-action"
+                },
+                {
+                    "name": "Oil Control Gun Hose Extension",
+                    "brands": [
+                        "Shell",
+                        "Mobil"
+                    ],
+                    "image": "/images/official_products/lubrication-equipments/Oil_Control_Gun_Hose_Extension.png",
+                    "slug": "oil-control-gun-hose-extension"
+                },
+                {
+                    "name": "Smart Funnel",
+                    "brands": [
+                        "Groz"
+                    ],
+                    "image": "/images/official_products/lubrication-equipments/Smart_Funnel.png",
+                    "slug": "smart-funnel"
+                },
+                {
+                    "name": "Flexible Spout",
+                    "brands": [
+                        "Groz"
+                    ],
+                    "image": "/images/official_products/lubrication-equipments/Flexible_Spout.png",
+                    "slug": "flexible-spout"
+                },
+                {
+                    "name": "Drain Pans",
+                    "brands": [],
+                    "image": "/images/official_products/lubrication-equipments/Drain_Pans.png",
+                    "slug": "drain-pans"
+                },
+                {
+                    "name": "Metal Hose Reel Grease",
+                    "brands": [
+                        "Shell",
+                        "Kluber"
+                    ],
+                    "image": "/images/official_products/lubrication-equipments/Metal_Hose_Reel_Grease.png",
+                    "slug": "metal-hose-reel-grease"
+                },
+                {
+                    "name": "Metal Hose Reel Oil",
+                    "brands": [
+                        "Shell",
+                        "Mobil"
+                    ],
+                    "image": "/images/official_products/lubrication-equipments/Metal_Hose_Reel_Oil.png",
+                    "slug": "metal-hose-reel-oil"
+                },
+                {
+                    "name": "Vgp_6A   Bucket Grease Pump",
+                    "brands": [
+                        "Shell",
+                        "Kluber"
+                    ],
+                    "image": "/images/official_products/lubrication-equipments/VGP_6A_-_Bucket_Grease_Pump.png",
+                    "slug": "vgp-6a-bucket-grease-pump"
+                },
+                {
+                    "name": "Grease Pump",
+                    "brands": [
+                        "Shell",
+                        "Kluber"
+                    ],
+                    "image": "/images/official_products/lubrication-equipments/Grease_Pump.png",
+                    "slug": "grease-pump"
+                },
+                {
+                    "name": "Red Grease Cartridge",
+                    "brands": [
+                        "Shell",
+                        "Kluber"
+                    ],
+                    "image": "/images/official_products/lubrication-equipments/Red_Grease_Cartridge.png",
+                    "slug": "red-grease-cartridge"
+                },
+                {
+                    "name": "Hydraulic Couplers",
+                    "brands": [
+                        "Groz"
+                    ],
+                    "image": "/images/official_products/lubrication-equipments/Hydraulic_Couplers.png",
+                    "slug": "hydraulic-couplers"
+                },
+                {
+                    "name": "Grease Pump (1)",
+                    "brands": [
+                        "Shell",
+                        "Kluber"
+                    ],
+                    "image": "/images/official_products/lubrication-equipments/Grease_Pump__1_.png",
+                    "slug": "grease-pump-1"
+                },
+                {
+                    "name": "Air Operated Grease Gun",
+                    "brands": [
+                        "Shell",
+                        "Kluber"
+                    ],
+                    "image": "/images/official_products/lubrication-equipments/Air_Operated_Grease_Gun.png",
+                    "slug": "air-operated-grease-gun"
+                },
+                {
+                    "name": "Groz Zgs Mini Lube",
+                    "brands": [],
+                    "image": "/images/official_products/lubrication-equipments/Groz_ZGS_Mini-Lube.png",
+                    "slug": "groz-zgs-mini-lube"
+                },
+                {
+                    "name": "Air Hose Reel",
+                    "brands": [
+                        "Groz"
+                    ],
+                    "image": "/images/official_products/lubrication-equipments/Air_Hose_Reel.png",
+                    "slug": "air-hose-reel"
+                },
+                {
+                    "name": "151",
+                    "brands": [
+                        "Groz",
+                        "Lincoln"
+                    ],
+                    "image": "/images/official_products/centralized-lubrication-systems/151.png",
+                    "slug": "151"
+                },
+                {
+                    "name": "146",
+                    "brands": [
+                        "Groz",
+                        "Lincoln"
+                    ],
+                    "image": "/images/official_products/centralized-lubrication-systems/146.png",
+                    "slug": "146"
+                },
+                {
+                    "name": "148",
+                    "brands": [
+                        "Groz",
+                        "Lincoln"
+                    ],
+                    "image": "/images/official_products/centralized-lubrication-systems/148.png",
+                    "slug": "148"
+                },
+                {
+                    "name": "150",
+                    "brands": [
+                        "Groz",
+                        "Lincoln"
+                    ],
+                    "image": "/images/official_products/centralized-lubrication-systems/150.png",
+                    "slug": "150"
+                },
+                {
+                    "name": "147",
+                    "brands": [
+                        "Groz",
+                        "Lincoln"
+                    ],
+                    "image": "/images/official_products/centralized-lubrication-systems/147.png",
+                    "slug": "147"
+                },
+                {
+                    "name": "149",
+                    "brands": [
+                        "Groz",
+                        "Lincoln"
+                    ],
+                    "image": "/images/official_products/centralized-lubrication-systems/149.png",
+                    "slug": "149"
+                },
+                {
+                    "name": "Products For Website",
+                    "brands": [],
+                    "image": "/images/official_products/centralized-lubrication-systems/Products_for_website.png",
+                    "slug": "products-for-website"
+                }
+            ]
+        },
+        {
+            "id": "adhesives-coating",
+            "title": "Adhesives & Coating",
+            "desc": "Industrial adhesives, epoxies, and coatings.",
+            "image": "/images/catalog/pidilitemix.png",
+            "products": [
+                {
+                    "name": "Wrap Seal Plus Tm",
+                    "brands": [
+                        "Wrap Seal"
+                    ],
+                    "image": "/images/official_products/adhesives-and--coating-solutions/Wrap_Seal_Plus_TM.png",
+                    "slug": "wrap-seal-plus-tm"
+                },
+                {
+                    "name": "Zorrik 421",
+                    "brands": [
+                        "Zorrik (Pidilite)"
+                    ],
+                    "image": "/images/official_products/adhesives-and--coating-solutions/Zorrik_421.png",
+                    "slug": "zorrik-421"
+                },
+                {
+                    "name": "M Seal Steel Putty",
+                    "brands": [
+                        "M-Seal (Pidilite)"
+                    ],
+                    "image": "/images/official_products/adhesives-and--coating-solutions/M-Seal_Steel_Putty.png",
+                    "slug": "m-seal-steel-putty"
+                },
+                {
+                    "name": "Zorrik 311",
+                    "brands": [
+                        "Zorrik (Pidilite)"
+                    ],
+                    "image": "/images/official_products/adhesives-and--coating-solutions/Zorrik_311.png",
+                    "slug": "zorrik-311"
+                },
+                {
+                    "name": "Zorrik 301",
+                    "brands": [
+                        "Zorrik (Pidilite)"
+                    ],
+                    "image": "/images/official_products/adhesives-and--coating-solutions/Zorrik_301.png",
+                    "slug": "zorrik-301"
+                }
+            ]
+        },
+        {
+            "id": "protection-detection",
+            "title": "Protection & Detection",
+            "desc": "Gas detection and respiratory protection systems.",
+            "image": "/images/catalog/drager.png",
+            "products": [
+                {
+                    "name": "X Am 5600",
+                    "brands": [],
+                    "image": "/images/official_products/protection-and-detection-solutions/X-am_5600.png",
+                    "slug": "x-am-5600"
+                },
+                {
+                    "name": "X Zone 5500_5800",
+                    "brands": [],
+                    "image": "/images/official_products/protection-and-detection-solutions/X-zone_5500_5800.png",
+                    "slug": "x-zone-5500-5800"
+                },
+                {
+                    "name": "(Aqms) Aerotest",
+                    "brands": [
+                        "Dräger",
+                        "MSA"
+                    ],
+                    "image": "/images/official_products/protection-and-detection-solutions/_AQMS__Aerotest.png",
+                    "slug": "aqms-aerotest"
+                },
+                {
+                    "name": "Accuro",
+                    "brands": [
+                        "Dräger",
+                        "MSA"
+                    ],
+                    "image": "/images/official_products/protection-and-detection-solutions/Accuro.png",
+                    "slug": "accuro"
+                },
+                {
+                    "name": "Breathing Device(Saver Pp)",
+                    "brands": [
+                        "Dräger",
+                        "MSA"
+                    ],
+                    "image": "/images/official_products/protection-and-detection-solutions/Breathing_Device_Saver_PP_.png",
+                    "slug": "breathing-device-saver-pp"
+                },
+                {
+                    "name": "Bg 4",
+                    "brands": [
+                        "Dräger",
+                        "MSA"
+                    ],
+                    "image": "/images/official_products/protection-and-detection-solutions/BG_4.png",
+                    "slug": "bg-4"
+                },
+                {
+                    "name": "Cps 5800",
+                    "brands": [
+                        "Dräger",
+                        "MSA"
+                    ],
+                    "image": "/images/official_products/protection-and-detection-solutions/CPS_5800.png",
+                    "slug": "cps-5800"
+                },
+                {
+                    "name": "Filter Units (Pas Units)",
+                    "brands": [
+                        "Dräger",
+                        "MSA"
+                    ],
+                    "image": "/images/official_products/protection-and-detection-solutions/Filter_Units__PAS_Units_.png",
+                    "slug": "filter-units-pas-units"
+                },
+                {
+                    "name": "Micro Tubes",
+                    "brands": [
+                        "Dräger",
+                        "MSA"
+                    ],
+                    "image": "/images/official_products/protection-and-detection-solutions/Micro_Tubes.png",
+                    "slug": "micro-tubes"
+                },
+                {
+                    "name": "Emergency Escape Breathing Device (Saver Cf)",
+                    "brands": [
+                        "Dräger",
+                        "MSA"
+                    ],
+                    "image": "/images/official_products/protection-and-detection-solutions/Emergency_Escape_Breathing_Device__Saver_CF_.png",
+                    "slug": "emergency-escape-breathing-device-saver-cf"
+                },
+                {
+                    "name": "Oxy 3000_6000",
+                    "brands": [
+                        "Dräger",
+                        "MSA"
+                    ],
+                    "image": "/images/official_products/protection-and-detection-solutions/Oxy_3000_6000.png",
+                    "slug": "oxy-3000-6000"
+                },
+                {
+                    "name": "Draeger   Tubes",
+                    "brands": [],
+                    "image": "/images/official_products/protection-and-detection-solutions/Draeger_-_Tubes.png",
+                    "slug": "draeger-tubes"
+                },
+                {
+                    "name": "Cps 7800",
+                    "brands": [
+                        "Dräger",
+                        "MSA"
+                    ],
+                    "image": "/images/official_products/protection-and-detection-solutions/CPS_7800.png",
+                    "slug": "cps-7800"
+                },
+                {
+                    "name": "X Act 5000 Basic",
+                    "brands": [],
+                    "image": "/images/official_products/protection-and-detection-solutions/X-act_5000_Basic.png",
+                    "slug": "x-act-5000-basic"
+                },
+                {
+                    "name": "Pac 6500",
+                    "brands": [
+                        "Dräger",
+                        "MSA"
+                    ],
+                    "image": "/images/official_products/protection-and-detection-solutions/Pac_6500.png",
+                    "slug": "pac-6500"
+                },
+                {
+                    "name": "X Act 7000",
+                    "brands": [],
+                    "image": "/images/official_products/protection-and-detection-solutions/X-act_7000.png",
+                    "slug": "x-act-7000"
+                },
+                {
+                    "name": "Short Duration Scbapas Micro",
+                    "brands": [
+                        "Dräger",
+                        "MSA"
+                    ],
+                    "image": "/images/official_products/protection-and-detection-solutions/Short_Duration_SCBAPAS_Micro.png",
+                    "slug": "short-duration-scbapas-micro"
+                },
+                {
+                    "name": "X Am Pump",
+                    "brands": [
+                        "Groz",
+                        "Lincoln",
+                        "Graco"
+                    ],
+                    "image": "/images/official_products/protection-and-detection-solutions/X-am_Pump.png",
+                    "slug": "x-am-pump"
+                },
+                {
+                    "name": "Oxy K 30_50",
+                    "brands": [
+                        "Dräger",
+                        "MSA"
+                    ],
+                    "image": "/images/official_products/protection-and-detection-solutions/Oxy_K_30_50.png",
+                    "slug": "oxy-k-30-50"
+                },
+                {
+                    "name": "X Am 2800",
+                    "brands": [],
+                    "image": "/images/official_products/protection-and-detection-solutions/X-am_2800.png",
+                    "slug": "x-am-2800"
+                },
+                {
+                    "name": "Pac 8500",
+                    "brands": [
+                        "Dräger",
+                        "MSA"
+                    ],
+                    "image": "/images/official_products/protection-and-detection-solutions/Pac_8500.png",
+                    "slug": "pac-8500"
+                },
+                {
+                    "name": "Short Duration Escap (Pas Colt)",
+                    "brands": [
+                        "Dräger",
+                        "MSA"
+                    ],
+                    "image": "/images/official_products/protection-and-detection-solutions/Short_Duration_Escap__PAS_Colt_.png",
+                    "slug": "short-duration-escap-pas-colt"
+                },
+                {
+                    "name": "X Am 8000",
+                    "brands": [],
+                    "image": "/images/official_products/protection-and-detection-solutions/X-am_8000.png",
+                    "slug": "x-am-8000"
+                },
+                {
+                    "name": "X Pid 9500",
+                    "brands": [],
+                    "image": "/images/official_products/protection-and-detection-solutions/X-pid_9500.png",
+                    "slug": "x-pid-9500"
+                }
+            ]
+        },
+        {
+            "id": "welding-cutting",
+            "title": "Welding & Cutting",
+            "desc": "Advanced welding machines and plasma cutters.",
+            "image": "https://www.google.com/s2/favicons?domain=adorwelding.com&sz=128",
+            "products": [
+                {
+                    "name": "188",
+                    "brands": [
+                        "Ador Welding",
+                        "EWAC Alloys"
+                    ],
+                    "image": "/images/official_products/welding-products-and-cutting-services/188.png",
+                    "slug": "188"
+                },
+                {
+                    "name": "Welding Machines",
+                    "brands": [
+                        "Ador Welding",
+                        "EWAC Alloys",
+                        "Lincoln Electric"
+                    ],
+                    "image": "/images/official_products/welding-products-and-cutting-services/Welding_Machines.png",
+                    "slug": "welding-machines"
+                },
+                {
+                    "name": "187",
+                    "brands": [
+                        "Ador Welding",
+                        "EWAC Alloys"
+                    ],
+                    "image": "/images/official_products/welding-products-and-cutting-services/187.png",
+                    "slug": "187"
+                },
+                {
+                    "name": "Tig_Mig Machines",
+                    "brands": [
+                        "Ador Welding"
+                    ],
+                    "image": "/images/official_products/welding-products-and-cutting-services/TIG_MIG_Machines.png",
+                    "slug": "tig-mig-machines"
+                },
+                {
+                    "name": "190",
+                    "brands": [
+                        "Ador Welding",
+                        "EWAC Alloys"
+                    ],
+                    "image": "/images/official_products/welding-products-and-cutting-services/190.png",
+                    "slug": "190"
+                },
+                {
+                    "name": "Plasma Cutting  Machine",
+                    "brands": [
+                        "Ador Welding"
+                    ],
+                    "image": "/images/official_products/welding-products-and-cutting-services/Plasma_Cutting__Machine.png",
+                    "slug": "plasma-cutting-machine"
+                },
+                {
+                    "name": "Hardox Plates",
+                    "brands": [
+                        "SSAB"
+                    ],
+                    "image": "/images/official_products/welding-products-and-cutting-services/Hardox_Plates.png",
+                    "slug": "hardox-plates"
+                },
+                {
+                    "name": "189",
+                    "brands": [
+                        "Ador Welding",
+                        "EWAC Alloys"
+                    ],
+                    "image": "/images/official_products/welding-products-and-cutting-services/189.png",
+                    "slug": "189"
+                },
+                {
+                    "name": "Wear Plates",
+                    "brands": [
+                        "SSAB",
+                        "Ador Welding"
+                    ],
+                    "image": "/images/official_products/welding-products-and-cutting-services/Wear_Plates.png",
+                    "slug": "wear-plates"
+                },
+                {
+                    "name": "Steel Welding",
+                    "brands": [
+                        "Ador Welding",
+                        "EWAC Alloys",
+                        "Lincoln Electric"
+                    ],
+                    "image": "/images/official_products/welding-products-and-cutting-services/Steel_Welding.png",
+                    "slug": "steel-welding"
+                },
+                {
+                    "name": "Thermal Spray Coating (1)",
+                    "brands": [],
+                    "image": "/images/official_products/welding-products-and-cutting-services/Thermal_Spray_Coating__1_.png",
+                    "slug": "thermal-spray-coating-1"
+                }
+            ]
+        },
+        {
+            "id": "material-handling",
+            "title": "Material Handling Solutions",
+            "desc": "Conveyor solutions and belt maintenance products.",
+            "image": "/images/catalog/mainconveyor.png",
+            "products": [
+                {
+                    "name": "Skirting Systems",
+                    "brands": [],
+                    "image": "/images/official_products/conveyor-solutions/Skirting_Systems.png",
+                    "slug": "skirting-systems"
+                },
+                {
+                    "name": "Belt Cutters",
+                    "brands": [
+                        "Flexco"
+                    ],
+                    "image": "/images/official_products/conveyor-solutions/Belt_Cutters.png",
+                    "slug": "belt-cutters"
+                },
+                {
+                    "name": "Belt Cleaners",
+                    "brands": [
+                        "Flexco"
+                    ],
+                    "image": "/images/official_products/conveyor-solutions/Belt_Cleaners.png",
+                    "slug": "belt-cleaners"
+                },
+                {
+                    "name": "Belt Scrapper",
+                    "brands": [
+                        "Flexco"
+                    ],
+                    "image": "/images/official_products/conveyor-solutions/Belt_Scrapper.png",
+                    "slug": "belt-scrapper"
+                },
+                {
+                    "name": "Belt Skivers",
+                    "brands": [
+                        "Flexco"
+                    ],
+                    "image": "/images/official_products/conveyor-solutions/Belt_Skivers.png",
+                    "slug": "belt-skivers"
+                },
+                {
+                    "name": "Belt Lifter",
+                    "brands": [
+                        "Flexco"
+                    ],
+                    "image": "/images/official_products/conveyor-solutions/Belt_Lifter.png",
+                    "slug": "belt-lifter"
+                },
+                {
+                    "name": "Belt Clamps",
+                    "brands": [
+                        "Flexco"
+                    ],
+                    "image": "/images/official_products/conveyor-solutions/Belt_Clamps.png",
+                    "slug": "belt-clamps"
+                },
+                {
+                    "name": "Belt Fastners",
+                    "brands": [
+                        "Flexco"
+                    ],
+                    "image": "/images/official_products/conveyor-solutions/Belt_Fastners.png",
+                    "slug": "belt-fastners"
+                },
+                {
+                    "name": "Elevate Sensor",
+                    "brands": [],
+                    "image": "/images/official_products/conveyor-solutions/Elevate_Sensor.png",
+                    "slug": "elevate-sensor"
+                },
+                {
+                    "name": "Belt Trackers",
+                    "brands": [
+                        "Flexco"
+                    ],
+                    "image": "/images/official_products/conveyor-solutions/Belt_Trackers.png",
+                    "slug": "belt-trackers"
+                },
+                {
+                    "name": "Skirting System   1",
+                    "brands": [],
+                    "image": "/images/official_products/conveyor-solutions/Skirting_System_-_1.png",
+                    "slug": "skirting-system-1"
+                },
+                {
+                    "name": "Skirting System   2",
+                    "brands": [],
+                    "image": "/images/official_products/conveyor-solutions/Skirting_System_-_2.png",
+                    "slug": "skirting-system-2"
+                },
+                {
+                    "name": "Belt Cleaner   3",
+                    "brands": [
+                        "Flexco"
+                    ],
+                    "image": "/images/official_products/conveyor-solutions/Belt_Cleaner_-_3.png",
+                    "slug": "belt-cleaner-3"
+                },
+                {
+                    "name": "Belt Cleaner   1",
+                    "brands": [
+                        "Flexco"
+                    ],
+                    "image": "/images/official_products/conveyor-solutions/Belt_Cleaner_-_1.png",
+                    "slug": "belt-cleaner-1"
+                },
+                {
+                    "name": "Belt Cleaner   2",
+                    "brands": [
+                        "Flexco"
+                    ],
+                    "image": "/images/official_products/conveyor-solutions/Belt_Cleaner_-_2.png",
+                    "slug": "belt-cleaner-2"
+                },
+                {
+                    "name": "Pulley Lagging   1",
+                    "brands": [
+                        "Flexco"
+                    ],
+                    "image": "/images/official_products/conveyor-solutions/Pulley_Lagging_-_1.png",
+                    "slug": "pulley-lagging-1"
+                },
+                {
+                    "name": "Ceramic Pulley Lagging (1)",
+                    "brands": [
+                        "Flexco"
+                    ],
+                    "image": "/images/official_products/conveyor-solutions/Ceramic_Pulley_Lagging__1_.png",
+                    "slug": "ceramic-pulley-lagging-1"
+                },
+                {
+                    "name": "Tracker   1",
+                    "brands": [],
+                    "image": "/images/official_products/conveyor-solutions/Tracker_-_1.png",
+                    "slug": "tracker-1"
+                },
+                {
+                    "name": "Tracker   2",
+                    "brands": [],
+                    "image": "/images/official_products/conveyor-solutions/Tracker_-_2.png",
+                    "slug": "tracker-2"
+                },
+                {
+                    "name": "Belt Clamps (2)",
+                    "brands": [
+                        "Flexco"
+                    ],
+                    "image": "/images/official_products/conveyor-solutions/Belt_clamps__2_.png",
+                    "slug": "belt-clamps-2"
+                },
+                {
+                    "name": "Belt Skivers (1)",
+                    "brands": [
+                        "Flexco"
+                    ],
+                    "image": "/images/official_products/conveyor-solutions/Belt_Skivers__1_.png",
+                    "slug": "belt-skivers-1"
+                },
+                {
+                    "name": "Belt Cutter   1",
+                    "brands": [
+                        "Flexco"
+                    ],
+                    "image": "/images/official_products/conveyor-solutions/Belt_Cutter_-_1.png",
+                    "slug": "belt-cutter-1"
+                },
+                {
+                    "name": "Belt Fastner   1",
+                    "brands": [
+                        "Flexco"
+                    ],
+                    "image": "/images/official_products/conveyor-solutions/Belt_Fastner_-_1.png",
+                    "slug": "belt-fastner-1"
+                },
+                {
+                    "name": "Belt Fastner   2",
+                    "brands": [
+                        "Flexco"
+                    ],
+                    "image": "/images/official_products/conveyor-solutions/Belt_fastner_-_2.png",
+                    "slug": "belt-fastner-2"
+                }
+            ]
+        },
+        {
+            "id": "industrial-cleaning",
+            "title": "Industrial Cleaning Solutions",
+            "desc": "Professional high-pressure washers and steam cleaners.",
+            "image": "/images/catalog/finisholproducts.png",
+            "products": [
+                {
+                    "name": "Submersile Pump",
+                    "brands": [
+                        "Groz",
+                        "Lincoln",
+                        "Graco"
+                    ],
+                    "image": "/images/official_products/cleaning-equipments/Submersile_Pump.png",
+                    "slug": "submersile-pump"
+                },
+                {
+                    "name": "Pipe Cleaning Hose",
+                    "brands": [],
+                    "image": "/images/official_products/cleaning-equipments/Pipe_Cleaning_Hose.png",
+                    "slug": "pipe-cleaning-hose"
+                },
+                {
+                    "name": "High Pressure Cleaner",
+                    "brands": [],
+                    "image": "/images/official_products/cleaning-equipments/High_Pressure_Cleaner.png",
+                    "slug": "high-pressure-cleaner"
+                },
+                {
+                    "name": "Dirt Blaster",
+                    "brands": [
+                        "Kärcher"
+                    ],
+                    "image": "/images/official_products/cleaning-equipments/Dirt_Blaster.png",
+                    "slug": "dirt-blaster"
+                },
+                {
+                    "name": "Pressure Washer",
+                    "brands": [
+                        "Kärcher"
+                    ],
+                    "image": "/images/official_products/cleaning-equipments/Pressure_Washer.png",
+                    "slug": "pressure-washer"
+                },
+                {
+                    "name": "Trigger Gun",
+                    "brands": [
+                        "Kärcher"
+                    ],
+                    "image": "/images/official_products/cleaning-equipments/Trigger_Gun.png",
+                    "slug": "trigger-gun"
+                },
+                {
+                    "name": "Booster Pump",
+                    "brands": [
+                        "Groz",
+                        "Lincoln",
+                        "Graco"
+                    ],
+                    "image": "/images/official_products/cleaning-equipments/Booster_Pump.png",
+                    "slug": "booster-pump"
+                },
+                {
+                    "name": "High Pressure Washer",
+                    "brands": [
+                        "Kärcher"
+                    ],
+                    "image": "/images/official_products/cleaning-equipments/High_Pressure_Washer.png",
+                    "slug": "high-pressure-washer"
+                }
+            ]
+        },
+        {
+            "id": "electrical-lighting",
+            "title": "Electrical & Lighting",
+            "desc": "Industrial lighting, insulations and electrical consumables.",
+            "image": "/images/catalog/led.png",
+            "products": [
+                {
+                    "name": "Street & Flood Lighting",
+                    "brands": [],
+                    "image": "/images/official_products/lighting-and-electrical-consumables/Street___Flood_Lighting.png",
+                    "slug": "street-flood-lighting"
+                },
+                {
+                    "name": "128",
+                    "brands": [],
+                    "image": "/images/official_products/lighting-and-electrical-consumables/128.png",
+                    "slug": "128"
+                },
+                {
+                    "name": "129",
+                    "brands": [],
+                    "image": "/images/official_products/lighting-and-electrical-consumables/129.png",
+                    "slug": "129"
+                },
+                {
+                    "name": "Flood Lights",
+                    "brands": [],
+                    "image": "/images/official_products/lighting-and-electrical-consumables/Flood_Lights.png",
+                    "slug": "flood-lights"
+                },
+                {
+                    "name": "Commercial Lighting",
+                    "brands": [],
+                    "image": "/images/official_products/lighting-and-electrical-consumables/Commercial_Lighting.png",
+                    "slug": "commercial-lighting"
+                }
+            ]
+        },
+        {
+            "id": "tools-maintenance",
+            "title": "Tools & Maintenance",
+            "desc": "Hand tools, taps, spanners, and heavy duty workshop equipment.",
+            "image": "/images/catalog/trolley.png",
+            "products": [
+                {
+                    "name": "Led 0 225 Headlamp",
+                    "brands": [],
+                    "image": "/images/official_products/light-range---groz/LED_0_225_Headlamp.png",
+                    "slug": "led-0-225-headlamp"
+                },
+                {
+                    "name": "Led   230 Headlamp",
+                    "brands": [],
+                    "image": "/images/official_products/light-range---groz/LED_-_230_Headlamp.png",
+                    "slug": "led-230-headlamp"
+                },
+                {
+                    "name": "Led   150 Flashlight",
+                    "brands": [
+                        "Groz",
+                        "Lincoln"
+                    ],
+                    "image": "/images/official_products/light-range---groz/LED_-_150_Flashlight.png",
+                    "slug": "led-150-flashlight"
+                },
+                {
+                    "name": "Led   250 Headlamp",
+                    "brands": [],
+                    "image": "/images/official_products/light-range---groz/LED_-_250_Headlamp.png",
+                    "slug": "led-250-headlamp"
+                },
+                {
+                    "name": "Led   335 Penlight",
+                    "brands": [],
+                    "image": "/images/official_products/light-range---groz/LED_-_335_Penlight.png",
+                    "slug": "led-335-penlight"
+                },
+                {
+                    "name": "Led   170R Flashlight",
+                    "brands": [],
+                    "image": "/images/official_products/light-range---groz/LED_-_170R_Flashlight.png",
+                    "slug": "led-170r-flashlight"
+                },
+                {
+                    "name": "Led   360 Worklight",
+                    "brands": [],
+                    "image": "/images/official_products/light-range---groz/LED_-_360_Worklight.png",
+                    "slug": "led-360-worklight"
+                },
+                {
+                    "name": "Led   355 Underhood Light",
+                    "brands": [],
+                    "image": "/images/official_products/light-range---groz/LED_-_355_Underhood_Light.png",
+                    "slug": "led-355-underhood-light"
+                },
+                {
+                    "name": "Led   505 Floodlight",
+                    "brands": [],
+                    "image": "/images/official_products/light-range---groz/LED_-_505_Floodlight.png",
+                    "slug": "led-505-floodlight"
+                },
+                {
+                    "name": "Led   402 Spotlight Waterproof",
+                    "brands": [],
+                    "image": "/images/official_products/light-range---groz/LED_-_402_Spotlight_Waterproof.png",
+                    "slug": "led-402-spotlight-waterproof"
+                },
+                {
+                    "name": "Led   501 Floodlight",
+                    "brands": [],
+                    "image": "/images/official_products/light-range---groz/LED_-_501_Floodlight.png",
+                    "slug": "led-501-floodlight"
+                },
+                {
+                    "name": "Led   701 Lightbar",
+                    "brands": [],
+                    "image": "/images/official_products/light-range---groz/LED_-_701_Lightbar.png",
+                    "slug": "led-701-lightbar"
+                },
+                {
+                    "name": "Led   621 Worklight",
+                    "brands": [],
+                    "image": "/images/official_products/light-range---groz/LED_-_621_Worklight.png",
+                    "slug": "led-621-worklight"
+                },
+                {
+                    "name": "Led   545 Floodlight",
+                    "brands": [],
+                    "image": "/images/official_products/light-range---groz/LED_-_545_Floodlight.png",
+                    "slug": "led-545-floodlight"
+                },
+                {
+                    "name": "Led   530 Floodlight",
+                    "brands": [],
+                    "image": "/images/official_products/light-range---groz/LED_-_530_Floodlight.png",
+                    "slug": "led-530-floodlight"
+                },
+                {
+                    "name": "Led   670 Worklight",
+                    "brands": [],
+                    "image": "/images/official_products/light-range---groz/LED_-_670_Worklight.png",
+                    "slug": "led-670-worklight"
+                },
+                {
+                    "name": "Led   560 Worklight",
+                    "brands": [],
+                    "image": "/images/official_products/light-range---groz/LED_-_560_Worklight.png",
+                    "slug": "led-560-worklight"
+                },
+                {
+                    "name": "Led   711 Lightbar",
+                    "brands": [],
+                    "image": "/images/official_products/light-range---groz/LED_-_711_Lightbar.png",
+                    "slug": "led-711-lightbar"
+                },
+                {
+                    "name": "Woodworkimng Vices",
+                    "brands": [],
+                    "image": "/images/official_products/hand-and-air-tools/Woodworkimng_Vices.png",
+                    "slug": "woodworkimng-vices"
+                },
+                {
+                    "name": "Adjustable Tap & Reamer Wrenches",
+                    "brands": [],
+                    "image": "/images/official_products/hand-and-air-tools/Adjustable_Tap___Reamer_Wrenches.png",
+                    "slug": "adjustable-tap-reamer-wrenches"
+                },
+                {
+                    "name": "Arch Punches Bell Type",
+                    "brands": [],
+                    "image": "/images/official_products/hand-and-air-tools/Arch_Punches_Bell_Type.png",
+                    "slug": "arch-punches-bell-type"
+                },
+                {
+                    "name": "Adjustable Wrenches",
+                    "brands": [],
+                    "image": "/images/official_products/hand-and-air-tools/Adjustable_Wrenches.png",
+                    "slug": "adjustable-wrenches"
+                },
+                {
+                    "name": "Axe   Fg",
+                    "brands": [],
+                    "image": "/images/official_products/hand-and-air-tools/AXE_-_FG.png",
+                    "slug": "axe-fg"
+                },
+                {
+                    "name": "Ball Pein Hammer",
+                    "brands": [],
+                    "image": "/images/official_products/hand-and-air-tools/Ball_Pein_Hammer.png",
+                    "slug": "ball-pein-hammer"
+                },
+                {
+                    "name": "Axe   Id",
+                    "brands": [],
+                    "image": "/images/official_products/hand-and-air-tools/AXE_-_ID.png",
+                    "slug": "axe-id"
+                },
+                {
+                    "name": "Reversible Ratching Spanner",
+                    "brands": [],
+                    "image": "/images/official_products/hand-and-air-tools/Reversible_Ratching_Spanner.png",
+                    "slug": "reversible-ratching-spanner"
+                },
+                {
+                    "name": "Gcl   G Clamps",
+                    "brands": [],
+                    "image": "/images/official_products/hand-and-air-tools/GCL_-_G_Clamps.png",
+                    "slug": "gcl-g-clamps"
+                },
+                {
+                    "name": "Centre Punches Heavy Duty",
+                    "brands": [],
+                    "image": "/images/official_products/hand-and-air-tools/Centre_Punches_Heavy_Duty.png",
+                    "slug": "centre-punches-heavy-duty"
+                },
+                {
+                    "name": "Combination Pliers",
+                    "brands": [],
+                    "image": "/images/official_products/hand-and-air-tools/Combination_Pliers.png",
+                    "slug": "combination-pliers"
+                },
+                {
+                    "name": "Bestseller Center Punch Acp A Center Punch Automatic",
+                    "brands": [],
+                    "image": "/images/official_products/hand-and-air-tools/Bestseller_Center_Punch_ACP-A_Center_Punch_Automatic.png",
+                    "slug": "bestseller-center-punch-acp-a-center-punch-automatic"
+                },
+                {
+                    "name": "Claw Hammer",
+                    "brands": [],
+                    "image": "/images/official_products/hand-and-air-tools/Claw_Hammer.png",
+                    "slug": "claw-hammer"
+                },
+                {
+                    "name": "Css 7Rrt Ratcheting Spanners Set",
+                    "brands": [],
+                    "image": "/images/official_products/hand-and-air-tools/CSS-7RRT_Ratcheting_Spanners_Set.png",
+                    "slug": "css-7rrt-ratcheting-spanners-set"
+                },
+                {
+                    "name": "Die Stock Holder Round Dies",
+                    "brands": [],
+                    "image": "/images/official_products/hand-and-air-tools/Die_Stock_Holder_Round_Dies.png",
+                    "slug": "die-stock-holder-round-dies"
+                },
+                {
+                    "name": "Club Hammer",
+                    "brands": [],
+                    "image": "/images/official_products/hand-and-air-tools/Club_Hammer.png",
+                    "slug": "club-hammer"
+                },
+                {
+                    "name": "Bench Vises",
+                    "brands": [],
+                    "image": "/images/official_products/hand-and-air-tools/Bench_Vises.png",
+                    "slug": "bench-vises"
+                },
+                {
+                    "name": "Hacksaw Frame   40",
+                    "brands": [],
+                    "image": "/images/official_products/hand-and-air-tools/Hacksaw_Frame_-_40.png",
+                    "slug": "hacksaw-frame-40"
+                },
+                {
+                    "name": "Tap & Die    41 Pc Set",
+                    "brands": [],
+                    "image": "/images/official_products/hand-and-air-tools/Tap___Die_-__41_pc_set.png",
+                    "slug": "tap-die-41-pc-set"
+                },
+                {
+                    "name": "Screwdriver Set",
+                    "brands": [
+                        "ABB"
+                    ],
+                    "image": "/images/official_products/hand-and-air-tools/Screwdriver_Set.png",
+                    "slug": "screwdriver-set"
+                },
+                {
+                    "name": "Hacksaw Frame   12",
+                    "brands": [],
+                    "image": "/images/official_products/hand-and-air-tools/Hacksaw_Frame_-_12.png",
+                    "slug": "hacksaw-frame-12"
+                },
+                {
+                    "name": "Water Pump Pliers",
+                    "brands": [
+                        "Groz",
+                        "Lincoln",
+                        "Graco"
+                    ],
+                    "image": "/images/official_products/hand-and-air-tools/Water_Pump_Pliers.png",
+                    "slug": "water-pump-pliers"
+                },
+                {
+                    "name": "Sledge Hammer",
+                    "brands": [],
+                    "image": "/images/official_products/hand-and-air-tools/Sledge_Hammer.png",
+                    "slug": "sledge-hammer"
+                },
+                {
+                    "name": "Knv Retractable Retra Knife",
+                    "brands": [],
+                    "image": "/images/official_products/hand-and-air-tools/KNV_Retractable_Retra_Knife.png",
+                    "slug": "knv-retractable-retra-knife"
+                },
+                {
+                    "name": "Woodworkimng Vices (1)",
+                    "brands": [],
+                    "image": "/images/official_products/hand-and-air-tools/Woodworkimng_Vices__1_.png",
+                    "slug": "woodworkimng-vices-1"
+                },
+                {
+                    "name": "Air Control Units",
+                    "brands": [],
+                    "image": "/images/official_products/hand-and-air-tools/Air_Control_Units.png",
+                    "slug": "air-control-units"
+                },
+                {
+                    "name": "Air Plug & Coupler Set",
+                    "brands": [
+                        "Groz"
+                    ],
+                    "image": "/images/official_products/hand-and-air-tools/Air_Plug___Coupler_Set.png",
+                    "slug": "air-plug-coupler-set"
+                },
+                {
+                    "name": "Hose Reel",
+                    "brands": [
+                        "Groz"
+                    ],
+                    "image": "/images/official_products/hand-and-air-tools/Hose_Reel.png",
+                    "slug": "hose-reel"
+                },
+                {
+                    "name": "Impact Sockets",
+                    "brands": [
+                        "Dräger",
+                        "MSA"
+                    ],
+                    "image": "/images/official_products/hand-and-air-tools/Impact_Sockets.png",
+                    "slug": "impact-sockets"
+                },
+                {
+                    "name": "Ipw   501",
+                    "brands": [],
+                    "image": "/images/official_products/hand-and-air-tools/IPW_-_501.png",
+                    "slug": "ipw-501"
+                },
+                {
+                    "name": "Ipw   503",
+                    "brands": [],
+                    "image": "/images/official_products/hand-and-air-tools/IPW_-_503.png",
+                    "slug": "ipw-503"
+                },
+                {
+                    "name": "Hand Tap Drill Set",
+                    "brands": [],
+                    "image": "/images/official_products/cutting-tools-(high-performance)/Hand-Tap_Drill_Set.png",
+                    "slug": "hand-tap-drill-set"
+                },
+                {
+                    "name": "Hss Taps",
+                    "brands": [],
+                    "image": "/images/official_products/cutting-tools-(high-performance)/HSS_Taps.png",
+                    "slug": "hss-taps"
+                },
+                {
+                    "name": "Hsh & Tct Annual Cutter",
+                    "brands": [],
+                    "image": "/images/official_products/cutting-tools-(high-performance)/HSH___TCT_Annual_Cutter.png",
+                    "slug": "hsh-tct-annual-cutter"
+                },
+                {
+                    "name": "Regular Drills",
+                    "brands": [],
+                    "image": "/images/official_products/cutting-tools-(high-performance)/Regular_Drills.png",
+                    "slug": "regular-drills"
+                },
+                {
+                    "name": "Endmills",
+                    "brands": [],
+                    "image": "/images/official_products/cutting-tools-(high-performance)/Endmills.png",
+                    "slug": "endmills"
+                },
+                {
+                    "name": "Solid Carbid Tools",
+                    "brands": [],
+                    "image": "/images/official_products/cutting-tools-(high-performance)/Solid_Carbid_Tools.png",
+                    "slug": "solid-carbid-tools"
+                },
+                {
+                    "name": "Hss Premium Cut Edge Taps",
+                    "brands": [],
+                    "image": "/images/official_products/cutting-tools-(high-performance)/HSS_Premium_Cut_Edge_Taps.png",
+                    "slug": "hss-premium-cut-edge-taps"
+                },
+                {
+                    "name": "Tcrb   Rotary Burr",
+                    "brands": [],
+                    "image": "/images/official_products/cutting-tools-(high-performance)/TCRB_-_Rotary_Burr.png",
+                    "slug": "tcrb-rotary-burr"
+                },
+                {
+                    "name": "Centre Drills",
+                    "brands": [],
+                    "image": "/images/official_products/cutting-tools-(high-performance)/Centre_Drills.png",
+                    "slug": "centre-drills"
+                }
+            ]
+        },
+        {
+            "id": "frp-valves",
+            "title": "FRP Products & Valves",
+            "desc": "FRP Digesters and Industrial Valves.",
+            "image": "/images/catalog/speciality.png",
+            "products": [
+                {
+                    "name": "General FRP Products & Valves",
+                    "brands": [],
+                    "image": "/images/catalog/speciality.png",
+                    "slug": "general-frp-products-valves"
+                }
+            ]
+        }
+    ],
+    "brands": [
+        {
+            "name": "Timken",
+            "image": "/images/catalog/timken-logo.png",
+            "desc": "The Timken Company is a global manufacturer of bearings and power transmission products consisting of world renowned brands like Philadelphia Gears, Lovejoy, Diamond, Beka, Interlube, Groeneveld, Cone Drive, QF, QM etc. Timken offers a diverse range of products across industrial sectors.",
+            "url": "timken.com",
+            "subBrands": [
+                {
+                    "name": "Interlube",
+                    "logo": "https://www.google.com/s2/favicons?domain=interlube.com&sz=128",
+                    "productImage": "/images/catalog/grease_mix.jpg",
+                    "slug": "interlube"
+                },
+                {
+                    "name": "Lovejoy",
+                    "logo": "https://www.google.com/s2/favicons?domain=lovejoy-inc.com&sz=128",
+                    "productImage": "/images/catalog/powertranmission.png",
+                    "slug": "lovejoy"
+                },
+                {
+                    "name": "Drives by Timken",
+                    "logo": "https://www.google.com/s2/favicons?domain=timken.com&sz=128",
+                    "productImage": "/images/catalog/powertranmission.png",
+                    "slug": "drives-by-timken"
+                },
+                {
+                    "name": "Diamond Chains by Timken",
+                    "logo": "https://www.google.com/s2/favicons?domain=diamondchain.com&sz=128",
+                    "productImage": "/images/catalog/powertranmission.png",
+                    "slug": "diamond-chains-by-timken"
+                },
+                {
+                    "name": "Rollon by Timken",
+                    "logo": "https://www.google.com/s2/favicons?domain=rollon.com&sz=128",
+                    "productImage": "/images/catalog/powertranmission.png",
+                    "slug": "rollon-by-timken"
+                },
+                {
+                    "name": "Spinea by Timken",
+                    "logo": "https://www.google.com/s2/favicons?domain=spinea.com&sz=128",
+                    "productImage": "/images/catalog/gearmotor.png",
+                    "slug": "spinea-by-timken"
+                },
+                {
+                    "name": "Philadelphia Gear by Timken",
+                    "logo": "/images/catalog/philadelphia.png",
+                    "productImage": "/images/catalog/gearmotor.png",
+                    "slug": "philadelphia-gear-by-timken"
+                },
+                {
+                    "name": "GGB by Timken",
+                    "logo": "https://www.google.com/s2/favicons?domain=ggbearings.com&sz=128",
+                    "productImage": "/images/catalog/ucp.png",
+                    "slug": "ggb-by-timken"
+                },
+                {
+                    "name": "Groeneveld by Timken",
+                    "logo": "https://www.google.com/s2/favicons?domain=groeneveld-beka.com&sz=128",
+                    "productImage": "/images/catalog/grease_mix.jpg",
+                    "slug": "groeneveld-by-timken"
+                },
+                {
+                    "name": "Cone Drive by Timken",
+                    "logo": "https://www.google.com/s2/favicons?domain=conedrive.com&sz=128",
+                    "productImage": "/images/catalog/gearmotor.png",
+                    "slug": "cone-drive-by-timken"
+                },
+                {
+                    "name": "Nadella by Timken",
+                    "logo": "https://www.google.com/s2/favicons?domain=nadella.com&sz=128",
+                    "productImage": "/images/catalog/powertranmission.png",
+                    "slug": "nadella-by-timken"
+                },
+                {
+                    "name": "DesCase by Timken",
+                    "logo": "https://www.google.com/s2/favicons?domain=descase.com&sz=128",
+                    "productImage": "/images/catalog/grease_mix.jpg",
+                    "slug": "descase-by-timken"
+                },
+                {
+                    "name": "Timken Belts",
+                    "logo": "https://www.google.com/s2/favicons?domain=timken.com&sz=128",
+                    "productImage": "/images/catalog/powertranmission.png",
+                    "slug": "timken-belts"
+                },
+                {
+                    "name": "PTTech by Timken",
+                    "logo": "https://www.google.com/s2/favicons?domain=pttech.com&sz=128",
+                    "productImage": "/images/catalog/gearmotor.png",
+                    "slug": "pttech-by-timken"
+                },
+                {
+                    "name": "Torsion Control Products by Timken",
+                    "logo": "https://www.google.com/s2/favicons?domain=torsioncontrol.com&sz=128",
+                    "productImage": "/images/catalog/powertranmission.png",
+                    "slug": "torsion-control-products-by-timken"
+                },
+                {
+                    "name": "Lagersmit by Timken",
+                    "logo": "https://www.google.com/s2/favicons?domain=lagersmit.com&sz=128",
+                    "productImage": "/images/catalog/powertranmission.png",
+                    "slug": "lagersmit-by-timken"
+                },
+                {
+                    "name": "R+L Hydraulics by Timken",
+                    "logo": "https://www.google.com/s2/favicons?domain=rl-hydraulics.com&sz=128",
+                    "productImage": "/images/catalog/powertranmission.png",
+                    "slug": "r-l-hydraulics-by-timken"
+                },
+                {
+                    "name": "BEKA by Timken",
+                    "logo": "https://www.timken.com/wp-content/uploads/2019/11/GroeneveldBeka-Logo_Final_RGB.jpg",
+                    "productImage": "/images/catalog/grease_mix.jpg",
+                    "slug": "beka-by-timken"
+                },
+                {
+                    "name": "Fafnir by Timken",
+                    "logo": "https://www.google.com/s2/favicons?domain=timken.com&sz=128",
+                    "productImage": "/images/catalog/ucp.png",
+                    "slug": "fafnir-by-timken"
+                }
+            ],
+            "slug": "timken"
+        },
+        {
+            "name": "RegalRexnord",
+            "image": "https://static.pjpower.com/website-mapped/news/_1200x630_crop_center-center_82_none/Regal-Rexnord.jpg",
+            "desc": "Regal Rexnord Corporation is a leading manufacturer of electric motors and motion controls, power generation and power transmission products. The company brings together iconic brands like Rexnord, Falk, Stearns, and Tollok to provide comprehensive power transmission solutions.",
+            "url": "regalrexnord.com",
+            "subBrands": [
+                {
+                    "name": "Link-Belt",
+                    "logo": "https://www.google.com/s2/favicons?domain=regalrexnord.com&sz=128",
+                    "productImage": "/images/catalog/ucp.png",
+                    "slug": "link-belt"
+                },
+                {
+                    "name": "FALK",
+                    "logo": "https://media.licdn.com/dms/image/v2/C4E0BAQHquT_Pno3B2Q/company-logo_200_200/company-logo_200_200/0/1639757127580/regal_beloit_logo?e=2147483647&v=beta&t=w_KQNtKffHIOsxDPXOdcJgFbwU-AaIDVL5cROq7xOeE",
+                    "productImage": "/images/catalog/gearmotor.png",
+                    "slug": "falk"
+                },
+                {
+                    "name": "REXNORD",
+                    "logo": "https://www.google.com/s2/favicons?domain=regalrexnord.com&sz=128",
+                    "productImage": "/images/catalog/powertranmission.png",
+                    "slug": "rexnord"
+                },
+                {
+                    "name": "SEALMASTER",
+                    "logo": "https://www.google.com/s2/favicons?domain=regalrexnord.com&sz=128",
+                    "productImage": "/images/catalog/ucp.png",
+                    "slug": "sealmaster"
+                },
+                {
+                    "name": "Duralon",
+                    "logo": "https://www.google.com/s2/favicons?domain=regalrexnord.com&sz=128",
+                    "productImage": "/images/catalog/ucp.png",
+                    "slug": "duralon"
+                },
+                {
+                    "name": "Rex",
+                    "logo": "https://www.google.com/s2/favicons?domain=regalrexnord.com&sz=128",
+                    "productImage": "/images/catalog/powertranmission.png",
+                    "slug": "rex"
+                },
+                {
+                    "name": "EUROFLEX",
+                    "logo": "https://www.google.com/s2/favicons?domain=regalrexnord.com&sz=128",
+                    "productImage": "/images/catalog/powertranmission.png",
+                    "slug": "euroflex"
+                },
+                {
+                    "name": "CENTA",
+                    "logo": "https://www.google.com/s2/favicons?domain=regalrexnord.com&sz=128",
+                    "productImage": "/images/catalog/powertranmission.png",
+                    "slug": "centa"
+                },
+                {
+                    "name": "ROLLWAY",
+                    "logo": "https://www.google.com/s2/favicons?domain=regalrexnord.com&sz=128",
+                    "productImage": "/images/catalog/ucp.png",
+                    "slug": "rollway"
+                },
+                {
+                    "name": "KOP-FLEX",
+                    "logo": "https://www.google.com/s2/favicons?domain=regalrexnord.com&sz=128",
+                    "productImage": "/images/catalog/powertranmission.png",
+                    "slug": "kop-flex"
+                },
+                {
+                    "name": "Stearns",
+                    "logo": "https://media.licdn.com/dms/image/v2/C4E0BAQHquT_Pno3B2Q/company-logo_200_200/company-logo_200_200/0/1639757127580/regal_beloit_logo?e=2147483647&v=beta&t=w_KQNtKffHIOsxDPXOdcJgFbwU-AaIDVL5cROq7xOeE",
+                    "productImage": "/images/catalog/gearmotor.png",
+                    "slug": "stearns"
+                },
+                {
+                    "name": "Thomas",
+                    "logo": "https://www.google.com/s2/favicons?domain=regalrexnord.com&sz=128",
+                    "productImage": "/images/catalog/powertranmission.png",
+                    "slug": "thomas"
+                },
+                {
+                    "name": "BOSTON GEAR",
+                    "logo": "https://www.google.com/s2/favicons?domain=regalrexnord.com&sz=128",
+                    "productImage": "/images/catalog/gearmotor.png",
+                    "slug": "boston-gear"
+                },
+                {
+                    "name": "JAURE",
+                    "logo": "https://www.google.com/s2/favicons?domain=regalrexnord.com&sz=128",
+                    "productImage": "/images/catalog/powertranmission.png",
+                    "slug": "jaure"
+                },
+                {
+                    "name": "Altra Motion",
+                    "logo": "https://www.google.com/s2/favicons?domain=altramotion.com&sz=128",
+                    "productImage": "/images/catalog/powertranmission.png",
+                    "slug": "altra-motion"
+                },
+                {
+                    "name": "McGILL",
+                    "logo": "https://www.google.com/s2/favicons?domain=regalrexnord.com&sz=128",
+                    "productImage": "/images/catalog/ucp.png",
+                    "slug": "mcgill"
+                },
+                {
+                    "name": "OMEGA",
+                    "logo": "https://www.google.com/s2/favicons?domain=regalrexnord.com&sz=128",
+                    "productImage": "/images/catalog/powertranmission.png",
+                    "slug": "omega"
+                },
+                {
+                    "name": "DURST",
+                    "logo": "https://www.google.com/s2/favicons?domain=regalrexnord.com&sz=128",
+                    "productImage": "/images/catalog/gearmotor.png",
+                    "slug": "durst"
+                },
+                {
+                    "name": "Browning",
+                    "logo": "https://www.google.com/s2/favicons?domain=regalrexnord.com&sz=128",
+                    "productImage": "/images/catalog/powertranmission.png",
+                    "slug": "browning"
+                },
+                {
+                    "name": "Regal",
+                    "logo": "https://www.google.com/s2/favicons?domain=regalrexnord.com&sz=128",
+                    "productImage": "/images/catalog/powertranmission.png",
+                    "slug": "regal"
+                },
+                {
+                    "name": "VIVA",
+                    "logo": "https://www.google.com/s2/favicons?domain=regalrexnord.com&sz=128",
+                    "productImage": "/images/catalog/powertranmission.png",
+                    "slug": "viva"
+                },
+                {
+                    "name": "Thomas Coupling",
+                    "logo": "https://www.google.com/s2/favicons?domain=regalrexnord.com&sz=128",
+                    "productImage": "/images/catalog/disccoupling.png",
+                    "slug": "thomas-coupling"
+                },
+                {
+                    "name": "Steelflex Coupling",
+                    "logo": "https://www.google.com/s2/favicons?domain=regalrexnord.com&sz=128",
+                    "productImage": "/images/catalog/gridcoupling.png",
+                    "slug": "steelflex-coupling"
+                }
+            ],
+            "slug": "regalrexnord"
+        },
+        {
+            "name": "Pidilite",
+            "image": "/images/catalog/Pidilite_logo.svg.png",
+            "desc": "Pidilite Industries offer adhesive technologies, waterproofing solutions, wood finishes and paint, automotive, technical textiles, tile grouts, and woodworking solutions. Their brands like M-Seal and Zorrik are essential for industrial maintenance.",
+            "url": "pidilite.com",
+            "slug": "pidilite"
+        },
+        {
+            "name": "Groz",
+            "image": "https://www.google.com/s2/favicons?domain=groz-tools.com&sz=128",
+            "desc": "Groz provides premium quality Lubrication, Fuel, Air Handling Equipment, Workshop, LED & Precision Tools. Used across Automotive, Industrial, Agriculture, and Mining industries. They are a global leader in lubrication management solutions.",
+            "url": "groz-tools.com",
+            "slug": "groz"
+        },
+        {
+            "name": "Finishol",
+            "image": "https://www.finishol.com/wp-content/uploads/2021/04/finishol-logo.png",
+            "desc": "Finishol offers industrial cleaners, degreasers, and protective coatings for machinery and equipment. Their solutions ensure effective cleaning, rust prevention, and improved equipment longevity through eco-friendly advanced chemical engineering.",
+            "url": "finishol.com",
+            "slug": "finishol"
+        },
+        {
+            "name": "Baldor",
+            "image": "https://www.google.com/s2/favicons?domain=abb.com&sz=128",
+            "desc": "Baldor Electric Company, now part of ABB, provides industrial electric motors, drives and mechanical power transmission products. Renowned for their high-efficiency cooling tower direct drive motors.",
+            "url": "baldor.com",
+            "slug": "baldor"
+        },
+        {
+            "name": "PBL",
+            "image": "https://www.google.com/s2/favicons?domain=powerbuild.in&sz=128",
+            "desc": "Power Build Private Limited (PBL) offers compact drive geared motor solutions for diverse material handling needs through its Radicon PBL brand. They are a leader in the Indian power transmission market.",
+            "url": "powerbuild.in",
+            "slug": "pbl"
+        },
+        {
+            "name": "Gamet",
+            "image": "/images/catalog/gamet_logo_new.jpg",
+            "desc": "Super Precision Tapered Roller Bearings. Trusted by the printing and packaging industries, renowned for incredibly tight tolerances and sub-micron precision for machine tool spindles.",
+            "url": "gamet-bearings.com",
+            "slug": "gamet"
+        },
+        {
+            "name": "Atraflex",
+            "image": "https://www.ustsubaki.com/wp-content/uploads/Atra_Flex_BLUE_LOGO.png",
+            "desc": "Elastomer power transmission couplings designed to accommodate high torque and misalignment. Part of U.S. Tsubaki, providing maintenance-free solutions for demanding power transmission tasks.",
+            "url": "atra-flex.com",
+            "slug": "atraflex"
+        },
+        {
+            "name": "Dräger",
+            "image": "https://www.google.com/s2/favicons?domain=draeger.com&sz=128",
+            "desc": "Dräger manufactures medical and safety technology products. In doing so, they protect, support, and save people's lives around the world in hospitals, fire departments, and hazardous industrial zones with advanced gas detection and respiratory protection.",
+            "url": "draeger.com",
+            "slug": "dr-ger"
+        },
+        {
+            "name": "Shell",
+            "image": "https://upload.wikimedia.org/wikipedia/en/thumb/e/e8/Shell_logo.svg/1200px-Shell_logo.svg.png",
+            "desc": "Shell offers a wide range of lubricants and greases that reduce wear and enhance efficiency. Their products serve industries like automotive, manufacturing, and energy through globally trusted industrial oil formulations.",
+            "url": "shell.com",
+            "slug": "shell"
+        },
+        {
+            "name": "ABB",
+            "image": "https://www.google.com/s2/favicons?domain=abb.com&sz=128",
+            "desc": "ABB is a technology leader in electrification and automation, enabling a more sustainable and resource-efficient future. Their portfolio includes high-performance motors, drives, and PLC systems for industrial scale automation.",
+            "url": "abb.com",
+            "slug": "abb"
+        },
+        {
+            "name": "Ador",
+            "image": "https://www.google.com/s2/favicons?domain=adorwelding.com&sz=128",
+            "desc": "Indian manufacturer of welding and cutting equipment and consumables. Ador Welding provides high-performance solutions for fabrication and maintenance across heavy manufacturing sectors.",
+            "url": "adorwelding.com",
+            "slug": "ador"
+        },
+        {
+            "name": "Hypertherm",
+            "image": "https://www.google.com/s2/favicons?domain=hypertherm.com&sz=128",
+            "desc": "Industrial plasma, waterjet, and laser cutting equipment renowned for unparalleled precision. Hypertherm products are designed for maximum productivity and cut quality in metal fabrication.",
+            "url": "hypertherm.com",
+            "slug": "hypertherm"
+        },
+        {
+            "name": "Flexco",
+            "image": "https://www.google.com/s2/favicons?domain=flexco.com&sz=128",
+            "desc": "Flexco can help you reduce material spillage, avoid uneven belt wear, and eliminate potential system damage with high performance belt trainers, scrapers, and mechanical fasteners for conveyor systems.",
+            "url": "flexco.com",
+            "slug": "flexco"
+        },
+        {
+            "name": "Karcher",
+            "image": "https://www.google.com/s2/favicons?domain=kaercher.com&sz=128",
+            "desc": "Industrial cleaning technology and high-pressure washers ensuring deep facility sanitized environments. Karcher is the world leader in professional cleaning systems for industrial and commercial use.",
+            "url": "kaercher.com",
+            "slug": "karcher"
+        },
+        {
+            "name": "Lubrilog",
+            "image": "/images/catalog/lubrilog_logo.png",
+            "desc": "Lubrilog provides lubricants for industrial applications, including open gear drives, water-resistant greases, and specialty oils designed to ensure optimal performance in harsh cement and mining environments.",
+            "url": "lubrilog.fr",
+            "slug": "lubrilog"
+        },
+        {
+            "name": "PRS - Permacel",
+            "image": "https://www.google.com/s2/favicons?domain=nitto.com&sz=128",
+            "desc": "PRS Permacel provides high-performance adhesive tapes for industrial, electrical, and packaging needs. Their solutions cater to industries like automotive and electronics with advanced insulation materials.",
+            "url": "permacel.in",
+            "slug": "prs-permacel"
+        },
+        {
+            "name": "Wattera",
+            "image": "https://www.google.com/s2/favicons?domain=wattera.in&sz=128",
+            "desc": "A Lighting solutions and Electrical distribution systems manufacturer, specializing in LED solutions for industrial and commercial applications, including hazardous area lighting.",
+            "url": "wattera.in",
+            "slug": "wattera"
+        },
+        {
+            "name": "GMY",
+            "image": "/images/catalog/gmy_logo.png",
+            "desc": "GMY Industrial specializes in providing high-quality hydraulic components and parts for the construction and excavation industries, ensuring peak performance for heavy earthmoving equipment.",
+            "url": "gmy.com.my",
+            "slug": "gmy"
+        },
+        {
+            "name": "Sigma Toolings",
+            "image": "https://www.google.com/s2/favicons?domain=sigmatoolings.com&sz=128",
+            "desc": "Sigma Toolings offers precision cutting tools and solutions for machining, including boring bars, indexable drills, and specialized tooling systems for the automotive and aerospace sectors.",
+            "url": "sigmatoolings.com",
+            "slug": "sigma-toolings"
+        },
+        {
+            "name": "Intervalve",
+            "image": "https://media.licdn.com/dms/image/v2/D4D0BAQGmCtVcoZoTYg/company-logo_200_200/company-logo_200_200/0/1711427740234/intervalvepoonawallaltd_logo?e=2147483647&v=beta&t=c0UG4eOwMBrRyiQMMgPKbCXLmZx1QZeTFojJ88Lf84U",
+            "desc": "Intervalve Poonawalla manufactures a wide range of industrial valves including butterfly, gate, globe, and check valves, known for their reliability in water and chemical processes.",
+            "url": "intervalvepuncou.com",
+            "slug": "intervalve"
+        },
+        {
+            "name": "Miranda",
+            "image": "https://www.google.com/s2/favicons?domain=mirandatools.in&sz=128",
+            "desc": "Miranda Tools, part of Dormer Pramet, is a leading manufacturer of HSS Taps, Carbide Tools, and other cutting solutions for metalworking professionals.",
+            "url": "mirandatools.in",
+            "slug": "miranda"
+        },
+        {
+            "name": "Marathon Motors",
+            "image": "https://www.google.com/s2/favicons?domain=marathonelectric.com&sz=128",
+            "desc": "An iconic brand in the commercial and industrial motor industry. They deliver efficient and durable motors for fans, pumps, compressors, and conveyors worldwide.",
+            "url": "marathonelectric.com",
+            "slug": "marathon-motors"
+        },
+        {
+            "name": "Cemp",
+            "image": "https://www.google.com/s2/favicons?domain=cemp.eu&sz=128",
+            "desc": "Cemp specializes in the production of flameproof and safety motors for hazardous environments. A trusted part of the WEG Group, bringing advanced electric solutions to demanding applications.",
+            "url": "cemp.eu",
+            "slug": "cemp"
+        }
+    ]
+};
+
+
+const companyData = {
+    timeline: [
+        { year: "1985", event: "Established by Jayprakash Vasa & Girish Vasa. Distribution of Timken pan India." },
+        { year: "1991", event: "Distribution of FAG, REXNORD/ LINKBELT." },
+        { year: "1993", event: "Inaugurated Nagpur Branch." },
+        { year: "1994", event: "JINHARSH trademarked under Class 7." },
+        { year: "1995", event: "Distributorship of NTN." },
+        { year: "1996", event: "Expanded core product offerings." },
+        { year: "2000", event: "Distributorship of DODGE, GAMET, ROLLIX for pan India." },
+        { year: "2004", event: "Inaugurated Baroda Branch." },
+        { year: "2005", event: "Inaugurated Raipur Branch." },
+        { year: "2006", event: "Inaugurated Surat & Gandhidham Branch." },
+        { year: "2008", event: "Distributorship of NSK / RHP Brands in association with Sojitz Corporation." },
+        { year: "2010", event: "Established Larger office at Surat - Hazira and shifted entire Gujarat operations to Surat." },
+        { year: "2011", event: "Inaugurated Goa Branch." },
+        { year: "2013", event: "Distributorship of GROZ Lubrication Tools, Hand Tools, LEDs." },
+        { year: "2015", event: "Established Chandrapur & Vadodara Customer Service Point, Moved Nagpur office to Prime Location." },
+        { year: "2018", event: "Diversified into Services & Distributorship of GRUETZNER." },
+        { year: "2020", event: "Distributorship of PIDILITE, FLEXCO, INFINITE UPTIME." },
+        { year: "2021", event: "Distributorship of SIGMA, ADOR FONTECH, & Inaugurated Borivali Office." },
+        { year: "2022", event: "Distributorship of Draeger & Shifted Surat Office to Jinharsh House." },
+        { year: "2024", event: "Crossed 125Cr + Turnover & Distributorship of Shell." }
+    ],
+    industries: [
+        { name: "Power", icon: "Zap", desc: "Energy generation and distribution.", image: "/images/catalog/powertranmission.png" },
+        { name: "Cement", icon: "Factory", desc: "Heavy duty manufacturing components.", image: "/images/catalog/gearmotor.png" },
+        { name: "Mining", icon: "Pickaxe", desc: "Rugged extraction equipment processing.", image: "/images/catalog/ballbearing.png" },
+        { name: "Oil & Gas", icon: "Flame", desc: "High safety and reliability components.", image: "/images/catalog/chains.png" },
+        { name: "Transport", icon: "Train", desc: "Railway supply and maintenance.", image: "/images/ai/industry_transport.png" },
+        { name: "Paper", icon: "Scroll", desc: "Paper processing machinery solutions.", image: "/images/ai/industry_paper.png" },
+        { name: "Metal", icon: "Anvil", desc: "Steel and non-ferrous manufacturing.", image: "/images/ai/industry_metal.png" },
+        { name: "Marine", icon: "Ship", desc: "Ship propulsion and maintenance.", image: "/images/ai/industry_marine.png" },
+        { name: "Chemical", icon: "FlaskConical", desc: "Corrosion-resistant solutions.", image: "/images/ai/industry_chemical.png" },
+        { name: "Agriculture", icon: "Tractor", desc: "Farming machinery maintenance.", image: "/images/ai/industry_agriculture.png" },
+        { name: "Construction", icon: "HardHat", desc: "Heavy machinery and earthmovers.", image: "/images/ai/industry_construction.png" },
+        { name: "General", icon: "Settings", desc: "Broad industrial processing.", image: "/images/ai/industry_general.png" },
+        { name: "Defense", icon: "Shield", desc: "Secure and precise engineering.", image: "/images/ai/industry_defense.png" },
+        { name: "FMCG", icon: "Package", desc: "Fast-moving consumer goods packaging.", image: "/images/catalog/conveyingchain.png" },
+        { name: "Pharmaceutical", icon: "Pill", desc: "Clean-room and precise processing.", image: "/images/catalog/drager.png" }
+    ],
+    verticals: [
+        { name: "Services", desc: "Comprehensive support including installation, repairs, commissions, AMC, condition monitoring, vibration analysis, and inventory management.", image: "/images/ai/vertical_services.png" },
+        { name: "Supply Aggregation", desc: "Consolidated procurement and logistics out of our massive pan-india warehouse network to ensure seamless supply chain.", image: "/images/ai/vertical_supply.png" },
+        { name: "Engineering Solutions", desc: "Innovative industrial solutions focused on ease of maintenance, retrofitting, and enhancing overall plant productivity.", image: "/images/ai/vertical_engineering.png" },
+        { name: "Trading Products", desc: "Sourcing and delivering high-quality standalone industrial products.", image: "/images/ai/vertical_trading.png" },
+        { name: "Distribution Products", desc: "Acting as authorized channel partners and master distributors for 24+ global principals.", image: "/images/ai/vertical_distribution.png" }
+    ],
+    events: [
+        { title: "Annual Meets", desc: "We organize an annual event where all employees from our various branches, along with their families, are invited to a resort for a team-building retreat. This gathering fosters camaraderie and collaboration through engaging team-bonding activities and enjoyable recreational events." },
+        { title: "Seminars", desc: "We attend seminars to connect with professionals in our industries, fostering valuable relationships that help expand our business. These events offer insights from fellow business owners, enhancing our knowledge and strategies." },
+        { title: "Exhibitions", desc: "At our exhibitions, we aim to connect with professionals and stakeholders in our industry, creating valuable relationships that help grow our network. These events serve as a platform to showcase our expertise, products, and services." }
+    ]
+};
+
+
+
+const officialCatalogsData = [
+    {
+        "brand": "Wattera",
+        "name": "Wattera Led Product Catalogue",
+        "fileSize": "20.0 MB",
+        "url": "/catalogs/official/Wattera/Wattera_LED_Product-Catalogue.pdf"
+    },
+    {
+        "brand": "Wattera",
+        "name": "Wattcab Product Catalog",
+        "fileSize": "8.3 MB",
+        "url": "/catalogs/official/Wattera/Wattcab-Product-Catalog.pdf"
+    },
+    {
+        "brand": "Timken",
+        "name": "Maintenance Tools Flyer",
+        "fileSize": "0.6 MB",
+        "url": "/catalogs/official/Timken/Maintenance-Tools-Flyer.pdf"
+    },
+    {
+        "brand": "Timken",
+        "name": "Uc Series Catalog",
+        "fileSize": "2.4 MB",
+        "url": "/catalogs/official/Timken/UC_Series-Catalog.pdf"
+    },
+    {
+        "brand": "Timken",
+        "name": "Thrust And Plain Bearings Catalog",
+        "fileSize": "4.1 MB",
+        "url": "/catalogs/official/Timken/Thrust-and-Plain-Bearings-Catalog.pdf"
+    },
+    {
+        "brand": "Timken",
+        "name": "U Series Ball Housed Unit Catalog",
+        "fileSize": "2.6 MB",
+        "url": "/catalogs/official/Timken/U-Series-Ball-Housed-Unit-Catalog.pdf"
+    },
+    {
+        "brand": "Timken",
+        "name": "Type E Mounted Tapered Roller Bearing Catalog",
+        "fileSize": "3.1 MB",
+        "url": "/catalogs/official/Timken/Type-E-Mounted-Tapered-Roller-Bearing-Catalog.pdf"
+    },
+    {
+        "brand": "Timken",
+        "name": "Tapered Roller Bearing Catalog",
+        "fileSize": "26.8 MB",
+        "url": "/catalogs/official/Timken/Tapered-Roller-Bearing-Catalog.pdf"
+    },
+    {
+        "brand": "Timken",
+        "name": "Srb Solid Block Housed Unit Catalog",
+        "fileSize": "16.5 MB",
+        "url": "/catalogs/official/Timken/SRB-Solid-Block-Housed-Unit-Catalog.pdf"
+    },
+    {
+        "brand": "Timken",
+        "name": "Super Precision Bearing For Machine Tool Catalog",
+        "fileSize": "7.3 MB",
+        "url": "/catalogs/official/Timken/Super-Precision-Bearing-for-Machine-Tool-Catalog.pdf"
+    },
+    {
+        "brand": "Timken",
+        "name": "Spherical Roller Bearing Catalog",
+        "fileSize": "6.9 MB",
+        "url": "/catalogs/official/Timken/Spherical-Roller-Bearing-Catalog.pdf"
+    },
+    {
+        "brand": "Timken",
+        "name": "National Indust Seals Catalog",
+        "fileSize": "31.5 MB",
+        "url": "/catalogs/official/Timken/National-Indust-Seals-Catalog.pdf"
+    },
+    {
+        "brand": "Timken",
+        "name": "Snt Plummer Block Flyer",
+        "fileSize": "4.7 MB",
+        "url": "/catalogs/official/Timken/SNT-Plummer-Block-Flyer.pdf"
+    },
+    {
+        "brand": "Timken",
+        "name": "Snt Housings Catalog",
+        "fileSize": "2.0 MB",
+        "url": "/catalogs/official/Timken/SNT-Housings-Catalog.pdf"
+    },
+    {
+        "brand": "Timken",
+        "name": "Saf Catalog",
+        "fileSize": "6.3 MB",
+        "url": "/catalogs/official/Timken/SAF-Catalog.pdf"
+    },
+    {
+        "brand": "Timken",
+        "name": "Quickflex Catalog",
+        "fileSize": "3.0 MB",
+        "url": "/catalogs/official/Timken/QuickFlex-Catalog.pdf"
+    },
+    {
+        "brand": "Timken",
+        "name": "Revolvo Catalog",
+        "fileSize": "2.6 MB",
+        "url": "/catalogs/official/Timken/Revolvo-Catalog.pdf"
+    },
+    {
+        "brand": "Timken",
+        "name": "Parts_Ncf Crb Flyer",
+        "fileSize": "0.0 MB",
+        "url": "/catalogs/official/Timken/Parts_NCF_CRB-Flyer.pdf"
+    },
+    {
+        "brand": "Timken",
+        "name": "Lube Selection Guide",
+        "fileSize": "0.7 MB",
+        "url": "/catalogs/official/Timken/Lube-Selection-Guide.pdf"
+    },
+    {
+        "brand": "Timken",
+        "name": "Informative Engineering Catalog",
+        "fileSize": "9.0 MB",
+        "url": "/catalogs/official/Timken/Informative-Engineering-Catalog.pdf"
+    },
+    {
+        "brand": "Timken",
+        "name": "Industrial Bearing Maintenance Manual",
+        "fileSize": "3.4 MB",
+        "url": "/catalogs/official/Timken/Industrial-Bearing-Maintenance-Manual.pdf"
+    },
+    {
+        "brand": "Timken",
+        "name": "Housed Unit Catalog",
+        "fileSize": "23.9 MB",
+        "url": "/catalogs/official/Timken/Housed-Unit-Catalog.pdf"
+    },
+    {
+        "brand": "Timken",
+        "name": "Drives Roller Chain Catalog",
+        "fileSize": "4.5 MB",
+        "url": "/catalogs/official/Timken/Drives-Roller-Chain-Catalog.pdf"
+    },
+    {
+        "brand": "Timken",
+        "name": "Deep Groove Ball Bearing Catalog",
+        "fileSize": "0.9 MB",
+        "url": "/catalogs/official/Timken/Deep-Groove-Ball-Bearing-Catalog.pdf"
+    },
+    {
+        "brand": "Timken",
+        "name": "Cylindrical Roller Bearing Catalog",
+        "fileSize": "8.8 MB",
+        "url": "/catalogs/official/Timken/Cylindrical-Roller-Bearing-Catalog.pdf"
+    },
+    {
+        "brand": "Timken",
+        "name": "Crbs Four Rows Catalog",
+        "fileSize": "0.7 MB",
+        "url": "/catalogs/official/Timken/CRBs-Four-Rows-Catalog.pdf"
+    },
+    {
+        "brand": "Timken",
+        "name": "Corrosion Resistant Ball Bearing Housed Unit Catalog",
+        "fileSize": "5.3 MB",
+        "url": "/catalogs/official/Timken/Corrosion-Resistant-Ball-Bearing-Housed-Unit-Catalog.pdf"
+    },
+    {
+        "brand": "Timken",
+        "name": "Ball Bearings Catalog",
+        "fileSize": "10.7 MB",
+        "url": "/catalogs/official/Timken/Ball-Bearings-Catalog.pdf"
+    },
+    {
+        "brand": "Timken",
+        "name": "Ball Bearing Housed Unit Catalog",
+        "fileSize": "14.5 MB",
+        "url": "/catalogs/official/Timken/Ball-Bearing-Housed-Unit-Catalog.pdf"
+    },
+    {
+        "brand": "Timken",
+        "name": "Ap Bearings Catalog",
+        "fileSize": "3.8 MB",
+        "url": "/catalogs/official/Timken/AP-Bearings-Catalog.pdf"
+    },
+    {
+        "brand": "Timken",
+        "name": "Angular Contact Ball Bearing Catalog.Pdf",
+        "fileSize": "2.6 MB",
+        "url": "/catalogs/official/Timken/Angular-Contact-Ball-Bearing-Catalog.PDF"
+    },
+    {
+        "brand": "SKF",
+        "name": "Progressive Lubrication Systems Catalog",
+        "fileSize": "5.6 MB",
+        "url": "/catalogs/official/SKF/Progressive-Lubrication-Systems-Catalog.pdf"
+    },
+    {
+        "brand": "Sigma Tooling",
+        "name": "Sigma Tooling Catalog",
+        "fileSize": "5.4 MB",
+        "url": "/catalogs/official/Sigma Tooling/Sigma-Tooling-Catalog.pdf"
+    },
+    {
+        "brand": "Shell",
+        "name": "Shell Tonna S3 Flyer",
+        "fileSize": "0.7 MB",
+        "url": "/catalogs/official/Shell/Shell-Tonna-S3-Flyer.pdf"
+    },
+    {
+        "brand": "Shell",
+        "name": "Shell Tellus Flyer",
+        "fileSize": "0.3 MB",
+        "url": "/catalogs/official/Shell/Shell-Tellus-Flyer.pdf"
+    },
+    {
+        "brand": "Shell",
+        "name": "Shell Spirax Heavy Duty Transmission Flyer",
+        "fileSize": "0.5 MB",
+        "url": "/catalogs/official/Shell/Shell-Spirax-heavy-duty-transmission-flyer.pdf"
+    },
+    {
+        "brand": "Shell",
+        "name": "Shell Spirax Flyer",
+        "fileSize": "0.7 MB",
+        "url": "/catalogs/official/Shell/Shell-Spirax-Flyer.pdf"
+    },
+    {
+        "brand": "Shell",
+        "name": "Shell Rimula Flyer",
+        "fileSize": "1.1 MB",
+        "url": "/catalogs/official/Shell/Shell-Rimula-Flyer.pdf"
+    },
+    {
+        "brand": "Shell",
+        "name": "Shell Omala Flyer",
+        "fileSize": "1.6 MB",
+        "url": "/catalogs/official/Shell/Shell-Omala-Flyer.pdf"
+    },
+    {
+        "brand": "Shell",
+        "name": "Shell Gadus Products Flyer",
+        "fileSize": "0.4 MB",
+        "url": "/catalogs/official/Shell/Shell-Gadus-Products-Flyer.pdf"
+    },
+    {
+        "brand": "Shell",
+        "name": "Shell Corena Flyer",
+        "fileSize": "0.2 MB",
+        "url": "/catalogs/official/Shell/Shell-Corena-Flyer.pdf"
+    },
+    {
+        "brand": "Shell",
+        "name": "Rimula Agriculture Flyer",
+        "fileSize": "22.3 MB",
+        "url": "/catalogs/official/Shell/Rimula-Agriculture-Flyer.pdf"
+    },
+    {
+        "brand": "Shell",
+        "name": "Metal Industry Flyer",
+        "fileSize": "0.7 MB",
+        "url": "/catalogs/official/Shell/Metal-Industry-Flyer.pdf"
+    },
+    {
+        "brand": "Shell",
+        "name": "All Products_Flyer",
+        "fileSize": "0.8 MB",
+        "url": "/catalogs/official/Shell/All-Products_Flyer.pdf"
+    },
+    {
+        "brand": "Shell",
+        "name": "Acgm Plastic Catalog",
+        "fileSize": "13.0 MB",
+        "url": "/catalogs/official/Shell/ACGM-Plastic-Catalog.pdf"
+    },
+    {
+        "brand": "Shell",
+        "name": "Shell_Tactic_Emv_Techguide",
+        "fileSize": "1.1 MB",
+        "url": "/catalogs/official/Shell/Shell_TACTIC_EMV_TechGuide.pdf"
+    },
+    {
+        "brand": "RegalRexnord",
+        "name": "Rexnord Thomas Disc Coupling Metric",
+        "fileSize": "2.8 MB",
+        "url": "/catalogs/official/RegalRexnord/Rexnord-Thomas-Disc-Coupling-Metric.pdf"
+    },
+    {
+        "brand": "RegalRexnord",
+        "name": "Rollway Crb Catalog",
+        "fileSize": "3.3 MB",
+        "url": "/catalogs/official/RegalRexnord/Rollway-CRB-Catalog.pdf"
+    },
+    {
+        "brand": "RegalRexnord",
+        "name": "Sealmaster Catalog",
+        "fileSize": "3.8 MB",
+        "url": "/catalogs/official/RegalRexnord/SealMaster-Catalog.pdf"
+    },
+    {
+        "brand": "RegalRexnord",
+        "name": "Rexnord Products_Tollok",
+        "fileSize": "0.9 MB",
+        "url": "/catalogs/official/RegalRexnord/Rexnord-Products_Tollok.pdf"
+    },
+    {
+        "brand": "RegalRexnord",
+        "name": "Rexnord Products_Coupling_Grid",
+        "fileSize": "1.4 MB",
+        "url": "/catalogs/official/RegalRexnord/Rexnord-Products_Coupling_Grid.pdf"
+    },
+    {
+        "brand": "RegalRexnord",
+        "name": "Rexnord Omega Coupling Catalog",
+        "fileSize": "1.3 MB",
+        "url": "/catalogs/official/RegalRexnord/Rexnord-Omega-Coupling-Catalog.pdf"
+    },
+    {
+        "brand": "RegalRexnord",
+        "name": "Rexnord Linkbelt Srb Catalog",
+        "fileSize": "9.9 MB",
+        "url": "/catalogs/official/RegalRexnord/Rexnord-Linkbelt-SRB-Catalog.pdf"
+    },
+    {
+        "brand": "RegalRexnord",
+        "name": "Rexnord Flyer_Falk Shaft & Fluid Couplings And Orange Peel Guards",
+        "fileSize": "0.2 MB",
+        "url": "/catalogs/official/RegalRexnord/Rexnord-Flyer_Falk-Shaft-_-Fluid-Couplings-And-Orange-Peel-Guards.pdf"
+    },
+    {
+        "brand": "RegalRexnord",
+        "name": "Rexnord Flyer_Coupling_Wrapflex",
+        "fileSize": "0.2 MB",
+        "url": "/catalogs/official/RegalRexnord/Rexnord-Flyer_Coupling_WrapFlex.pdf"
+    },
+    {
+        "brand": "RegalRexnord",
+        "name": "Rexnord Flyer_Coupling_Disc",
+        "fileSize": "0.1 MB",
+        "url": "/catalogs/official/RegalRexnord/Rexnord-Flyer_Coupling_Disc.pdf"
+    },
+    {
+        "brand": "RegalRexnord",
+        "name": "Rexnord Flyer_Coupling_Addax",
+        "fileSize": "0.2 MB",
+        "url": "/catalogs/official/RegalRexnord/Rexnord-Flyer_Coupling_Addax.pdf"
+    },
+    {
+        "brand": "RegalRexnord",
+        "name": "Rexnord  Flyer_Coupling Grid_Falk Steelflex",
+        "fileSize": "0.1 MB",
+        "url": "/catalogs/official/RegalRexnord/Rexnord-_Flyer_Coupling_Grid_Falk_SteelFlex.pdf"
+    },
+    {
+        "brand": "RegalRexnord",
+        "name": "Mcgill Sealed Bearing",
+        "fileSize": "0.3 MB",
+        "url": "/catalogs/official/RegalRexnord/McGill-Sealed-Bearing.pdf"
+    },
+    {
+        "brand": "RegalRexnord",
+        "name": "Browning Bearings",
+        "fileSize": "2.8 MB",
+        "url": "/catalogs/official/RegalRexnord/Browning-Bearings.pdf"
+    },
+    {
+        "brand": "RegalRexnord",
+        "name": "Altraflex Catalog",
+        "fileSize": "21.3 MB",
+        "url": "/catalogs/official/RegalRexnord/Altraflex-Catalog.pdf"
+    },
+    {
+        "brand": "RegalRexnord",
+        "name": "Euroflex Couplings Flyer",
+        "fileSize": "2.8 MB",
+        "url": "/catalogs/official/RegalRexnord/Euroflex-Couplings-Flyer.pdf"
+    },
+    {
+        "brand": "RegalRexnord",
+        "name": "Wrapflex Part Numbers",
+        "fileSize": "0.1 MB",
+        "url": "/catalogs/official/RegalRexnord/Wrapflex-Part-Numbers.pdf"
+    },
+    {
+        "brand": "RegalRexnord",
+        "name": "Tollok Couplings Flyer",
+        "fileSize": "0.9 MB",
+        "url": "/catalogs/official/RegalRexnord/Tollok-Couplings-Flyer.pdf"
+    },
+    {
+        "brand": "RegalRexnord",
+        "name": "Couplings Samiflex Flyer",
+        "fileSize": "3.9 MB",
+        "url": "/catalogs/official/RegalRexnord/Couplings-Samiflex-Flyer.pdf"
+    },
+    {
+        "brand": "RegalRexnord",
+        "name": "Coupling Torus Flyer",
+        "fileSize": "2.3 MB",
+        "url": "/catalogs/official/RegalRexnord/Coupling-Torus-Flyer.pdf"
+    },
+    {
+        "brand": "RegalRexnord",
+        "name": "Coupling Wrapflex Metric Flyer",
+        "fileSize": "0.6 MB",
+        "url": "/catalogs/official/RegalRexnord/Coupling-WrapFlex-Metric-Flyer.pdf"
+    },
+    {
+        "brand": "RegalRexnord",
+        "name": "Coupling Wrapflex Inch Flyer",
+        "fileSize": "0.7 MB",
+        "url": "/catalogs/official/RegalRexnord/Coupling-WrapFlex-Inch-Flyer.pdf"
+    },
+    {
+        "brand": "RegalRexnord",
+        "name": "Coupling Viva Flyer",
+        "fileSize": "0.6 MB",
+        "url": "/catalogs/official/RegalRexnord/Coupling-Viva-Flyer.pdf"
+    },
+    {
+        "brand": "RegalRexnord",
+        "name": "Coupling Pin And Bush Penco Flex Flyer",
+        "fileSize": "2.1 MB",
+        "url": "/catalogs/official/RegalRexnord/Coupling-Pin-and-Bush-Penco-flex-Flyer.pdf"
+    },
+    {
+        "brand": "RegalRexnord",
+        "name": "Coupling Omega Metric Flyer",
+        "fileSize": "0.0 MB",
+        "url": "/catalogs/official/RegalRexnord/Coupling-Omega-Metric-Flyer.pdf"
+    },
+    {
+        "brand": "RegalRexnord",
+        "name": "Coupling Omega Inch Flyer",
+        "fileSize": "1.0 MB",
+        "url": "/catalogs/official/RegalRexnord/Coupling-Omega-Inch-Flyer.pdf"
+    },
+    {
+        "brand": "RegalRexnord",
+        "name": "Coupling Grid Flyer",
+        "fileSize": "1.4 MB",
+        "url": "/catalogs/official/RegalRexnord/Coupling-Grid-Flyer.pdf"
+    },
+    {
+        "brand": "RegalRexnord",
+        "name": "Coupling Gear Metric Flyer",
+        "fileSize": "1.4 MB",
+        "url": "/catalogs/official/RegalRexnord/Coupling-Gear-Metric-Flyer.pdf"
+    },
+    {
+        "brand": "RegalRexnord",
+        "name": "Coupling Gear Inch Flyer",
+        "fileSize": "1.4 MB",
+        "url": "/catalogs/official/RegalRexnord/Coupling-Gear-Inch-Flyer.pdf"
+    },
+    {
+        "brand": "RegalRexnord",
+        "name": "Coupling Disc Thomas Flyer",
+        "fileSize": "1.0 MB",
+        "url": "/catalogs/official/RegalRexnord/Coupling-Disc-Thomas-Flyer.pdf"
+    },
+    {
+        "brand": "RegalRexnord",
+        "name": "Coupling Disc Reciprocating Compressors Flyer",
+        "fileSize": "0.4 MB",
+        "url": "/catalogs/official/RegalRexnord/Coupling-Disc-Reciprocating-Compressors-Flyer.pdf"
+    },
+    {
+        "brand": "RegalRexnord",
+        "name": "Coupling Autoflex Flyer",
+        "fileSize": "1.5 MB",
+        "url": "/catalogs/official/RegalRexnord/Coupling-Autoflex-Flyer.pdf"
+    },
+    {
+        "brand": "RegalRexnord",
+        "name": "Coupling Airflex Gland Flyer",
+        "fileSize": "1.7 MB",
+        "url": "/catalogs/official/RegalRexnord/Coupling-Airflex-Gland-Flyer.pdf"
+    },
+    {
+        "brand": "RegalRexnord",
+        "name": "Coupling Addax Cooling Tower Flyer",
+        "fileSize": "1.5 MB",
+        "url": "/catalogs/official/RegalRexnord/Coupling-Addax-Cooling-Tower-Flyer.pdf"
+    },
+    {
+        "brand": "RegalRexnord",
+        "name": "Carden Shaft Flyer",
+        "fileSize": "3.7 MB",
+        "url": "/catalogs/official/RegalRexnord/Carden-Shaft-Flyer.pdf"
+    },
+    {
+        "brand": "PRS - Permacel",
+        "name": "Prs Products Catalog",
+        "fileSize": "1.4 MB",
+        "url": "/catalogs/official/PRS - Permacel/PRS-Products-Catalog.pdf"
+    },
+    {
+        "brand": "PRS - Permacel",
+        "name": "Electrical Insualtion Flyer",
+        "fileSize": "1.0 MB",
+        "url": "/catalogs/official/PRS - Permacel/Electrical_Insualtion_Flyer.pdf"
+    },
+    {
+        "brand": "PRS - Permacel",
+        "name": "Company Profile   Sgf",
+        "fileSize": "0.1 MB",
+        "url": "/catalogs/official/PRS - Permacel/company_profile_-_sgf.pdf"
+    },
+    {
+        "brand": "Marathon",
+        "name": "Marathon Motors Series Catalog",
+        "fileSize": "18.3 MB",
+        "url": "/catalogs/official/Marathon/Marathon-Motors_Series-Catalog.pdf"
+    },
+    {
+        "brand": "Marathon",
+        "name": "Marathon Motor Catalog",
+        "fileSize": "11.4 MB",
+        "url": "/catalogs/official/Marathon/Marathon-Motor-Catalog.pdf"
+    },
+    {
+        "brand": "Marathon",
+        "name": "Marathon Ks Motor Flyer",
+        "fileSize": "1.3 MB",
+        "url": "/catalogs/official/Marathon/Marathon-KS-Motor-Flyer.pdf"
+    },
+    {
+        "brand": "Pidilite",
+        "name": "Zorrik Catalog",
+        "fileSize": "4.6 MB",
+        "url": "/catalogs/official/Pidilite/Zorrik-Catalog.pdf"
+    },
+    {
+        "brand": "Lubrilog",
+        "name": "Starplex Ht 2 Heavy",
+        "fileSize": "0.2 MB",
+        "url": "/catalogs/official/Lubrilog/STARPLEX-HT-2-HEAVY.pdf"
+    },
+    {
+        "brand": "Lubrilog",
+        "name": "Speed Gl 2",
+        "fileSize": "0.2 MB",
+        "url": "/catalogs/official/Lubrilog/SPEED-GL-2.pdf"
+    },
+    {
+        "brand": "Lubrilog",
+        "name": "Speed Gb2",
+        "fileSize": "0.2 MB",
+        "url": "/catalogs/official/Lubrilog/SPEED-GB2.pdf"
+    },
+    {
+        "brand": "Lubrilog",
+        "name": "Polygear",
+        "fileSize": "0.2 MB",
+        "url": "/catalogs/official/Lubrilog/POLYGEAR.pdf"
+    },
+    {
+        "brand": "Lubrilog",
+        "name": "Lx 1500 Gm",
+        "fileSize": "0.2 MB",
+        "url": "/catalogs/official/Lubrilog/LX-1500-GM.pdf"
+    },
+    {
+        "brand": "Lubrilog",
+        "name": "Lubrilog Catalog",
+        "fileSize": "2.7 MB",
+        "url": "/catalogs/official/Lubrilog/Lubrilog-Catalog.pdf"
+    },
+    {
+        "brand": "Lubrilog",
+        "name": "Logrease M 2",
+        "fileSize": "0.2 MB",
+        "url": "/catalogs/official/Lubrilog/LOGREASE-M-2.pdf"
+    },
+    {
+        "brand": "Lubrilog",
+        "name": "Logrease 1",
+        "fileSize": "0.2 MB",
+        "url": "/catalogs/official/Lubrilog/LOGREASE-1.pdf"
+    },
+    {
+        "brand": "Lubrilog",
+        "name": "Gear Fluid Sm 600",
+        "fileSize": "0.2 MB",
+        "url": "/catalogs/official/Lubrilog/GEAR-FLUID-SM-600.pdf"
+    },
+    {
+        "brand": "Lubrilog",
+        "name": "Fluolog 6925 2",
+        "fileSize": "0.2 MB",
+        "url": "/catalogs/official/Lubrilog/FLUOLOG-6925-2.pdf"
+    },
+    {
+        "brand": "Lubrilog",
+        "name": "Cuprolog G2",
+        "fileSize": "0.2 MB",
+        "url": "/catalogs/official/Lubrilog/CUPROLOG-G2.pdf"
+    },
+    {
+        "brand": "Lubrilog",
+        "name": "Shravan_Case Study_Fl Jsw_Brm Transfer Chain_L Ptfe",
+        "fileSize": "1.7 MB",
+        "url": "/catalogs/official/Lubrilog/SHRAVAN_CASE_STUDY_FL-JSW_BRM-TRANSFER_CHAIN_L-PTFE.pdf"
+    },
+    {
+        "brand": "Lubrilog",
+        "name": "Honda_Vithlapur_Spc 123_ Chainguard230_ Case Study Report Lubrilog",
+        "fileSize": "0.6 MB",
+        "url": "/catalogs/official/Lubrilog/HONDA_Vithlapur_SPC-123__Chainguard230__Case_Study_Report_Lubrilog.pdf"
+    },
+    {
+        "brand": "Lubrilog",
+        "name": "Cs_2024_Grasim_Ht_Dryer",
+        "fileSize": "0.9 MB",
+        "url": "/catalogs/official/Lubrilog/CS_2024_GRASIM_HT_DRYER.pdf"
+    },
+    {
+        "brand": "Lubrilog",
+        "name": "Cs_2018_Tata Kpo_Stacker&Reclaimer#2_Rmhs_L Ep_1211_Lltuhinbaidya",
+        "fileSize": "1.8 MB",
+        "url": "/catalogs/official/Lubrilog/CS_2018_TATA-KPO_STACKER_RECLAIMER_2_RMHS_L-EP_1211_LLTUHINBAIDYA.pdf"
+    },
+    {
+        "brand": "Lubrilog",
+        "name": "Case Study 2",
+        "fileSize": "0.7 MB",
+        "url": "/catalogs/official/Lubrilog/case_study_2.pdf"
+    },
+    {
+        "brand": "Lubrilog",
+        "name": "Case Study 1",
+        "fileSize": "1.8 MB",
+        "url": "/catalogs/official/Lubrilog/Case_study_1.pdf"
+    },
+    {
+        "brand": "Lubrilog",
+        "name": "(04) Case Study_Neco Steel_L Ep Application",
+        "fileSize": "3.2 MB",
+        "url": "/catalogs/official/Lubrilog/_04__CASE_STUDY_NECO_STEEL_L-EP_Application.pdf"
+    },
+    {
+        "brand": "Karcher",
+        "name": "Mineral Metallurgy_Flyer",
+        "fileSize": "31.9 MB",
+        "url": "/catalogs/official/Karcher/Mineral-metallurgy_flyer.pdf"
+    },
+    {
+        "brand": "Karcher",
+        "name": "Karcher Catalog",
+        "fileSize": "3.6 MB",
+        "url": "/catalogs/official/Karcher/Karcher-catalog.pdf"
+    },
+    {
+        "brand": "Karcher",
+        "name": "Auto Flyer",
+        "fileSize": "12.0 MB",
+        "url": "/catalogs/official/Karcher/Auto-flyer.pdf"
+    },
+    {
+        "brand": "Karcher",
+        "name": "Agriculture Machinery Flyer",
+        "fileSize": "1.5 MB",
+        "url": "/catalogs/official/Karcher/Agriculture-machinery-flyer.pdf"
+    },
+    {
+        "brand": "Gamet Bearings",
+        "name": "Gamet Bearing Catalog",
+        "fileSize": "2.5 MB",
+        "url": "/catalogs/official/Gamet Bearings/Gamet-Bearing-Catalog.pdf"
+    },
+    {
+        "brand": "Groz",
+        "name": "Workshop Tools Flyer",
+        "fileSize": "8.7 MB",
+        "url": "/catalogs/official/Groz/Workshop-Tools-Flyer.pdf"
+    },
+    {
+        "brand": "Groz",
+        "name": "Precision Tools Catalog",
+        "fileSize": "13.3 MB",
+        "url": "/catalogs/official/Groz/Precision-Tools-Catalog.pdf"
+    },
+    {
+        "brand": "Groz",
+        "name": "Led Worklights Flyer",
+        "fileSize": "7.9 MB",
+        "url": "/catalogs/official/Groz/LED-Worklights-Flyer.pdf"
+    },
+    {
+        "brand": "Groz",
+        "name": "Industrial Product Ctalogue",
+        "fileSize": "16.7 MB",
+        "url": "/catalogs/official/Groz/Industrial-product-ctalogue.pdf"
+    },
+    {
+        "brand": "Groz",
+        "name": "Groz Product Catalog",
+        "fileSize": "16.3 MB",
+        "url": "/catalogs/official/Groz/Groz-Product-Catalog.pdf"
+    },
+    {
+        "brand": "Groz",
+        "name": "Fluid Handling Flyer",
+        "fileSize": "11.6 MB",
+        "url": "/catalogs/official/Groz/Fluid-Handling-Flyer.pdf"
+    },
+    {
+        "brand": "Flexco",
+        "name": "Skirting System Flyer",
+        "fileSize": "2.0 MB",
+        "url": "/catalogs/official/Flexco/Skirting-System-Flyer.pdf"
+    },
+    {
+        "brand": "Flexco",
+        "name": "Mechanical Belt Fasteners Flyer",
+        "fileSize": "2.6 MB",
+        "url": "/catalogs/official/Flexco/Mechanical-Belt-Fasteners-Flyer.pdf"
+    },
+    {
+        "brand": "Flexco",
+        "name": "Flexco Flyer",
+        "fileSize": "1.9 MB",
+        "url": "/catalogs/official/Flexco/Flexco-Flyer.pdf"
+    },
+    {
+        "brand": "Flexco",
+        "name": "Elevate Flyer",
+        "fileSize": "7.0 MB",
+        "url": "/catalogs/official/Flexco/Elevate-Flyer.pdf"
+    },
+    {
+        "brand": "Flexco",
+        "name": "Electric Belt Cutter Flyer",
+        "fileSize": "0.2 MB",
+        "url": "/catalogs/official/Flexco/Electric-Belt-Cutter-Flyer.pdf"
+    },
+    {
+        "brand": "Flexco",
+        "name": "Dualsealpolyskirtcleanup_Flyer",
+        "fileSize": "0.3 MB",
+        "url": "/catalogs/official/Flexco/DualSealPolySkirtCleanUp_Flyer.pdf"
+    },
+    {
+        "brand": "Flexco",
+        "name": "Belt Conveyor Products Overview",
+        "fileSize": "7.5 MB",
+        "url": "/catalogs/official/Flexco/Belt-Conveyor-Products-Overview.pdf"
+    },
+    {
+        "brand": "Flexco",
+        "name": "Belt Conveyor Products Flyer",
+        "fileSize": "6.4 MB",
+        "url": "/catalogs/official/Flexco/Belt-Conveyor-Products-Flyer.pdf"
+    },
+    {
+        "brand": "Finishol",
+        "name": "Finishol Catalog",
+        "fileSize": "9.5 MB",
+        "url": "/catalogs/official/Finishol/Finishol-Catalog.pdf"
+    },
+    {
+        "brand": "Finishol",
+        "name": "Finishol 99 With Scrub Msds",
+        "fileSize": "0.3 MB",
+        "url": "/catalogs/official/Finishol/Finishol_99_With_Scrub_MSDS.pdf"
+    },
+    {
+        "brand": "Draeger",
+        "name": "Xplore 3300 And 3500 Flyer",
+        "fileSize": "3.6 MB",
+        "url": "/catalogs/official/Draeger/Xplore-3300-and-3500-flyer.pdf"
+    },
+    {
+        "brand": "Draeger",
+        "name": "X Plore 8000 Papr Flyer",
+        "fileSize": "2.1 MB",
+        "url": "/catalogs/official/Draeger/X-Plore-8000-PAPR-Flyer.pdf"
+    },
+    {
+        "brand": "Draeger",
+        "name": "X Plore 8000 Head Pieces Flyer",
+        "fileSize": "0.3 MB",
+        "url": "/catalogs/official/Draeger/X-Plore-8000-Head_Pieces-Flyer.pdf"
+    },
+    {
+        "brand": "Draeger",
+        "name": "Pss 3000 Scba Flyer",
+        "fileSize": "2.2 MB",
+        "url": "/catalogs/official/Draeger/Pss-3000-Scba-Flyer.pdf"
+    },
+    {
+        "brand": "Draeger",
+        "name": "Portablegas Detection Flyer",
+        "fileSize": "10.2 MB",
+        "url": "/catalogs/official/Draeger/PortableGas-Detection-Flyer.pdf"
+    },
+    {
+        "brand": "Draeger",
+        "name": "Portable Sensor Flyer",
+        "fileSize": "6.5 MB",
+        "url": "/catalogs/official/Draeger/Portable-Sensor-Flyer.pdf"
+    },
+    {
+        "brand": "Draeger",
+        "name": "Papr Xplore 8500 And 8700 Flyer",
+        "fileSize": "0.6 MB",
+        "url": "/catalogs/official/Draeger/PAPR-Xplore-8500-and-8700-flyer.pdf"
+    },
+    {
+        "brand": "Draeger",
+        "name": "Mining Catalog",
+        "fileSize": "27.3 MB",
+        "url": "/catalogs/official/Draeger/Mining-Catalog.pdf"
+    },
+    {
+        "brand": "Draeger",
+        "name": "Fixed Electrochemical Sensor Catalog",
+        "fileSize": "2.0 MB",
+        "url": "/catalogs/official/Draeger/Fixed-Electrochemical-Sensor-Catalog.pdf"
+    },
+    {
+        "brand": "Draeger",
+        "name": "Ffps N95 Industrial Safety Professionals Flyer",
+        "fileSize": "2.2 MB",
+        "url": "/catalogs/official/Draeger/FFPs-N95-Industrial_Safety_Professionals-Flyer.pdf"
+    },
+    {
+        "brand": "Draeger",
+        "name": "Draeger Product Catalog",
+        "fileSize": "2.0 MB",
+        "url": "/catalogs/official/Draeger/Draeger-Product-Catalog.pdf"
+    },
+    {
+        "brand": "Dodge",
+        "name": "Torque Arm Family Catalog",
+        "fileSize": "14.4 MB",
+        "url": "/catalogs/official/Dodge/Torque-Arm-family-Catalog.pdf"
+    },
+    {
+        "brand": "Dodge",
+        "name": "Gearing Engineering Catalog",
+        "fileSize": "47.4 MB",
+        "url": "/catalogs/official/Dodge/Gearing-Engineering-Catalog.pdf"
+    },
+    {
+        "brand": "Beka",
+        "name": "Gvbk_Productcatalog",
+        "fileSize": "4.8 MB",
+        "url": "/catalogs/official/Beka/GVBK_ProductCatalog.pdf"
+    },
+    {
+        "brand": "Beka",
+        "name": "Sve 2 And Sve 3 Control Valve Electric Flyer",
+        "fileSize": "1.7 MB",
+        "url": "/catalogs/official/Beka/SVE-2-and-SVE-3-control-valve-electric-flyer.pdf"
+    },
+    {
+        "brand": "Beka",
+        "name": "Grease Lubrication Pump F10 Flyer",
+        "fileSize": "1.6 MB",
+        "url": "/catalogs/official/Beka/Grease-lubrication-pump-F10-flyer.pdf"
+    },
+    {
+        "brand": "Beka",
+        "name": "Dual Line Systems En Flyer",
+        "fileSize": "1.3 MB",
+        "url": "/catalogs/official/Beka/Dual-line-systems-EN-flyer.pdf"
+    },
+    {
+        "brand": "Beka",
+        "name": "Dual Line Distributor Bz Flyer",
+        "fileSize": "1.9 MB",
+        "url": "/catalogs/official/Beka/Dual-line-distributor-BZ-flyer.pdf"
+    },
+    {
+        "brand": "Beka",
+        "name": "Bekaone Catalog",
+        "fileSize": "0.9 MB",
+        "url": "/catalogs/official/Beka/Bekaone-Catalog.pdf"
+    },
+    {
+        "brand": "Beka",
+        "name": "Bekaone Accessories Flyer",
+        "fileSize": "5.8 MB",
+        "url": "/catalogs/official/Beka/Bekaone-accessories-flyer.pdf"
+    },
+    {
+        "brand": "Beka",
+        "name": "Bekaone 250 Flyer",
+        "fileSize": "0.7 MB",
+        "url": "/catalogs/official/Beka/Bekaone-250-flyer.pdf"
+    },
+    {
+        "brand": "Beka",
+        "name": "Bekaone 120 Flyer",
+        "fileSize": "0.8 MB",
+        "url": "/catalogs/official/Beka/Bekaone-120-flyer.pdf"
+    },
+    {
+        "brand": "Beka",
+        "name": "Beka Progressive Systems Flyer",
+        "fileSize": "3.7 MB",
+        "url": "/catalogs/official/Beka/Beka-Progressive-systems-flyer.pdf"
+    },
+    {
+        "brand": "Beka",
+        "name": "Beka Pico Pump Flyer",
+        "fileSize": "0.7 MB",
+        "url": "/catalogs/official/Beka/Beka-Pico-pump-flyer.pdf"
+    },
+    {
+        "brand": "Beka",
+        "name": "Beka Food Bevrage Flyer",
+        "fileSize": "4.0 MB",
+        "url": "/catalogs/official/Beka/Beka-Food-Bevrage-flyer.pdf"
+    },
+    {
+        "brand": "Ador Fontech",
+        "name": "Welding Electrode Brochure",
+        "fileSize": "3.2 MB",
+        "url": "/catalogs/official/Ador Fontech/Welding-Electrode-Brochure.pdf"
+    },
+    {
+        "brand": "Ador Fontech",
+        "name": "Ador India Welding Equipment Brochure",
+        "fileSize": "2.8 MB",
+        "url": "/catalogs/official/Ador Fontech/Ador-India-Welding-Equipment-Brochure.pdf"
+    },
+    {
+        "brand": "Ador Fontech",
+        "name": "Ador Fontech Catalog",
+        "fileSize": "4.7 MB",
+        "url": "/catalogs/official/Ador Fontech/Ador-Fontech-Catalog.pdf"
+    },
+    {
+        "brand": "Ador Fontech",
+        "name": "Tornado 601",
+        "fileSize": "0.2 MB",
+        "url": "/catalogs/official/Ador Fontech/Tornado-601.pdf"
+    },
+    {
+        "brand": "Ador Fontech",
+        "name": "Tor 315 500 Ac Dc",
+        "fileSize": "0.2 MB",
+        "url": "/catalogs/official/Ador Fontech/Tor-315-500-Ac-Dc.pdf"
+    },
+    {
+        "brand": "Ador Fontech",
+        "name": "Thunder I 400",
+        "fileSize": "2.2 MB",
+        "url": "/catalogs/official/Ador Fontech/Thunder-i_400.pdf"
+    },
+    {
+        "brand": "Ador Fontech",
+        "name": "Fontech Thunder I 400",
+        "fileSize": "0.3 MB",
+        "url": "/catalogs/official/Ador Fontech/Fontech-thunder-i-400.pdf"
+    },
+    {
+        "brand": "Ador Fontech",
+        "name": "Fonarc R 600",
+        "fileSize": "0.1 MB",
+        "url": "/catalogs/official/Ador Fontech/Fonarc-R-600.pdf"
+    },
+    {
+        "brand": "Ador Fontech",
+        "name": "Pmx 30 Xp",
+        "fileSize": "0.8 MB",
+        "url": "/catalogs/official/Ador Fontech/PMX_30_XP.pdf"
+    },
+    {
+        "brand": "Ador Fontech",
+        "name": "Pmx 30 Air",
+        "fileSize": "0.5 MB",
+        "url": "/catalogs/official/Ador Fontech/PMX_30_Air.pdf"
+    },
+    {
+        "brand": "Ador Fontech",
+        "name": "Maxpro200",
+        "fileSize": "1.3 MB",
+        "url": "/catalogs/official/Ador Fontech/MAXPRO200.pdf"
+    },
+    {
+        "brand": "Ador Fontech",
+        "name": "Hypertherm Alternative For Oxy Fuel",
+        "fileSize": "0.2 MB",
+        "url": "/catalogs/official/Ador Fontech/Hypertherm-alternative-for-oxy-fuel.pdf"
+    },
+    {
+        "brand": "Ador Fontech",
+        "name": "Tig Wc729",
+        "fileSize": "0.3 MB",
+        "url": "/catalogs/official/Ador Fontech/TIG-WC729.pdf"
+    },
+    {
+        "brand": "Ador Fontech",
+        "name": "Tig 517",
+        "fileSize": "0.3 MB",
+        "url": "/catalogs/official/Ador Fontech/TIG-517.pdf"
+    },
+    {
+        "brand": "Ador Fontech",
+        "name": "Tig 402",
+        "fileSize": "0.3 MB",
+        "url": "/catalogs/official/Ador Fontech/TIG-402.pdf"
+    },
+    {
+        "brand": "Ador Fontech",
+        "name": "Sphf 043",
+        "fileSize": "0.3 MB",
+        "url": "/catalogs/official/Ador Fontech/SPHF-043.pdf"
+    },
+    {
+        "brand": "Ador Fontech",
+        "name": "Spem0010",
+        "fileSize": "0.2 MB",
+        "url": "/catalogs/official/Ador Fontech/SPEM0010.pdf"
+    },
+    {
+        "brand": "Ador Fontech",
+        "name": "Lh725",
+        "fileSize": "0.2 MB",
+        "url": "/catalogs/official/Ador Fontech/LH725.pdf"
+    },
+    {
+        "brand": "Ador Fontech",
+        "name": "Lh210Sf",
+        "fileSize": "0.4 MB",
+        "url": "/catalogs/official/Ador Fontech/LH210SF.pdf"
+    },
+    {
+        "brand": "Ador Fontech",
+        "name": "Lh106",
+        "fileSize": "0.1 MB",
+        "url": "/catalogs/official/Ador Fontech/LH106.pdf"
+    },
+    {
+        "brand": "Ador Fontech",
+        "name": "Lh 745 S",
+        "fileSize": "0.2 MB",
+        "url": "/catalogs/official/Ador Fontech/LH-745-S.pdf"
+    },
+    {
+        "brand": "Ador Fontech",
+        "name": "Hebco Rearc 18",
+        "fileSize": "0.9 MB",
+        "url": "/catalogs/official/Ador Fontech/HEBCO-REARC-18.pdf"
+    },
+    {
+        "brand": "Ador Fontech",
+        "name": "Habco Mt 993 S",
+        "fileSize": "0.9 MB",
+        "url": "/catalogs/official/Ador Fontech/HABCO-MT-993-S.pdf"
+    },
+    {
+        "brand": "ABB Motors",
+        "name": "Standard Drives Catalog",
+        "fileSize": "0.5 MB",
+        "url": "/catalogs/official/ABB Motors/Standard-drives-catalog.pdf"
+    },
+    {
+        "brand": "ABB Motors",
+        "name": "Nema Motors Catalog",
+        "fileSize": "10.9 MB",
+        "url": "/catalogs/official/ABB Motors/NEMA_Motors-catalog.pdf"
+    },
+    {
+        "brand": "ABB Motors",
+        "name": "Low Voltage Roller Table Motors Catalog",
+        "fileSize": "11.0 MB",
+        "url": "/catalogs/official/ABB Motors/Low-voltage-roller-table-motors-catalog.pdf"
+    },
+    {
+        "brand": "ABB Motors",
+        "name": "Low Voltage Process Performance Motors Catalog",
+        "fileSize": "23.9 MB",
+        "url": "/catalogs/official/ABB Motors/Low-voltage-process-performance-motors-catalog.pdf"
+    },
+    {
+        "brand": "ABB Motors",
+        "name": "Hv Flameproof Motors Catalog",
+        "fileSize": "34.2 MB",
+        "url": "/catalogs/official/ABB Motors/HV-Flameproof-motors-catalog.pdf"
+    },
+    {
+        "brand": "ABB Motors",
+        "name": "High Efficiency Cast Iron Motors",
+        "fileSize": "39.6 MB",
+        "url": "/catalogs/official/ABB Motors/High-efficiency-cast-iron-motors.pdf"
+    },
+    {
+        "brand": "ABB Motors",
+        "name": "Flameproof Motors Catalog",
+        "fileSize": "22.7 MB",
+        "url": "/catalogs/official/ABB Motors/Flameproof-Motors-Catalog.pdf"
+    },
+    {
+        "brand": "ABB Motors",
+        "name": "Cast Iron Motors Catalog",
+        "fileSize": "15.3 MB",
+        "url": "/catalogs/official/ABB Motors/Cast-iron-motors-catalog.pdf"
+    },
+    {
+        "brand": "ABB Motors",
+        "name": "Baldor Cooling Tower And Drive System Catalog",
+        "fileSize": "2.3 MB",
+        "url": "/catalogs/official/ABB Motors/Baldor-Cooling-tower-and-drive-system-catalog.pdf"
+    },
+    {
+        "brand": "ABB Motors",
+        "name": "New Product Note_Smart Sensor",
+        "fileSize": "0.2 MB",
+        "url": "/catalogs/official/ABB Motors/New_Product_Note_Smart_Sensor.pdf"
+    },
+    {
+        "brand": "ABB Motors",
+        "name": "Abb Smart Sensor Motor Installation Guide_Clamp Brackets_012019",
+        "fileSize": "1.5 MB",
+        "url": "/catalogs/official/ABB Motors/ABB_Smart_sensor_motor_installation_guide_clamp_brackets_012019.pdf"
+    },
+    {
+        "brand": "ABB Motors",
+        "name": "Abb Ability Smart Sensor  Customer Presentation",
+        "fileSize": "1.3 MB",
+        "url": "/catalogs/official/ABB Motors/ABB_Ability_Smart_Sensor_-Customer_Presentation.pdf"
+    }
+];

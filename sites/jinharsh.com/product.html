@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Product Details | Jinharsh</title>
+  <meta name="description" content="Technical product specifications and direct quote requests from JinHarsh Industrial Solutions.">
+  <meta property="og:title" content="Product Details | Jinharsh">
+  <meta property="og:description" content="Technical product specifications and direct quote requests from JinHarsh Industrial Solutions.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://www.jinharsh.com/product.html">
+  <link rel="canonical" href="https://www.jinharsh.com/product.html">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Rubik:ital,wght@0,300..900;1,300..900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/styles.css">
+  <script defer src="js/data.js"></script>
+  <script defer src="js/quote-cart.js"></script>
+  <script defer src="js/components.js"></script>
+</head>
+<body class="flex flex-col min-h-screen bg-[var(--color-primary)] overflow-x-hidden">
+
+  <div id="main-header"></div>
+
+  <main class="flex-grow pt-20">
+    <div id="breadcrumb" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 text-xs font-bold text-[#5a5a5a] uppercase">
+      <!-- Injected -->
+    </div>
+
+    <section id="product-hero" class="py-12 bg-white border-y border-[#E7E7E7]">
+      <!-- Injected -->
+    </section>
+  </main>
+
+  <div id="main-footer"></div>
+  <div id="floating-chat-container"></div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const urlParams = new URLSearchParams(window.location.search);
+      const catId = urlParams.get('category');
+      const prodSlug = urlParams.get('slug');
+
+      if (!catId || !prodSlug || typeof catalogData === 'undefined') return;
+
+      const category = catalogData.categories.find(c => c.id === catId);
+      if (!category) return;
+
+      const product = category.products.find(p => p.slug === prodSlug);
+      if (!product) return;
+
+      document.title = `${product.name} | Jinharsh`;
+
+      document.getElementById('breadcrumb').innerHTML = `
+        <a href="portfolio.html" class="hover:text-[var(--color-accent)]">Portfolio</a> / 
+        <a href="category.html?id=${category.id}" class="hover:text-[var(--color-accent)]">${category.title}</a> / 
+        <span class="text-[#121212]">${product.name}</span>
+      `;
+
+      document.getElementById('product-hero').innerHTML = `
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+            <div class="bg-gray-50 border border-[#E7E7E7] p-8 flex items-center justify-center rounded">
+              <img src="public${product.image}" alt="${product.name}" class="max-h-80 max-w-full object-contain" onerror="this.src='public/images/catalog/homepage.png'" />
+            </div>
+
+            <div class="space-y-6">
+              <div class="inline-block bg-[var(--color-accent)] text-[#121212] text-xs font-bold px-3 py-1 uppercase">
+                Technical Specification Asset
+              </div>
+              <h1 class="text-3xl md:text-5xl font-black text-[#121212] uppercase">${product.name}</h1>
+              
+              <div class="border-y border-[#E7E7E7] py-4">
+                <span class="text-xs font-bold text-[#5a5a5a] uppercase">Available Principal Brands:</span>
+                <div class="text-lg font-bold text-[var(--color-accent-dark)] mt-1">
+                  ${(product.brands && product.brands.length) ? product.brands.join(', ') : 'Various Brands'}
+                </div>
+              </div>
+
+              <p class="text-[#5a5a5a] text-sm leading-relaxed">
+                Engineered for maximum reliability in heavy-duty industrial applications. Sourced directly from authorized manufacturers to meet global quality standards.
+              </p>
+
+              <div class="pt-4 space-y-3">
+                <button onclick="handleAddToCart('${product.name.replace(/'/g, "\\'")}', '${category.title.replace(/'/g, "\\'")}', '${(product.brands && product.brands[0]) ? product.brands[0] : 'Generic'}', 'public${product.image}', '${product.slug}')" class="indust-button w-full py-4 text-xs font-bold uppercase">
+                  + Add to Quote Request
+                </button>
+                <a href="technical-catalog.html" class="block text-center text-xs font-bold text-[var(--color-accent)] hover:underline uppercase py-2">
+                  View PDF Catalogs & Drawings →
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      `;
+    });
+
+    function handleAddToCart(name, category, brand, image, slug) {
+      addToQuote(name, category, brand, image, slug);
+      alert(`${name} added to your quote request cart!`);
+    }
+  </script>
+</body>
+</html>

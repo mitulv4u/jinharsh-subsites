@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Quote Request Cart | Jinharsh</title>
+  <meta name="description" content="Request an industrial quotation (RFQ) directly from the JinHarsh technical sales team.">
+  <meta property="og:title" content="Quote Request Cart | Jinharsh">
+  <meta property="og:description" content="Request an industrial quotation (RFQ) directly from the JinHarsh technical sales team.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://www.jinharsh.com/quote.html">
+  <link rel="canonical" href="https://www.jinharsh.com/quote.html">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Rubik:ital,wght@0,300..900;1,300..900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/styles.css">
+  <script defer src="js/data.js"></script>
+  <script defer src="js/quote-cart.js"></script>
+  <script defer src="js/components.js"></script>
+</head>
+<body class="flex flex-col min-h-screen bg-[var(--color-primary)] overflow-x-hidden">
+
+  <div id="main-header"></div>
+
+  <main class="flex-grow pt-20">
+    <section class="py-12 bg-[#F8F8F8] border-b border-[#E7E7E7]">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex justify-between items-center fade-in-up">
+        <div>
+          <h1 class="text-3xl md:text-4xl font-black text-[#121212] uppercase tracking-tighter">
+            Quote Request Cart
+          </h1>
+          <p class="text-xs text-[#5a5a5a] uppercase tracking-wider font-bold mt-1">Review selected components and request pricing</p>
+        </div>
+        <button onclick="handleClearCart()" class="text-xs text-red-600 font-bold uppercase hover:underline">
+          Clear All Items
+        </button>
+      </div>
+    </section>
+
+    <section class="py-12 bg-white">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div id="quote-content" class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+          <!-- Injected via script -->
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <div id="main-footer"></div>
+  <div id="floating-chat-container"></div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', renderQuotePage);
+
+    function renderQuotePage() {
+      const items = getQuoteItems();
+      const container = document.getElementById('quote-content');
+
+      if (items.length === 0) {
+        container.innerHTML = `
+          <div class="col-span-full text-center py-16">
+            <div class="text-6xl mb-4">📋</div>
+            <h3 class="text-2xl font-black text-[#121212] uppercase mb-2">Your Quote Cart is Empty</h3>
+            <p class="text-sm text-[#5a5a5a] mb-6">Browse our portfolio to add bearings, lubricants, or power transmission parts.</p>
+            <a href="portfolio.html" class="indust-button px-8 py-3 text-xs font-bold uppercase">
+              Explore Portfolio →
+            </a>
+          </div>
+        `;
+        return;
+      }
+
+      container.innerHTML = `
+        <!-- Left: Cart Items -->
+        <div class="lg:col-span-7 space-y-4">
+          ${items.map(item => `
+            <div class="flex flex-col sm:flex-row items-center justify-between p-4 border border-[#E7E7E7] bg-white rounded gap-4">
+              <div class="flex items-center gap-4 w-full sm:w-auto">
+                <img src="${item.image}" alt="${item.name}" class="h-16 w-16 object-contain bg-gray-50 p-2 border border-[#E7E7E7]" onerror="this.src='public/images/catalog/homepage.png'" />
+                <div>
+                  <h4 class="font-bold text-[#121212] uppercase text-sm">${item.name}</h4>
+                  <div class="text-xs text-[#5a5a5a]">${item.category} | ${item.brand}</div>
+                </div>
+              </div>
+
+              <div class="flex items-center gap-4 w-full sm:w-auto justify-between">
+                <div class="flex items-center border border-[#E7E7E7]">
+                  <button onclick="handleQty('${item.slug}', ${(item.quantity || 1) - 1})" class="px-3 py-1 font-bold text-sm bg-gray-50">-</button>
+                  <span class="px-3 py-1 text-sm font-bold">${item.quantity || 1}</span>
+                  <button onclick="handleQty('${item.slug}', ${(item.quantity || 1) + 1})" class="px-3 py-1 font-bold text-sm bg-gray-50">+</button>
+                </div>
+
+                <button onclick="handleRemove('${item.slug}')" class="text-red-500 font-bold text-sm hover:underline">
+                  ✕
+                </button>
+              </div>
+            </div>
+          `).join('')}
+        </div>
+
+        <!-- Right: Inquiry Form -->
+        <div class="lg:col-span-5">
+          <div class="bg-[#222831] text-white p-8 rounded border-t-4 border-[var(--color-accent)] sticky top-28">
+            <h3 class="text-xl font-black uppercase mb-4">Submit RFQ</h3>
+            <form onsubmit="handleFormSubmit(event)">
+              <div class="space-y-4">
+                <div>
+                  <label class="block text-xs font-bold uppercase tracking-wider mb-1">Full Name *</label>
+                  <input type="text" name="name" required class="w-full px-4 py-2.5 bg-white text-[#121212] text-sm focus:outline-none" />
+                </div>
+                <div>
+                  <label class="block text-xs font-bold uppercase tracking-wider mb-1">Company Name</label>
+                  <input type="text" name="company" class="w-full px-4 py-2.5 bg-white text-[#121212] text-sm focus:outline-none" />
+                </div>
+                <div>
+                  <label class="block text-xs font-bold uppercase tracking-wider mb-1">Email Address *</label>
+                  <input type="email" name="email" required class="w-full px-4 py-2.5 bg-white text-[#121212] text-sm focus:outline-none" />
+                </div>
+                <div>
+                  <label class="block text-xs font-bold uppercase tracking-wider mb-1">Phone Number</label>
+                  <input type="tel" name="phone" class="w-full px-4 py-2.5 bg-white text-[#121212] text-sm focus:outline-none" />
+                </div>
+                <div>
+                  <label class="block text-xs font-bold uppercase tracking-wider mb-1">Additional Notes</label>
+                  <textarea name="notes" rows="3" class="w-full px-4 py-2.5 bg-white text-[#121212] text-sm focus:outline-none"></textarea>
+                </div>
+
+                <button id="rfq-submit-btn" type="submit" class="w-full py-4 bg-[var(--color-accent)] hover:bg-[var(--color-accent-hover)] text-[#121212] font-black uppercase text-xs tracking-widest transition-colors">
+                  Submit Quote Request →
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      `;
+    }
+
+    function handleQty(slug, qty) {
+      if (qty < 1) handleRemove(slug);
+      else {
+        updateQuantity(slug, qty);
+        renderQuotePage();
+      }
+    }
+
+    function handleRemove(slug) {
+      removeFromQuote(slug);
+      renderQuotePage();
+    }
+
+    function handleClearCart() {
+      if (confirm('Clear all items from your quote cart?')) {
+        clearQuote();
+        renderQuotePage();
+      }
+    }
+
+    async function handleFormSubmit(e) {
+      e.preventDefault();
+      const form = e.target;
+      const btn = document.getElementById('rfq-submit-btn');
+      const fd = Object.fromEntries(new FormData(form).entries());
+      const items = getQuoteItems();
+      const itemsSummary = items
+        .map((it) => `- ${it.name} (${it.brand || ''} / ${it.category || ''}) x ${it.quantity || 1}`)
+        .join('\n');
+
+      btn.disabled = true;
+      btn.textContent = 'Submitting RFQ...';
+      try {
+        const res = await fetch('/inquiry.php', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            name: fd.name || '',
+            company: fd.company || '',
+            email: fd.email || '',
+            phone: fd.phone || '',
+            inquiry_type: 'RFQ Cart Quote',
+            message: `${itemsSummary}\n\nNotes: ${fd.notes || 'None'}`,
+          }),
+        });
+        if (res.ok) {
+          alert('Your Quote Request has been sent to our JinHarsh sales team! We will respond within 24 hours.');
+          clearQuote();
+          renderQuotePage();
+        } else {
+          alert('Could not submit automatically. Please email crm@jinharsh.com.');
+          btn.disabled = false;
+          btn.textContent = 'Submit Quote Request →';
+        }
+      } catch {
+        alert('Network error. Please email crm@jinharsh.com.');
+        btn.disabled = false;
+        btn.textContent = 'Submit Quote Request →';
+      }
+    }
+  </script>
+</body>
+</html>

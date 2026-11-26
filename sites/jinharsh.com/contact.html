@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Contact Us | Jinharsh</title>
+  <meta name="description" content="Contact JinHarsh Industrial Solutions — Mumbai HQ, Surat, Vadodara, Goa, Nagpur & Indore technical sales desks.">
+  <meta property="og:title" content="Contact Us | Jinharsh">
+  <meta property="og:description" content="Contact JinHarsh Industrial Solutions — Mumbai HQ, Surat, Vadodara, Goa, Nagpur & Indore technical sales desks.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://www.jinharsh.com/contact.html">
+  <link rel="canonical" href="https://www.jinharsh.com/contact.html">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Rubik:ital,wght@0,300..900;1,300..900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/styles.css">
+  <script defer src="js/data.js"></script>
+  <script defer src="js/quote-cart.js"></script>
+  <script defer src="js/components.js"></script>
+</head>
+<body class="flex flex-col min-h-screen bg-[var(--color-primary)] overflow-x-hidden">
+
+  <div id="main-header"></div>
+
+  <main class="flex-grow pt-20">
+    <section class="py-16 bg-[#F8F8F8] border-b border-[#E7E7E7]">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center fade-in-up">
+        <div class="inline-flex items-center gap-2 px-4 py-2 bg-white border border-[#E7E7E7] text-[var(--color-accent-dark)] text-sm font-bold uppercase tracking-widest mb-4 shadow-sm">
+          Get In Touch
+        </div>
+        <h1 class="text-4xl md:text-5xl font-black text-[#121212] uppercase tracking-tighter mb-4">
+          Partner With Jinharsh
+        </h1>
+        <p class="text-base text-[#5a5a5a] max-w-2xl mx-auto font-light">
+          Have an inquiry regarding power transmission, technical support, or industrial supply? Reach out to our expert team.
+        </p>
+      </div>
+    </section>
+
+    <section class="py-16 bg-white">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-12">
+          
+          <!-- Contact Form -->
+          <div class="lg:col-span-7 bg-[#F8F8F8] p-8 border border-[#E7E7E7] rounded-sm fade-in-up">
+            <h3 class="text-2xl font-black text-[#121212] uppercase tracking-wide mb-6">Send an Inquiry</h3>
+            <form id="jh-contact-form" onsubmit="submitContactForm(event)">
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
+                <div>
+                  <label class="block text-xs font-bold uppercase tracking-wider text-[#121212] mb-2">First Name *</label>
+                  <input type="text" name="first_name" required class="w-full px-4 py-3 border border-[#E7E7E7] bg-white focus:outline-none focus:border-[var(--color-accent)] text-sm" />
+                </div>
+                <div>
+                  <label class="block text-xs font-bold uppercase tracking-wider text-[#121212] mb-2">Last Name</label>
+                  <input type="text" name="last_name" class="w-full px-4 py-3 border border-[#E7E7E7] bg-white focus:outline-none focus:border-[var(--color-accent)] text-sm" />
+                </div>
+              </div>
+
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
+                <div>
+                  <label class="block text-xs font-bold uppercase tracking-wider text-[#121212] mb-2">Email Address *</label>
+                  <input type="email" name="email" required class="w-full px-4 py-3 border border-[#E7E7E7] bg-white focus:outline-none focus:border-[var(--color-accent)] text-sm" />
+                </div>
+                <div>
+                  <label class="block text-xs font-bold uppercase tracking-wider text-[#121212] mb-2">Phone / WhatsApp</label>
+                  <input type="tel" name="phone" class="w-full px-4 py-3 border border-[#E7E7E7] bg-white focus:outline-none focus:border-[var(--color-accent)] text-sm" />
+                </div>
+              </div>
+
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
+                <div>
+                  <label class="block text-xs font-bold uppercase tracking-wider text-[#121212] mb-2">Company Name</label>
+                  <input type="text" name="company" class="w-full px-4 py-3 border border-[#E7E7E7] bg-white focus:outline-none focus:border-[var(--color-accent)] text-sm" />
+                </div>
+                <div>
+                  <label class="block text-xs font-bold uppercase tracking-wider text-[#121212] mb-2">Inquiry Type</label>
+                  <select name="inquiry_type" class="w-full px-4 py-3 border border-[#E7E7E7] bg-white focus:outline-none focus:border-[var(--color-accent)] text-sm">
+                    <option value="Product & Sales Inquiry">Product &amp; Sales Inquiry</option>
+                    <option value="Technical Support & AMC">Technical Support &amp; AMC</option>
+                    <option value="Principal Partnership">Principal Partnership</option>
+                    <option value="General Contact">General Contact</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="mb-6">
+                <label class="block text-xs font-bold uppercase tracking-wider text-[#121212] mb-2">Message *</label>
+                <textarea name="message" rows="4" required class="w-full px-4 py-3 border border-[#E7E7E7] bg-white focus:outline-none focus:border-[var(--color-accent)] text-sm"></textarea>
+              </div>
+
+              <button id="jh-contact-btn" type="submit" class="indust-button w-full py-4 text-xs font-bold tracking-widest uppercase">
+                Send Inquiry →
+              </button>
+              <p id="jh-contact-status" class="hidden text-xs font-bold text-center mt-3"></p>
+            </form>
+          </div>
+
+          <!-- Offices Directory & Map -->
+          <div class="lg:col-span-5 space-y-6 fade-in-up">
+            <div class="bg-[#222831] text-white p-6 rounded-sm">
+              <h4 class="font-black text-lg uppercase tracking-wide mb-4">Direct Contact</h4>
+              <div class="space-y-3 text-sm">
+                <div class="flex items-center gap-3">
+                  <span>📞</span> <span>+91-22-40 900000</span>
+                </div>
+                <div class="flex items-center gap-3">
+                  <span>✉️</span> <span>crm@jinharsh.com</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Branch Tabs -->
+            <div class="border border-[#E7E7E7] bg-white p-6">
+              <h4 class="font-black text-lg text-[#121212] uppercase tracking-wide mb-4">Our Offices</h4>
+              <div class="flex border-b border-[#E7E7E7] mb-4">
+                <button onclick="switchTab('mumbai')" id="tab-mumbai" class="px-4 py-2 text-xs font-bold uppercase border-b-2 border-[var(--color-accent)] text-[var(--color-accent)]">Mumbai (HQ)</button>
+                <button onclick="switchTab('surat')" id="tab-surat" class="px-4 py-2 text-xs font-bold uppercase border-b-2 border-transparent text-[#5a5a5a]">Surat</button>
+                <button onclick="switchTab('goa')" id="tab-goa" class="px-4 py-2 text-xs font-bold uppercase border-b-2 border-transparent text-[#5a5a5a]">Goa</button>
+              </div>
+
+              <div id="address-mumbai" class="text-sm text-[#5a5a5a] space-y-2">
+                <div class="font-bold text-[#121212]">Mumbai Head Office</div>
+                <p>76/78 Nagdevi Street, Mumbai – 400003, Maharashtra, India</p>
+              </div>
+
+              <div id="address-surat" class="text-sm text-[#5a5a5a] space-y-2 hidden">
+                <div class="font-bold text-[#121212]">Surat Regional Office</div>
+                <p>Jinharsh House, Hazira Road, Surat, Gujarat, India</p>
+              </div>
+
+              <div id="address-goa" class="text-sm text-[#5a5a5a] space-y-2 hidden">
+                <div class="font-bold text-[#121212]">Goa Branch</div>
+                <p>Pilerne Industrial Estate, Bardez, Goa, India</p>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <div id="main-footer"></div>
+  <div id="floating-chat-container"></div>
+
+  <script>
+    function switchTab(city) {
+      ['mumbai', 'surat', 'goa'].forEach(c => {
+        const tab = document.getElementById(`tab-${c}`);
+        const addr = document.getElementById(`address-${c}`);
+        if (c === city) {
+          tab.classList.add('border-[var(--color-accent)]', 'text-[var(--color-accent)]');
+          tab.classList.remove('border-transparent', 'text-[#5a5a5a]');
+          addr.classList.remove('hidden');
+        } else {
+          tab.classList.remove('border-[var(--color-accent)]', 'text-[var(--color-accent)]');
+          tab.classList.add('border-transparent', 'text-[#5a5a5a]');
+          addr.classList.add('hidden');
+        }
+      });
+    }
+
+    async function submitContactForm(e) {
+      e.preventDefault();
+      const form = e.target;
+      const btn = document.getElementById('jh-contact-btn');
+      const status = document.getElementById('jh-contact-status');
+      const fd = Object.fromEntries(new FormData(form).entries());
+      const payload = {
+        name: `${fd.first_name || ''} ${fd.last_name || ''}`.trim(),
+        email: fd.email || '',
+        phone: fd.phone || '',
+        company: fd.company || '',
+        inquiry_type: fd.inquiry_type || 'Product & Sales Inquiry',
+        message: fd.message || '',
+      };
+      btn.disabled = true;
+      status.className = 'text-xs font-bold text-center mt-3 text-[#5a5a5a]';
+      status.textContent = 'Sending inquiry...';
+      try {
+        const res = await fetch('/inquiry.php', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload),
+        });
+        if (res.ok) {
+          status.className = 'text-xs font-bold text-center mt-3 text-emerald-700';
+          status.textContent = 'Thank you! Our JinHarsh team has received your inquiry.';
+          form.reset();
+        } else {
+          status.className = 'text-xs font-bold text-center mt-3 text-rose-700';
+          status.textContent = 'Could not submit automatically. Please email crm@jinharsh.com.';
+        }
+      } catch {
+        status.className = 'text-xs font-bold text-center mt-3 text-rose-700';
+        status.textContent = 'Network error. Please email crm@jinharsh.com.';
+      } finally {
+        btn.disabled = false;
+      }
+    }
+  </script>
+</body>
+</html>
