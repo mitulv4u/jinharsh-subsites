@@ -1,10 +1,12 @@
 name: Deploy Approved Subsites to aaPanel
 
 on:
+  workflow_dispatch:
   push:
     branches: [main]
     paths:
       - "sites/**"
+      - ".github/workflows/deploy-aapanel.yml"
 
 jobs:
   deploy:
@@ -14,7 +16,7 @@ jobs:
         with:
           fetch-depth: 2
 
-      - name: Sync changed site folders to aaPanel (159.89.94.209)
+      - name: Configure SSH deploy key
         env:
           DEPLOY_KEY: ${{ secrets.AAPANEL_DEPLOY_SSH_KEY }}
         run: |
@@ -23,6 +25,12 @@ jobs:
           chmod 600 ~/.ssh/id_deploy
           ssh-keyscan -H 159.89.94.209 >> ~/.ssh/known_hosts
 
+      - name: Sync git-sites.json on aaPanel (159.89.94.209)
+        run: |
+          python3 -c "import json, os; print(json.dumps(sorted([d for d in os.listdir('sites') if os.path.isdir(os.path.join('sites', d))])))" | ssh -i ~/.ssh/id_deploy deploy@159.89.94.209 "cat > /home/deploy/git-sites.json"
+
+      - name: Sync changed site folders to aaPanel (159.89.94.209)
+        run: |
           CHANGED_SITES=$(git diff --name-only HEAD~1 HEAD -- sites/ | cut -d/ -f2 | sort -u)
           for site in $CHANGED_SITES; do
             if [ -d "sites/$site" ]; then
@@ -30,4 +38,3 @@ jobs:
               rsync -rlvz --delete --no-perms --no-owner --no-group --omit-dir-times --exclude='.user.ini' --exclude='.well-known' -e "ssh -i ~/.ssh/id_deploy" "sites/$site/" "deploy@159.89.94.209:/www/wwwroot/$site/"
             fi
           done
-          python3 -c "import json, os; print(json.dumps(sorted([d for d in os.listdir('sites') if os.path.isdir(os.path.join('sites', d))])))" | ssh -i ~/.ssh/id_deploy deploy@159.89.94.209 "cat > /home/deploy/git-sites.json"
