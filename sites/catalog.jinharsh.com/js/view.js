@@ -281,7 +281,9 @@ function openReader() {
 async function startReader(pagesEl, scroller, box) {
   const $$ = (q) => box.querySelector(q);
   const L = await pdfjs();
-  if (!pdfDoc) pdfDoc = await L.getDocument({ url: D.file, rangeChunkSize: 256 * 1024, disableAutoFetch: true, ...PDF_OPTS }).promise;
+  // only the pieces of the PDF the pages on screen need (disableStream: no download of the whole file in the
+  // background, which for a big catalogue crowded out the pieces for page 1 and used a phone's data)
+  if (!pdfDoc) pdfDoc = await L.getDocument({ url: D.file, rangeChunkSize: 256 * 1024, disableAutoFetch: true, disableStream: true, ...PDF_OPTS }).promise;
   const pdf = pdfDoc;
   if (!box.isConnected) return () => {};
   const n = pdf.numPages;
