@@ -9,43 +9,50 @@
   "w": 720,
   "h": 932,
   "pages": 16,
-  "size": 887342
+  "size": 887342,
+  "file": "/hub/mirror/High-Performance-SRB-Technical-White-Paper.pdf"
  },
  "lovejoy-qf-couplings": {
   "w": 720,
   "h": 932,
   "pages": 4,
-  "size": 455565
+  "size": 455565,
+  "file": "/hub/mirror/QF-Brochure.pdf"
  },
  "rexnord-omega-viva": {
   "w": 720,
   "h": 932,
   "pages": 20,
-  "size": 1760379
+  "size": 1760379,
+  "file": "/hub/mirror/omega-metric-catalog.pdf"
  },
  "rexnord-omega-imperial": {
   "w": 720,
   "h": 932,
   "pages": 18,
-  "size": 1022545
+  "size": 1022545,
+  "file": "/hub/mirror/omega-imperial-4000.pdf"
  },
  "groz-lubrication-tools": {
   "w": 720,
   "h": 932,
   "pages": 48,
-  "size": 10275565
+  "size": 10275565,
+  "file": "/hub/mirror/groz-lubrication-equipments.pdf"
  },
  "groz-fluid-handling": {
   "w": 720,
   "h": 932,
   "pages": 372,
-  "size": 82202939
+  "size": 82202939,
+  "file": "/hub/mirror/Fluid_Handling_Catalogue_spread.pdf"
  },
  "groz-lighting": {
   "w": 720,
   "h": 1018,
   "pages": 48,
-  "size": 4992061
+  "size": 4992061,
+  "file": "/hub/mirror/GROZ_LIGHTING_GL-10_1.pdf"
  },
  "shell-lubricants": {
   "w": 720,

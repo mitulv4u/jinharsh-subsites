@@ -29,6 +29,8 @@ function toDoc(c, covers) {
   const own = pdf && /^\/(?!\/)/.test(url);
   const abs = /^https?:/i.test(url) ? url : location.origin + url;
   const m = covers[c.id] || {};
+  // a PDF from another website that has a copy here (tools/php-hub/make-mirror.mjs) opens in the hub's own reader
+  const here = own ? url : m.file || '';
   return {
     code: c.id, title: c.title, brand: c.brand || '', note: c.description || '',
     category: [...new Set([c.category, c.badge].filter(Boolean))].join(' · '),
@@ -37,9 +39,9 @@ function toDoc(c, covers) {
     waiting: !pdf, sourceUrl: pdf ? '' : url,
     cover: m.w ? `/hub/covers/${c.id}.webp` : null, thumb: m.w ? `/hub/covers/${c.id}-t.webp` : null, coverW: m.w || null, coverH: m.h || null,
     pages: m.pages || null, size: m.size || bytesOf(c.pages),
-    file: pdf ? url : '', download: pdf ? url : '', name: `${c.id}.pdf`,
-    // a PDF on another website cannot be read from here: the reader shows it in Google's viewer (as the hub did)
-    frame: pdf && !own ? `https://docs.google.com/gview?embedded=true&url=${encodeURIComponent(abs)}` : '', frameLabel: 'Google viewer',
+    file: pdf ? here || url : '', download: pdf ? here || url : '', name: `${c.id}.pdf`,
+    // a PDF on another website with no copy here cannot be read from here: Google's viewer shows it (as the hub did)
+    frame: pdf && !here ? `https://docs.google.com/gview?embedded=true&url=${encodeURIComponent(abs)}` : '', frameLabel: 'Google viewer',
     updatedAt: c.uploaded_at ? String(c.uploaded_at).replace(' ', 'T') + '+05:30' : '',
   };
 }
