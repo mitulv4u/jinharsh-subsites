@@ -6,27 +6,27 @@ date_default_timezone_set('Asia/Kolkata');
 header('Content-Type: application/json; charset=utf-8');
 header('X-Content-Type-Options: nosniff');
 
+const GOOGLE_CLIENT_ID = '232694715908-2575cktv96o2l83tsi5oo4u3cs5g0anc.apps.googleusercontent.com';
+const ALLOWED_DOMAIN   = 'jinharsh.com';
+const ADMIN_EMAILS     = ['mitul.vasa@jinharsh.com', 'content@jinharsh.com', 'content@jinhars.com'];
+
 $BASE_DIR = __DIR__;
 $DATA_DIR = $BASE_DIR . '/data';
 $PDF_DIR  = $BASE_DIR . '/pdfs';
 
-if (!is_dir($DATA_DIR)) {
-    @mkdir($DATA_DIR, 0755, true);
-}
-if (!is_dir($PDF_DIR)) {
-    @mkdir($PDF_DIR, 0755, true);
-}
+if (!is_dir($DATA_DIR)) @mkdir($DATA_DIR, 0755, true);
+if (!is_dir($PDF_DIR))  @mkdir($PDF_DIR, 0755, true);
 
 $htaccessPath = $DATA_DIR . '/.htaccess';
 if (!file_exists($htaccessPath)) {
     @file_put_contents($htaccessPath, "Order allow,deny\nDeny from all\n<IfModule mod_authz_core.c>\nRequire all denied\n</IfModule>\n");
 }
 
-$CONFIG_FILE   = $DATA_DIR . '/config.json';
-$EVENTS_FILE   = $DATA_DIR . '/events.jsonl';
-$INQUIRY_FILE  = $DATA_DIR . '/inquiries.jsonl';
-$CUSTOM_CATS   = $DATA_DIR . '/custom-catalogs.json';
-$GEO_CACHE     = $DATA_DIR . '/geo-cache.json';
+$CONFIG_FILE  = $DATA_DIR . '/config.json';
+$EVENTS_FILE  = $DATA_DIR . '/events.jsonl';
+$INQUIRY_FILE = $DATA_DIR . '/inquiries.jsonl';
+$CUSTOM_CATS  = $DATA_DIR . '/custom-catalogs.json';
+$GEO_CACHE    = $DATA_DIR . '/geo-cache.json';
 
 function load_config(string $path): array {
     $defaults = [
@@ -34,27 +34,43 @@ function load_config(string $path): array {
         'start_date'      => date('Y-m-d'),
         'end_date'        => date('Y-m-d', strtotime('+3 days')),
         'passcode'        => 'jinharsh2026',
+        'hmac_secret'     => bin2hex(random_bytes(24)),
     ];
     if (!file_exists($path)) {
         @file_put_contents($path, json_encode($defaults, JSON_PRETTY_PRINT));
         return $defaults;
     }
     $decoded = json_decode((string)@file_get_contents($path), true);
-    return is_array($decoded) ? array_merge($defaults, $decoded) : $defaults;
+    $merged = is_array($decoded) ? array_merge($defaults, $decoded) : $defaults;
+    if (empty($decoded['hmac_secret'])) {
+        @file_put_contents($path, json_encode($merged, JSON_PRETTY_PRINT), LOCK_EX);
+    }
+    return $merged;
+}
+
+function sign_session(array $payload, string $secret): string {
+    $b64 = rtrim(strtr(base64_encode(json_encode($payload)), '+/', '-_'), '=');
+    $sig = hash_hmac('sha256', $b64, $secret);
+    return $b64 . '.' . $sig;
+}
+
+function verify_session(string $token, string $secret): ?array {
+    $parts = explode('.', $token, 2);
+    if (count($parts) !== 2) return null;
+    [$b64, $sig] = $parts;
+    $expected = hash_hmac('sha256', $b64, $secret);
+    if (!hash_equals($expected, $sig)) return null;
+    $json = base64_decode(strtr($b64, '-_', '+/'));
+    $data = json_decode((string)$json, true);
+    if (!is_array($data) || ($data['exp'] ?? 0) < time()) return null;
+    return $data;
 }
 
 function get_client_ip(): string {
-    $candidates = [
-        $_SERVER['HTTP_CF_CONNECTING_IP'] ?? '',
-        $_SERVER['HTTP_X_FORWARDED_FOR'] ?? '',
-        $_SERVER['REMOTE_ADDR'] ?? '',
-    ];
-    foreach ($candidates as $raw) {
+    foreach ([$_SERVER['HTTP_CF_CONNECTING_IP'] ?? '', $_SERVER['HTTP_X_FORWARDED_FOR'] ?? '', $_SERVER['REMOTE_ADDR'] ?? ''] as $raw) {
         if (!$raw) continue;
         $first = trim(explode(',', $raw)[0]);
-        if (filter_var($first, FILTER_VALIDATE_IP)) {
-            return $first;
-        }
+        if (filter_var($first, FILTER_VALIDATE_IP)) return $first;
     }
     return '0.0.0.0';
 }
@@ -63,16 +79,8 @@ function lookup_geo(string $ip, string $cacheFile): array {
     if ($ip === '0.0.0.0' || !filter_var($ip, FILTER_VALIDATE_IP, FILTER_FLAG_NO_PRIV_RANGE | FILTER_FLAG_NO_RES_RANGE)) {
         return ['city' => 'Local/Private', 'region' => '', 'country' => '', 'isp' => ''];
     }
-
-    $cache = [];
-    if (file_exists($cacheFile)) {
-        $loaded = json_decode((string)@file_get_contents($cacheFile), true);
-        if (is_array($loaded)) $cache = $loaded;
-    }
-
-    if (isset($cache[$ip]) && is_array($cache[$ip])) {
-        return $cache[$ip];
-    }
+    $cache = file_exists($cacheFile) ? (json_decode((string)@file_get_contents($cacheFile), true) ?: []) : [];
+    if (isset($cache[$ip]) && is_array($cache[$ip])) return $cache[$ip];
 
     $ctx = stream_context_create(['http' => ['timeout' => 2]]);
     $resp = @file_get_contents("http://ip-api.com/json/{$ip}?fields=status,country,regionName,city,isp", false, $ctx);
@@ -86,9 +94,7 @@ function lookup_geo(string $ip, string $cacheFile): array {
                 'country' => (string)($data['country'] ?? ''),
                 'isp'     => (string)($data['isp'] ?? ''),
             ];
-            if (count($cache) > 5000) {
-                $cache = array_slice($cache, -2500, null, true);
-            }
+            if (count($cache) > 5000) $cache = array_slice($cache, -2500, null, true);
             $cache[$ip] = $geo;
             @file_put_contents($cacheFile, json_encode($cache), LOCK_EX);
         }
@@ -98,17 +104,14 @@ function lookup_geo(string $ip, string $cacheFile): array {
 
 function get_exhibition_phase(array $config): string {
     $today = date('Y-m-d');
-    $start = $config['start_date'] ?? $today;
-    $end   = $config['end_date'] ?? $today;
-    if ($today < $start) return 'pre_exhibition';
-    if ($today > $end) return 'post_exhibition';
+    if ($today < ($config['start_date'] ?? $today)) return 'pre_exhibition';
+    if ($today > ($config['end_date'] ?? $today)) return 'post_exhibition';
     return 'during_exhibition';
 }
 
 function read_json_body(): array {
     $raw = file_get_contents('php://input');
-    if (!$raw) return [];
-    $decoded = json_decode($raw, true);
+    $decoded = $raw ? json_decode($raw, true) : [];
     return is_array($decoded) ? $decoded : [];
 }
 
@@ -130,13 +133,29 @@ function read_jsonl(string $file, int $limit = 1000): array {
     return $out;
 }
 
-function require_auth(array $config): void {
-    $provided = $_SERVER['HTTP_X_TEAM_PASSCODE'] ?? $_GET['passcode'] ?? $_POST['passcode'] ?? '';
-    if (!hash_equals((string)$config['passcode'], (string)$provided)) {
-        http_response_code(401);
-        echo json_encode(['ok' => false, 'error' => 'Invalid team passcode']);
-        exit;
+function require_auth(array $config, string $minRole = 'uploader'): array {
+    $token = $_SERVER['HTTP_X_TEAM_TOKEN'] ?? $_GET['token'] ?? $_POST['token'] ?? '';
+    if ($token !== '') {
+        $session = verify_session($token, (string)$config['hmac_secret']);
+        if ($session) {
+            $role = $session['role'] ?? 'uploader';
+            if ($minRole === 'admin' && $role !== 'admin') {
+                http_response_code(403);
+                echo json_encode(['ok' => false, 'error' => 'Only content@jinharsh.com and mitul.vasa@jinharsh.com have permission to remove or change settings.']);
+                exit;
+            }
+            return $session;
+        }
     }
+
+    $provided = $_SERVER['HTTP_X_TEAM_PASSCODE'] ?? $_GET['passcode'] ?? $_POST['passcode'] ?? '';
+    if ($provided !== '' && hash_equals((string)$config['passcode'], (string)$provided)) {
+        return ['email' => 'team-passcode@jinharsh.com', 'name' => 'JinHarsh Team', 'role' => 'admin'];
+    }
+
+    http_response_code(401);
+    echo json_encode(['ok' => false, 'error' => 'Authentication required']);
+    exit;
 }
 
 function load_custom_catalogs(string $file): array {
@@ -163,7 +182,6 @@ switch ($action) {
             if (is_array($decoded)) $base = $decoded;
         }
         $custom = load_custom_catalogs($CUSTOM_CATS);
-        // Put newly uploaded team catalogs first so they are easy to spot
         echo json_encode(array_merge(array_reverse($custom), $base), JSON_UNESCAPED_SLASHES);
         break;
     }
@@ -240,7 +258,6 @@ switch ($action) {
         ];
         append_jsonl($INQUIRY_FILE, $record);
 
-        // Also log as an event
         append_jsonl($EVENTS_FILE, [
             'id'            => bin2hex(random_bytes(6)),
             'timestamp_ist' => $record['timestamp_ist'],
@@ -265,7 +282,6 @@ switch ($action) {
             'isp'           => $geo['isp'],
         ]);
 
-        // Forward to central Odoo ERP API (best-effort, non-blocking)
         $odooPayload = json_encode([
             'name'             => $name,
             'email'            => $email,
@@ -277,10 +293,10 @@ switch ($action) {
         ]);
         $ctx = stream_context_create([
             'http' => [
-                'method'  => 'POST',
-                'header'  => "Content-Type: application/json\r\n",
-                'content' => $odooPayload,
-                'timeout' => 3,
+                'method'        => 'POST',
+                'header'        => "Content-Type: application/json\r\n",
+                'content'       => $odooPayload,
+                'timeout'       => 3,
                 'ignore_errors' => true,
             ],
         ]);
@@ -290,11 +306,63 @@ switch ($action) {
         break;
     }
 
+    case 'google_auth': {
+        $body = read_json_body();
+        $idToken = trim((string)($body['credential'] ?? ''));
+        if ($idToken === '') {
+            http_response_code(400);
+            echo json_encode(['ok' => false, 'error' => 'Missing Google credential']);
+            exit;
+        }
+        $ctx = stream_context_create(['http' => ['timeout' => 5, 'ignore_errors' => true]]);
+        $resp = @file_get_contents('https://oauth2.googleapis.com/tokeninfo?id_token=' . urlencode($idToken), false, $ctx);
+        $info = $resp ? json_decode($resp, true) : null;
+
+        if (!is_array($info) || ($info['aud'] ?? '') !== GOOGLE_CLIENT_ID) {
+            http_response_code(401);
+            echo json_encode(['ok' => false, 'error' => 'Invalid Google token']);
+            exit;
+        }
+        $email = strtolower(trim((string)($info['email'] ?? '')));
+        $verified = ($info['email_verified'] ?? '') === 'true' || ($info['email_verified'] ?? false) === true;
+        if (!$verified || $email === '') {
+            http_response_code(401);
+            echo json_encode(['ok' => false, 'error' => 'Google email is not verified']);
+            exit;
+        }
+
+        $domain = substr(strrchr($email, '@') ?: '', 1);
+        $isAdmin = in_array($email, ADMIN_EMAILS, true);
+        if ($domain !== ALLOWED_DOMAIN && !$isAdmin) {
+            http_response_code(403);
+            echo json_encode(['ok' => false, 'error' => "Only @" . ALLOWED_DOMAIN . " accounts are allowed."]);
+            exit;
+        }
+
+        $role = $isAdmin ? 'admin' : 'uploader';
+        $user = [
+            'email' => $email,
+            'name'  => (string)($info['name'] ?? $email),
+            'role'  => $role,
+            'exp'   => time() + 86400 * 7,
+        ];
+        $token = sign_session($user, (string)$config['hmac_secret']);
+        echo json_encode(['ok' => true, 'token' => $token, 'user' => $user]);
+        break;
+    }
+
     case 'auth': {
         $body = read_json_body();
         $pass = (string)($body['passcode'] ?? '');
         if (hash_equals((string)$config['passcode'], $pass)) {
-            echo json_encode(['ok' => true]);
+            $user = [
+                'email' => 'team-passcode@jinharsh.com',
+                'name'  => 'JinHarsh Team',
+                'role'  => 'admin',
+                'exp'   => time() + 86400 * 7,
+            ];
+            $token = sign_session($user, (string)$config['hmac_secret']);
+            echo json_encode(['ok' => true, 'token' => $token, 'user' => $user]);
         } else {
             http_response_code(401);
             echo json_encode(['ok' => false, 'error' => 'Incorrect passcode']);
@@ -303,17 +371,13 @@ switch ($action) {
     }
 
     case 'analytics': {
-        require_auth($config);
+        $user      = require_auth($config, 'uploader');
         $events    = read_jsonl($EVENTS_FILE, 1500);
         $inquiries = read_jsonl($INQUIRY_FILE, 1000);
         $custom    = load_custom_catalogs($CUSTOM_CATS);
 
-        $visits = 0;
-        $postVisits = 0;
-        $duringVisits = 0;
-        $downloads = 0;
-        $cities = [];
-        $emails = [];
+        $visits = 0; $postVisits = 0; $duringVisits = 0; $downloads = 0;
+        $cities = []; $emails = [];
 
         foreach ($events as $ev) {
             $t = $ev['type'] ?? '';
@@ -326,29 +390,28 @@ switch ($action) {
                 $downloads++;
             }
             $c = trim((string)($ev['city'] ?? ''));
-            if ($c && $c !== 'Unknown' && $c !== 'Local/Private') {
-                $cities[$c] = ($cities[$c] ?? 0) + 1;
-            }
+            if ($c && $c !== 'Unknown' && $c !== 'Local/Private') $cities[$c] = ($cities[$c] ?? 0) + 1;
             $em = trim((string)($ev['email'] ?? ''));
             if ($em) $emails[$em] = true;
         }
         arsort($cities);
 
         $safeConfig = $config;
-        unset($safeConfig['passcode']);
+        unset($safeConfig['passcode'], $safeConfig['hmac_secret']);
 
         echo json_encode([
-            'ok'      => true,
-            'config'  => $safeConfig,
+            'ok'            => true,
+            'user'          => $user,
+            'config'        => $safeConfig,
             'current_phase' => get_exhibition_phase($config),
-            'summary' => [
-                'total_visits'          => $visits,
+            'summary'       => [
+                'total_visits'             => $visits,
                 'during_exhibition_visits' => $duringVisits,
                 'post_exhibition_visits'   => $postVisits,
-                'total_downloads'       => $downloads,
-                'total_inquiries'       => count($inquiries),
-                'known_email_visitors'  => count($emails),
-                'top_cities'            => array_slice($cities, 0, 8, true),
+                'total_downloads'          => $downloads,
+                'total_inquiries'          => count($inquiries),
+                'known_email_visitors'     => count($emails),
+                'top_cities'               => array_slice($cities, 0, 8, true),
             ],
             'events'          => $events,
             'inquiries'       => $inquiries,
@@ -358,27 +421,19 @@ switch ($action) {
     }
 
     case 'save_config': {
-        require_auth($config);
+        require_auth($config, 'admin');
         $body = read_json_body();
-        if (!empty($body['exhibition_name'])) {
-            $config['exhibition_name'] = trim((string)$body['exhibition_name']);
-        }
-        if (!empty($body['start_date'])) {
-            $config['start_date'] = trim((string)$body['start_date']);
-        }
-        if (!empty($body['end_date'])) {
-            $config['end_date'] = trim((string)$body['end_date']);
-        }
-        if (!empty($body['new_passcode'])) {
-            $config['passcode'] = trim((string)$body['new_passcode']);
-        }
+        if (!empty($body['exhibition_name'])) $config['exhibition_name'] = trim((string)$body['exhibition_name']);
+        if (!empty($body['start_date']))      $config['start_date'] = trim((string)$body['start_date']);
+        if (!empty($body['end_date']))        $config['end_date'] = trim((string)$body['end_date']);
+        if (!empty($body['new_passcode']))    $config['passcode'] = trim((string)$body['new_passcode']);
         @file_put_contents($CONFIG_FILE, json_encode($config, JSON_PRETTY_PRINT), LOCK_EX);
         echo json_encode(['ok' => true, 'current_phase' => get_exhibition_phase($config)]);
         break;
     }
 
     case 'upload_catalog': {
-        require_auth($config);
+        $user = require_auth($config, 'uploader');
         if (empty($_FILES['pdf']) || $_FILES['pdf']['error'] !== UPLOAD_ERR_OK) {
             http_response_code(400);
             echo json_encode(['ok' => false, 'error' => 'Please select a valid PDF file.']);
@@ -404,9 +459,7 @@ switch ($action) {
             $title = ucwords(str_replace(['_', '-'], ' ', pathinfo((string)$file['name'], PATHINFO_FILENAME)));
         }
 
-        $baseSlug = preg_replace('/[^a-z0-9]+/', '-', strtolower($title));
-        $baseSlug = trim((string)$baseSlug, '-') ?: ('catalog-' . time());
-
+        $baseSlug = trim((string)preg_replace('/[^a-z0-9]+/', '-', strtolower($title)), '-') ?: ('catalog-' . time());
         $custom = load_custom_catalogs($CUSTOM_CATS);
         $existingIds = array_column($custom, 'id');
         $slug = $baseSlug;
@@ -432,7 +485,7 @@ switch ($action) {
             'badge'       => $badge ?: 'New 2026',
             'pages'       => format_bytes((int)$file['size']),
             'uploaded_at' => date('Y-m-d H:i:s'),
-            'uploaded_by' => trim((string)($_POST['uploaded_by'] ?? 'Team')),
+            'uploaded_by' => trim((string)($_POST['uploaded_by'] ?? '')) ?: ($user['email'] ?? 'Team'),
             'is_custom'   => true,
         ];
 
@@ -444,7 +497,7 @@ switch ($action) {
     }
 
     case 'delete_catalog': {
-        require_auth($config);
+        require_auth($config, 'admin');
         $body = read_json_body();
         $id = (string)($body['id'] ?? '');
         $custom = load_custom_catalogs($CUSTOM_CATS);
@@ -463,7 +516,7 @@ switch ($action) {
     }
 
     case 'export_csv': {
-        require_auth($config);
+        require_auth($config, 'uploader');
         $type = $_GET['type'] ?? 'events';
         header('Content-Type: text/csv; charset=utf-8');
         header('Content-Disposition: attachment; filename="jinharsh-' . $type . '-' . date('Ymd-His') . '.csv"');

@@ -6,6 +6,7 @@
   <title>Team &amp; Exhibition Portal — JINHARSH Catalog Hub</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+  <script src="https://accounts.google.com/gsi/client" async defer></script>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
   <style>
     body { font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; }
@@ -26,25 +27,50 @@
         </a>
       </div>
       <div class="flex items-center gap-2">
+        <span id="user-badge" class="hidden text-[11px] font-medium bg-slate-100 text-slate-700 px-2.5 py-1 rounded-lg"></span>
         <a href="/" class="text-xs font-medium text-slate-600 hover:text-slate-900 px-3 py-1.5 rounded-lg hover:bg-slate-100 transition">← Back to Catalog Hub</a>
         <button id="logout-btn" onclick="logout()" class="hidden text-xs font-semibold text-rose-600 hover:bg-rose-50 px-3 py-1.5 rounded-lg transition">Sign Out</button>
       </div>
     </div>
   </header>
 
-  <!-- Passcode Login Gate -->
+  <!-- Login Gate -->
   <main id="login-gate" class="flex-1 flex items-center justify-center p-4">
     <div class="bg-white border border-slate-200 rounded-2xl p-6 sm:p-8 max-w-sm w-full shadow-sm space-y-5">
       <div>
         <div class="text-xs font-bold uppercase tracking-wider text-indigo-600">JinHarsh Internal</div>
         <h1 class="text-xl font-bold text-slate-900 mt-1">Team Portal Access</h1>
-        <p class="text-xs text-slate-500 mt-1">Enter your team passcode to view exhibition visitor analytics, post-exhibition revisits, queries, and upload new catalogs.</p>
+        <p class="text-xs text-slate-500 mt-1">Sign in with your <strong>@jinharsh.com</strong> Google account to upload catalogs and view analytics. Only <strong>content@jinharsh.com</strong> &amp; <strong>mitul.vasa@jinharsh.com</strong> can remove catalogs.</p>
       </div>
+
+      <!-- Google Sign-In -->
+      <div class="space-y-2">
+        <div id="g_id_onload"
+             data-client_id="232694715908-2575cktv96o2l83tsi5oo4u3cs5g0anc.apps.googleusercontent.com"
+             data-callback="handleGoogleCredential"
+             data-auto_prompt="false">
+        </div>
+        <div class="g_id_signin flex justify-center"
+             data-type="standard"
+             data-size="large"
+             data-theme="outline"
+             data-text="signin_with"
+             data-shape="rectangular"
+             data-width="320">
+        </div>
+      </div>
+
+      <div class="relative flex items-center py-1">
+        <div class="flex-grow border-t border-slate-200"></div>
+        <span class="flex-shrink mx-3 text-[11px] text-slate-400 uppercase font-semibold">Or Passcode</span>
+        <div class="flex-grow border-t border-slate-200"></div>
+      </div>
+
       <form id="login-form" class="space-y-3">
         <input id="passcode-input" type="password" required placeholder="Team Passcode" class="w-full border border-slate-200 rounded-xl px-3.5 py-2.5 text-sm outline-none focus:border-indigo-500" />
-        <button type="submit" class="w-full bg-slate-900 hover:bg-slate-800 text-white text-sm font-semibold py-2.5 rounded-xl transition">Unlock Portal</button>
-        <p id="login-error" class="hidden text-xs text-rose-600 text-center font-medium"></p>
+        <button type="submit" class="w-full bg-slate-900 hover:bg-slate-800 text-white text-sm font-semibold py-2.5 rounded-xl transition">Unlock with Passcode</button>
       </form>
+      <p id="login-error" class="hidden text-xs text-rose-600 text-center font-medium"></p>
     </div>
   </main>
 
@@ -55,7 +81,7 @@
       <div>
         <div class="flex items-center gap-2 flex-wrap">
           <span id="ex-name" class="font-bold text-base text-slate-900">Exhibition</span>
-          <span id="ex-phase-badge" class="text-[11px] font-bold px-2.5 py-0.5 rounded-full"></span>
+          <span id="ex-phase-badge"></span>
         </div>
         <div id="ex-dates" class="text-xs text-slate-500 mt-0.5"></div>
       </div>
@@ -63,14 +89,13 @@
       <div class="flex flex-wrap gap-2">
         <button onclick="switchTab('analytics')" data-tab="analytics" class="tab-btn px-3.5 py-2 rounded-xl text-xs font-semibold bg-slate-900 text-white transition">Visitor Analytics &amp; Queries</button>
         <button onclick="switchTab('upload')" data-tab="upload" class="tab-btn px-3.5 py-2 rounded-xl text-xs font-semibold bg-slate-100 text-slate-700 hover:bg-slate-200 transition">+ Upload New Catalog</button>
-        <button onclick="switchTab('settings')" data-tab="settings" class="tab-btn px-3.5 py-2 rounded-xl text-xs font-semibold bg-slate-100 text-slate-700 hover:bg-slate-200 transition">Exhibition Settings</button>
+        <button id="settings-tab-btn" onclick="switchTab('settings')" data-tab="settings" class="hidden tab-btn px-3.5 py-2 rounded-xl text-xs font-semibold bg-slate-100 text-slate-700 hover:bg-slate-200 transition">Exhibition Settings</button>
         <button onclick="loadDashboard()" class="px-3 py-2 rounded-xl text-xs font-medium border border-slate-200 hover:bg-slate-50 text-slate-600 transition">Refresh</button>
       </div>
     </div>
 
     <!-- TAB 1: ANALYTICS & QUERIES -->
     <section id="tab-analytics" class="space-y-6">
-      <!-- KPIs -->
       <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3">
         <div class="bg-white border border-slate-200 rounded-2xl p-4">
           <div class="text-xs text-slate-500 font-medium">Total Visits</div>
@@ -94,13 +119,11 @@
         </div>
       </div>
 
-      <!-- Top Cities -->
       <div class="bg-white border border-slate-200 rounded-2xl p-4 flex flex-wrap items-center gap-2">
         <span class="text-xs font-bold uppercase tracking-wider text-slate-500 mr-2">Top Visitor Locations:</span>
         <div id="top-cities" class="flex flex-wrap gap-2 text-xs text-slate-600">No location data yet.</div>
       </div>
 
-      <!-- Visitor Activity Log -->
       <div class="bg-white border border-slate-200 rounded-2xl overflow-hidden">
         <div class="p-4 border-b border-slate-100 flex flex-wrap items-center justify-between gap-3">
           <div>
@@ -143,7 +166,6 @@
         </div>
       </div>
 
-      <!-- Direct Queries Inbox -->
       <div class="bg-white border border-slate-200 rounded-2xl overflow-hidden">
         <div class="p-4 border-b border-slate-100 flex flex-wrap items-center justify-between gap-3">
           <div>
@@ -173,7 +195,6 @@
     <!-- TAB 2: SMART CATALOG UPLOADER -->
     <section id="tab-upload" class="hidden space-y-6">
       <div class="grid grid-cols-1 lg:grid-cols-5 gap-6">
-        <!-- Upload Form -->
         <div class="lg:col-span-3 bg-white border border-slate-200 rounded-2xl p-6 space-y-5">
           <div>
             <h2 class="text-lg font-bold text-slate-900">Upload New Product Catalog (PDF)</h2>
@@ -236,7 +257,7 @@
               </div>
               <div>
                 <label class="block text-[11px] font-semibold text-slate-600 mb-1">Uploaded By</label>
-                <input id="up-by" placeholder="Your Name" class="w-full border border-slate-200 rounded-xl px-3 py-2 text-xs outline-none focus:border-indigo-500" />
+                <input id="up-by" placeholder="Auto-filled from login" class="w-full border border-slate-200 rounded-xl px-3 py-2 text-xs outline-none focus:border-indigo-500" />
               </div>
             </div>
 
@@ -250,7 +271,6 @@
           </form>
         </div>
 
-        <!-- Instant Result + QR Preview -->
         <div class="lg:col-span-2 space-y-4">
           <div id="upload-success-card" class="hidden bg-white border border-emerald-200 rounded-2xl p-5 space-y-3 text-center">
             <div class="text-xs font-bold uppercase tracking-wider text-emerald-700">Published Live!</div>
@@ -271,7 +291,7 @@
       </div>
     </section>
 
-    <!-- TAB 3: EXHIBITION SETTINGS -->
+    <!-- TAB 3: EXHIBITION SETTINGS (Admin Only) -->
     <section id="tab-settings" class="hidden max-w-xl">
       <div class="bg-white border border-slate-200 rounded-2xl p-6 space-y-4">
         <div>
@@ -305,7 +325,8 @@
   </main>
 
   <script>
-    let PASSCODE = sessionStorage.getItem('jh_team_pass') || '';
+    let TOKEN = sessionStorage.getItem('jh_team_token') || '';
+    let USER = null;
     let DATA = null;
     let LAST_UPLOADED_ID = '';
 
@@ -334,6 +355,26 @@
       return '<span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-slate-100 text-slate-600">Pre-Exhibition</span>';
     }
 
+    async function handleGoogleCredential(response) {
+      const err = document.getElementById('login-error');
+      err.classList.add('hidden');
+      const res = await fetch('/hub/api.php?action=google_auth', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ credential: response.credential }),
+      });
+      const json = await res.json();
+      if (res.ok && json.ok) {
+        TOKEN = json.token;
+        USER = json.user;
+        sessionStorage.setItem('jh_team_token', TOKEN);
+        showDashboard();
+      } else {
+        err.textContent = json.error || 'Google Sign-In failed.';
+        err.classList.remove('hidden');
+      }
+    }
+
     document.getElementById('login-form').addEventListener('submit', async (e) => {
       e.preventDefault();
       const pass = document.getElementById('passcode-input').value;
@@ -344,19 +385,22 @@
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ passcode: pass }),
       });
-      if (res.ok) {
-        PASSCODE = pass;
-        sessionStorage.setItem('jh_team_pass', pass);
+      const json = await res.json();
+      if (res.ok && json.ok) {
+        TOKEN = json.token;
+        USER = json.user;
+        sessionStorage.setItem('jh_team_token', TOKEN);
         showDashboard();
       } else {
-        err.textContent = 'Invalid passcode. Please try again.';
+        err.textContent = json.error || 'Invalid passcode.';
         err.classList.remove('hidden');
       }
     });
 
     function logout() {
-      sessionStorage.removeItem('jh_team_pass');
-      PASSCODE = '';
+      sessionStorage.removeItem('jh_team_token');
+      TOKEN = '';
+      USER = null;
       location.reload();
     }
 
@@ -369,10 +413,20 @@
 
     async function loadDashboard() {
       const res = await fetch('/hub/api.php?action=analytics', {
-        headers: { 'X-Team-Passcode': PASSCODE },
+        headers: { 'X-Team-Token': TOKEN },
       });
       if (res.status === 401) return logout();
       DATA = await res.json();
+      USER = DATA.user || USER;
+
+      const isAdmin = USER && USER.role === 'admin';
+      const badge = document.getElementById('user-badge');
+      badge.textContent = `${USER.email} (${isAdmin ? 'Admin' : 'Upload Only'})`;
+      badge.classList.remove('hidden');
+      document.getElementById('settings-tab-btn').classList.toggle('hidden', !isAdmin);
+      if (USER && USER.email && !document.getElementById('up-by').value) {
+        document.getElementById('up-by').value = USER.email;
+      }
 
       document.getElementById('ex-name').textContent = DATA.config.exhibition_name;
       document.getElementById('ex-dates').textContent = `Exhibition Window: ${DATA.config.start_date} to ${DATA.config.end_date}`;
@@ -445,6 +499,7 @@
 
     function renderCustomCatalogs() {
       const list = DATA.custom_catalogs || [];
+      const isAdmin = USER && USER.role === 'admin';
       const el = document.getElementById('custom-catalogs-list');
       el.innerHTML = list.length
         ? list.map((c) => `
@@ -455,7 +510,7 @@
             </div>
             <div class="flex items-center gap-2 shrink-0">
               <a href="/?cat=${encodeURIComponent(c.id)}" target="_blank" class="text-indigo-600 font-semibold hover:underline">Open</a>
-              <button onclick="deleteCatalog('${esc(c.id)}')" class="text-rose-600 hover:underline">Delete</button>
+              ${isAdmin ? `<button onclick="deleteCatalog('${esc(c.id)}')" class="text-rose-600 hover:underline">Delete</button>` : ''}
             </div>
           </div>
         `).join('')
@@ -464,11 +519,16 @@
 
     async function deleteCatalog(id) {
       if (!confirm('Remove this uploaded catalog?')) return;
-      await fetch('/hub/api.php?action=delete_catalog', {
+      const res = await fetch('/hub/api.php?action=delete_catalog', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json', 'X-Team-Passcode': PASSCODE },
+        headers: { 'Content-Type': 'application/json', 'X-Team-Token': TOKEN },
         body: JSON.stringify({ id }),
       });
+      if (!res.ok) {
+        const j = await res.json().catch(() => ({}));
+        alert(j.error || 'Permission denied.');
+        return;
+      }
       loadDashboard();
     }
 
@@ -483,10 +543,9 @@
     }
 
     function exportCsv(type) {
-      window.location.href = `/hub/api.php?action=export_csv&type=${encodeURIComponent(type)}&passcode=${encodeURIComponent(PASSCODE)}`;
+      window.location.href = `/hub/api.php?action=export_csv&type=${encodeURIComponent(type)}&token=${encodeURIComponent(TOKEN)}`;
     }
 
-    // Smart filename auto-detection
     document.getElementById('pdf-file-input').addEventListener('change', (e) => {
       const file = e.target.files[0];
       if (!file) return;
@@ -531,7 +590,7 @@
       try {
         const res = await fetch('/hub/api.php?action=upload_catalog', {
           method: 'POST',
-          headers: { 'X-Team-Passcode': PASSCODE },
+          headers: { 'X-Team-Token': TOKEN },
           body: fd,
         });
         const json = await res.json();
@@ -580,7 +639,7 @@
       const newPass = document.getElementById('set-pass').value.trim();
       const res = await fetch('/hub/api.php?action=save_config', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json', 'X-Team-Passcode': PASSCODE },
+        headers: { 'Content-Type': 'application/json', 'X-Team-Token': TOKEN },
         body: JSON.stringify({
           exhibition_name: document.getElementById('set-name').value.trim(),
           start_date: document.getElementById('set-start').value,
@@ -589,21 +648,18 @@
         }),
       });
       if (res.ok) {
-        if (newPass) {
-          PASSCODE = newPass;
-          sessionStorage.setItem('jh_team_pass', newPass);
-        }
         status.className = 'text-xs font-semibold text-emerald-700';
         status.textContent = 'Exhibition settings saved!';
         document.getElementById('set-pass').value = '';
         loadDashboard();
       } else {
+        const j = await res.json().catch(() => ({}));
         status.className = 'text-xs font-semibold text-rose-700';
-        status.textContent = 'Could not save settings.';
+        status.textContent = j.error || 'Could not save settings.';
       }
     });
 
-    if (PASSCODE) showDashboard();
+    if (TOKEN) showDashboard();
   </script>
 </body>
 </html>

@@ -316,6 +316,14 @@
       }).join('') || '<p class="text-xs text-slate-400 p-3">No matching catalogs.</p>';
     }
 
+    function isPdfUrl(url) {
+      return /\.pdf(\?|#|$)/i.test(url || '');
+    }
+
+    function isExternalPdf(url) {
+      return /^https?:\/\//i.test(url || '') && !url.startsWith(location.origin) && !url.includes('rexnord.co.in') && !url.includes('groz.tools');
+    }
+
     function selectCatalog(id, pushUrl) {
       activeCat = CATALOGS.find((c) => c.id === id) || CATALOGS[0];
       if (!activeCat) return;
@@ -328,7 +336,10 @@
       document.getElementById('active-title').textContent = activeCat.title;
       document.getElementById('active-desc').textContent = activeCat.description;
       document.getElementById('open-raw-pdf').href = activeCat.pdfUrl;
+      document.getElementById('download-pdf-btn').textContent = isPdfUrl(activeCat.pdfUrl) ? 'Download PDF ↓' : 'Open Portal ↗';
       document.title = `${activeCat.title} — JINHARSH Catalog Hub`;
+
+      useGoogleViewer = isPdfUrl(activeCat.pdfUrl) && isExternalPdf(activeCat.pdfUrl);
 
       if (pushUrl) {
         const url = new URL(location.href);
@@ -346,14 +357,24 @@
       if (!activeCat) return;
       const absUrl = activeCat.pdfUrl.startsWith('http') ? activeCat.pdfUrl : `${location.origin}${activeCat.pdfUrl}`;
       const iframe = document.getElementById('pdf-iframe');
+      const modeBtn = document.getElementById('viewer-mode-btn');
+
+      if (!isPdfUrl(activeCat.pdfUrl)) {
+        iframe.src = activeCat.pdfUrl;
+        document.getElementById('viewer-mode-label').textContent = 'Interactive Application Portal';
+        modeBtn.classList.add('hidden');
+        return;
+      }
+
+      modeBtn.classList.remove('hidden');
       if (useGoogleViewer) {
         iframe.src = `https://docs.google.com/gview?embedded=true&url=${encodeURIComponent(absUrl)}`;
         document.getElementById('viewer-mode-label').textContent = 'Embedded Google PDF Viewer';
-        document.getElementById('viewer-mode-btn').textContent = 'Switch to Native Browser Viewer';
+        modeBtn.textContent = 'Switch to Native Browser Viewer';
       } else {
         iframe.src = activeCat.pdfUrl;
         document.getElementById('viewer-mode-label').textContent = 'Native Interactive PDF Viewer';
-        document.getElementById('viewer-mode-btn').textContent = 'Trouble viewing? Try Embedded Viewer';
+        modeBtn.textContent = 'Trouble viewing? Try Embedded Viewer';
       }
     }
 
