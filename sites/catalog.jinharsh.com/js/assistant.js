@@ -9,12 +9,13 @@ import { esc } from './markup.js';
 import { pageLink } from './peek.js';
 import { catPath, sendInquiry } from './backend.js';
 import { visitor, device, source } from './visitor.js';
-import { findPages, findCatalogs, findBrands, brands, catalogOf, loadPages } from './lookup.js';
+import { findPages, findCatalogs, findBrands, brands, catalogs, catalogOf, loadPages } from './lookup.js';
 import { byeHtml } from './goodbye.js';
+import { startJini, jiniSvg } from './jini.js';
 
 const KEY = 'jd_chat';
 const $ = (s, el = document) => el.querySelector(s);
-let SITE = {}, HERE = null, ui = null, state = { open: false, log: [], flow: null, greeted: false };
+let SITE = {}, HERE = null, ui = null, jini = null, state = { open: false, log: [], flow: null, greeted: false };
 
 const save = () => { try { sessionStorage.setItem(KEY, JSON.stringify({ ...state, log: state.log.slice(-60) })); } catch {} };
 const load = () => { try { const s = JSON.parse(sessionStorage.getItem(KEY) || 'null'); if (s && Array.isArray(s.log)) state = { ...state, ...s }; } catch {} };
@@ -25,16 +26,15 @@ const wait = (ms) => new Promise((r) => setTimeout(r, ms));
 export function startHelper({ site = {}, current = null } = {}) {
   SITE = site; HERE = current;
   load();
-  const mark = ($('.brand img') || {}).src || '';
   const box = document.createElement('div');
-  box.className = 'as';
+  box.className = 'as has-jini';
   box.innerHTML = `
     <button class="as-fab" type="button" aria-label="Chat with the Jinharsh helper" aria-expanded="false">${icon('message-circle')}<i class="as-on"></i></button>
     <div class="as-hint" hidden></div>
     <section class="as-panel" role="dialog" aria-label="Jinharsh helper" hidden>
       <header class="as-head">
-        <span class="as-av">${mark ? `<img src="${esc(mark)}" alt="">` : 'J'}</span>
-        <span class="as-who"><b>Jinharsh helper</b><small><i class="as-on"></i>Here to help you find things</small></span>
+        <span class="as-av">${jiniSvg()}</span>
+        <span class="as-who"><b>Jini · Jinharsh helper</b><small><i class="as-on"></i>Here to help you find things</small></span>
         <button class="ju-icon as-x" type="button" aria-label="Close the chat">${icon('x')}</button>
       </header>
       <div class="as-log" aria-live="polite"></div>
@@ -60,8 +60,16 @@ export function startHelper({ site = {}, current = null } = {}) {
   });
   ui.quick.addEventListener('click', (e) => { const b = e.target.closest('[data-act]'); if (!b) return; me(b.textContent.trim()); act(b.dataset.act, b.dataset.arg || ''); });
   ui.log.addEventListener('click', (e) => { const b = e.target.closest('[data-act]'); if (!b) return; e.preventDefault(); me(b.textContent.trim()); act(b.dataset.act, b.dataset.arg || ''); });
+  // Jini, the helper you can see: she walks around the page, waves, has a tip now and then, and opens this chat
+  const tips = HERE
+    ? [`Want a price for <b>${esc(HERE.title)}</b>? Tap me.`, 'Press <b>Read now</b> to flip through every page.', 'You can download it too, or share it on WhatsApp.', 'Looking for a size or a part number? Tap me and type it.']
+    : ['Type a part number in the search box: I will find the page for you.', 'Tap the 👁 on a card for a quick look inside.', 'Need a price? Tap me and tell me the part.', 'Not sure which catalogue? Tell me what you need.'];
+  try {
+    jini = startJini({ onOpen: () => (ui.panel.hidden ? open() : close()), tips,
+      hello: HERE ? `Hi! I'm Jini from Jinharsh 👋 Need a price for this one? Tap me.` : `Hi! I'm Jini from Jinharsh 👋 Looking for a part? Tap me.` });
+  } catch { box.classList.remove('has-jini'); }   // (the round button stays, if she could not appear)
   if (state.open) open(false);
-  else if (!state.greeted) nudge();
+  else if (!state.greeted && !jini) nudge();
 }
 
 // a small "can I help?" bubble by the button, once per visit, after a little while
@@ -83,6 +91,7 @@ export function openHelper(text = '') { open(); if (text) { me(text); handle(tex
 
 function open(animate = true) {
   ui.hint.hidden = true;
+  if (jini) jini.hide();
   ui.panel.hidden = false;
   ui.fab.setAttribute('aria-expanded', 'true');
   ui.box.classList.add('is-open');
@@ -98,7 +107,7 @@ function close() {
   state.open = false; save();
   ui.fab.setAttribute('aria-expanded', 'false');
   ui.box.classList.remove('is-open');
-  M.play(ui.panel, [{ opacity: 1, transform: 'none' }, { opacity: 0, transform: 'translateY(10px) scale(.98)' }], { duration: 200, easing: 'ease-in' }).then(() => { ui.panel.hidden = true; });
+  M.play(ui.panel, [{ opacity: 1, transform: 'none' }, { opacity: 0, transform: 'translateY(10px) scale(.98)' }], { duration: 200, easing: 'ease-in' }).then(() => { ui.panel.hidden = true; if (jini) jini.show(); });
 }
 
 // ---------- the conversation ----------
@@ -160,7 +169,9 @@ async function act(a, arg = '', text = '') {
       bs.slice(0, 8).map((b) => [b, 'brand', b]));
   }
   if (a === 'brand') {
-    const list = findCatalogs(arg).slice(0, 4);
+    // that brand's own catalogues (a catalogue that only mentions the brand, like the master guide, is not one of them)
+    const own = catalogs().filter((d) => (d.brand || '').toLowerCase() === arg.toLowerCase());
+    const list = (own.length ? own : findCatalogs(arg)).slice(0, 4);
     return say(list.length ? `Here ${list.length === 1 ? 'is' : 'are'} our <b>${esc(arg)}</b> catalogue${list.length === 1 ? '' : 's'}:${list.map(catCard).join('')}` : `I could not find a ${esc(arg)} catalogue here, but our team can help.`,
       [['Ask for a price', 'price'], ['Something else', 'find']]);
   }
@@ -197,7 +208,7 @@ function pageCard(p) {
 }
 function catCard(d) {
   return `<a class="as-hit" href="${esc(catPath(d.code))}"><span class="as-thumb">${d.thumb || d.cover ? `<img src="${esc(d.thumb || d.cover)}" alt="">` : ''}</span>
-    <span><b>${esc(d.title)}</b><small>${esc([d.brand, d.pages ? d.pages + ' pages' : ''].filter(Boolean).join(' · '))}</small></span></a>`;
+    <span><b>${esc(d.title)}</b><small>${esc([d.brand, d.pages ? `${d.pages} page${d.pages == 1 ? '' : 's'}` : ''].filter(Boolean).join(' · '))}</small></span></a>`;
 }
 function contactHtml() {
   const c = SITE.contact || {}, ph = (c.phones || [])[0];

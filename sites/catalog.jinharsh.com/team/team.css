@@ -377,3 +377,58 @@
   .kpi .k-go { display: none; }
 }
 @media (hover: none) { .kpi .k-go { opacity: 1; transform: none; } }
+
+/* ---------- queries: cards by day, with their status and quick ways to reply ---------- */
+.q-newcount { display: inline-block; vertical-align: middle; margin-left: 8px; padding: 3px 10px; border-radius: 999px; background: var(--accent); color: #fff; font-size: 12px; font-weight: 700; letter-spacing: 0; }
+.q-filters { margin-bottom: 6px; }
+.q-filters .ju-chip b { margin-left: 6px; font-weight: 700; opacity: .65; }
+.q-filters .ju-chip.on b { opacity: 1; }
+.q-list { display: grid; gap: 8px; }
+.q-day { margin: 10px 2px 0; font-size: 12px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); }
+.qcard { display: grid; grid-template-columns: 40px minmax(0, 1fr) auto; gap: 12px; align-items: start; padding: 14px; border-radius: 18px; background: var(--card);
+  box-shadow: 0 0 0 1px var(--line); transition: transform .2s var(--ease), box-shadow .2s var(--ease); position: relative; }
+.qcard:hover { transform: translateY(-1px); box-shadow: 0 0 0 1px var(--line), 0 14px 30px -20px rgba(20,22,28,.4); }
+.qcard:focus-visible { outline: 2px solid var(--blue); outline-offset: 2px; }
+.qcard.unseen::before { content: ''; position: absolute; left: -1px; top: 14px; bottom: 14px; width: 3px; border-radius: 3px; background: var(--accent); }
+.qcard.st-done { opacity: .72; }
+.qcard.st-done:hover { opacity: 1; }
+.qcard.is-new { animation: tp-new 4.5s ease-out both; }
+.q-av { width: 40px; height: 40px; border-radius: 50%; display: grid; place-items: center; font-weight: 750; font-size: 15px;
+  background: hsl(var(--h) 70% 92%); color: hsl(var(--h) 55% 32%); }
+.ju.dark .q-av { background: hsl(var(--h) 35% 22%); color: hsl(var(--h) 70% 82%); }
+.q-main { min-width: 0; }
+.q-top { display: flex; align-items: center; flex-wrap: wrap; gap: 4px 8px; }
+.q-top b { font-size: 15px; }
+.q-co { font-size: 13px; color: var(--muted); }
+.q-newdot { padding: 1px 8px; border-radius: 999px; background: var(--accent-soft); color: var(--accent); font-size: 11px; font-weight: 750; }
+.q-text { margin: 4px 0 6px; font-size: 14px; line-height: 1.45; white-space: pre-line; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+.q-meta { display: flex; flex-wrap: wrap; gap: 4px 14px; font-size: 12.5px; color: var(--muted); }
+.q-meta span { display: inline-flex; align-items: center; gap: 5px; min-width: 0; max-width: 100%; }
+.q-meta .i { width: 13px; height: 13px; flex: none; }
+.q-side { display: grid; justify-items: end; gap: 8px; }
+.q-st { border: 0; padding: 5px 12px; border-radius: 999px; font: inherit; font-size: 12px; font-weight: 700; cursor: pointer; white-space: nowrap;
+  background: var(--accent-soft); color: var(--accent); transition: transform .15s, filter .15s; }
+.q-st:hover { filter: brightness(.95); }
+.q-st:active { transform: scale(.94); }
+.qcard.st-contacted .q-st { background: var(--blue-soft); color: var(--blue); }
+.qcard.st-done .q-st { background: var(--ok-soft); color: var(--ok); }
+.q-acts { display: flex; gap: 4px; }
+.q-acts .ju-icon { width: 34px; height: 34px; background: var(--hover); }
+.q-acts .ju-icon .i { width: 16px; height: 16px; }
+.q-acts .ju-icon:hover { background: var(--ink); color: var(--ink-text); }
+/* the status inside a query's details */
+.q-status-row { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; margin: -4px 0 14px; }
+.q-status-row .q-label { margin-right: 4px; }
+.q-status-row .ju-chip { min-height: 32px; }
+.q-status-row .ju-chip.on.st-new { background: var(--accent); color: #fff; }
+.q-status-row .ju-chip.on.st-contacted { background: var(--blue); color: #fff; }
+.q-status-row .ju-chip.on.st-done { background: var(--ok); color: #fff; }
+.q-label { font-size: 12px; font-weight: 650; color: var(--muted); }
+@media (max-width: 760px) {
+  .qcard { grid-template-columns: 36px minmax(0, 1fr); padding: 12px; }
+  .q-av { width: 36px; height: 36px; font-size: 14px; }
+  .q-side { grid-column: 2; display: flex; justify-content: space-between; align-items: center; }
+  .q-filters .chips { flex-wrap: nowrap; overflow-x: auto; margin: 0 -14px; padding: 0 14px 2px; scrollbar-width: none; }
+  .q-filters .chips::-webkit-scrollbar { display: none; }
+}
+@media (max-width: 760px) { .q-newcount .long { display: none; } }
