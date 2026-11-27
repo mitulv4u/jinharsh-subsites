@@ -181,9 +181,29 @@ function closeAcct() {
 
 // ---------- sign in ----------
 let tries = 0;
+// Google's sign-in script is fetched only when someone starts to sign in (a touch, the mouse, a key, or a tap on
+// the button): it sets Google's cookies, so a page that is only looked at stays free of them (and opens faster).
+// Until then a look-alike button stands in; one tap on it loads the real one in its place.
+let gsi = null, wantSignIn = false;
+const GOOGLE_G = '<svg viewBox="0 0 48 48" width="18" height="18" aria-hidden="true"><path fill="#EA4335" d="M24 9.5c3.5 0 6.6 1.2 9.1 3.6l6.8-6.8C35.8 2.4 30.3 0 24 0 14.6 0 6.6 5.4 2.7 13.3l7.9 6.2C12.5 13.6 17.8 9.5 24 9.5z"/><path fill="#4285F4" d="M46.5 24.5c0-1.6-.1-3.1-.4-4.5H24v9h12.7c-.6 3-2.3 5.5-4.8 7.2l7.7 6c4.5-4.2 6.9-10.3 6.9-17.7z"/><path fill="#FBBC05" d="M10.5 28.6c-.5-1.4-.8-3-.8-4.6s.3-3.2.8-4.6l-7.9-6.2C1 16.6 0 20.2 0 24s1 7.4 2.7 10.8l7.8-6.2z"/><path fill="#34A853" d="M24 48c6.5 0 11.9-2.1 15.9-5.8l-7.7-6c-2.1 1.4-4.9 2.3-8.2 2.3-6.2 0-11.5-4.1-13.4-9.9l-7.8 6.2C6.6 42.6 14.6 48 24 48z"/></svg>';
+const loadGsi = () => gsi || (gsi = new Promise((ok, no) => {
+  const s = document.createElement('script');
+  s.src = 'https://accounts.google.com/gsi/client'; s.async = true; s.onload = ok; s.onerror = no;
+  document.head.appendChild(s);
+}));
+function standIn() {   // the look-alike button, until Google's own is there
+  const box = $('#g_id_signin');
+  if (box.querySelector('iframe, .g-real')) return;
+  box.innerHTML = `<button type="button" class="g-stand" id="gStand">${GOOGLE_G}<span>Sign in with Google</span></button>`;
+  $('#gStand').addEventListener('click', () => { $('#gStand').classList.add('busy'); wantSignIn = true; startGsi(); });
+  const early = () => { ['pointermove', 'pointerdown', 'keydown', 'touchstart', 'focusin'].forEach((t) => removeEventListener(t, early, true)); startGsi(); };
+  ['pointermove', 'pointerdown', 'keydown', 'touchstart', 'focusin'].forEach((t) => addEventListener(t, early, { capture: true, passive: true }));
+}
+function startGsi() { loadGsi().then(googleButton, () => gateMsg('Google sign-in did not load. Please check the internet connection and reload the page.', true)); }
 function googleButton() {
   const g = window.google && window.google.accounts && window.google.accounts.id;
   if (!g) {
+    if (!gsi) { standIn(); return; }   // (not asked for yet: the look-alike stays)
     if (++tries < 120) setTimeout(googleButton, 150);
     else gateMsg('Google sign-in did not load. Please check the internet connection and reload the page.', true);
     return;
@@ -192,6 +212,8 @@ function googleButton() {
   $('#g_id_signin').innerHTML = '';
   const dark = document.documentElement.classList.contains('dark');
   g.renderButton($('#g_id_signin'), { theme: dark ? 'filled_black' : 'outline', size: 'large', shape: 'pill', text: 'signin_with', width: 280 });
+  // they already tapped the look-alike: offer Google's one-tap sign-in straight away (the real button is there too)
+  if (wantSignIn) { wantSignIn = false; try { g.prompt(); } catch { /* the button works anyway */ } }
 }
 function gateMsg(text, bad = false) {
   const el = $('#gateMsg');
@@ -478,7 +500,7 @@ function paintEvents(animate = false, fresh = new Set()) {
     + list.map((ev, i) => {
       const a = ACTIONS[ev.type] || { ic: 'file-text', word: ev.type || 'Action' };
       const who = ev.email ? `<a class="lk" href="mailto:${esc(ev.email)}">${esc(ev.email)}</a>` : ev.name ? esc(ev.name) : '<span class="ju-muted">Anonymous</span>';
-      return `<div class="row tap${fresh.has(evKey(ev)) ? ' is-new' : ''}${secsAgo(ev.timestamp_ist) < 180 ? ' fresh' : ''}" data-ts="${esc(ev.timestamp_ist)}" data-i="${i}" role="button" tabindex="0" aria-label="Details: ${esc(a.word)} ${esc(ev.catalog_title || 'Front page')}">
+      return `<div class="row tap${fresh.has(evKey(ev)) ? ' is-new' : ''}${secsAgo(ev.timestamp_ist) < 180 ? ' fresh' : ''}" data-ts="${esc(ev.timestamp_ist)}" data-i="${i}" role="button" tabindex="0" title="Open the details">
         <span class="a-ic ${esc(ev.type)}" title="${esc(a.word)}">${icon(a.ic)}</span>
         <span><span class="main">${esc(ev.catalog_title || 'Front page')}</span><span class="sub">${esc(a.word)}${ev.brand ? ' · ' + esc(ev.brand) : ''}</span></span>
         <span><span class="main" style="font-weight:550">${who}</span><span class="sub">${esc(ev.company || '')}</span></span>
@@ -529,7 +551,7 @@ function paintQueries(fresh = new Set()) {
     const d = dayLabel(r.timestamp_ist);
     if (d !== day) { day = d; html += `<div class="q-day">${esc(d)}</div>`; }
     const s = qStatus(r), wa = waLink(r.phone), name = r.name || 'No name';
-    html += `<div class="qcard tap st-${s}${isUnseen(r) ? ' unseen' : ''}${fresh.has(qKey(r)) ? ' is-new' : ''}" data-i="${i}" role="button" tabindex="0" aria-label="Open the query from ${esc(name)}">
+    html += `<div class="qcard tap st-${s}${isUnseen(r) ? ' unseen' : ''}${fresh.has(qKey(r)) ? ' is-new' : ''}" data-i="${i}" role="button" tabindex="0" title="Open the query">
       <span class="q-av" style="--h:${hue(name)}">${esc(name[0].toUpperCase())}</span>
       <div class="q-main">
         <div class="q-top"><b>${esc(name)}</b>${r.company ? `<span class="q-co">${esc(r.company)}</span>` : ''}${isUnseen(r) ? '<span class="q-newdot">New</span>' : ''}</div>
@@ -771,7 +793,8 @@ document.addEventListener('keydown', (e) => {
   const d = e.target.closest && e.target.closest('[data-drill]');
   if (d && (e.key === 'Enter' || e.key === ' ') && d.tagName !== 'BUTTON') { e.preventDefault(); d.click(); }
 });
-const drillAttrs = (kind, arg, label) => `data-drill="${kind}" data-arg="${esc(arg)}" role="button" tabindex="0" aria-label="${esc(label)}"`;
+// (the words you see are the button's name; the hint goes in the tooltip, so screen readers say what is shown)
+const drillAttrs = (kind, arg, label) => `data-drill="${kind}" data-arg="${esc(arg)}" role="button" tabindex="0" title="${esc(label)}"`;
 
 // a query: who, how to reach them (call, WhatsApp, email), what about, the whole message, where and when
 function renderQuery(r) {
