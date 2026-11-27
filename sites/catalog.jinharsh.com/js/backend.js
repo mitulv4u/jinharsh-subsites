@@ -36,5 +36,13 @@ export async function sendInquiry(q) {
   if (!r.ok || j.ok === false) throw new Error(j.error || 'Could not send. Please try again, or call us.');
 }
 
+// "who else is looking right now" (his api.php action=ping): where this visitor is -> { total, cats: { id: n } }
+export async function sendPing({ code = '', id = '', leave = false }) {
+  const body = JSON.stringify({ code, id, leave });
+  if (leave) { try { navigator.sendBeacon('/hub/api.php?action=ping', new Blob([body], { type: 'application/json' })); } catch {} return null; }
+  const r = await fetch('/hub/api.php?action=ping', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body, cache: 'no-store' });
+  return r.ok ? r.json() : null;
+}
+
 // uploading happens on the hub's own Team Portal (Google sign-in there), not from the front page
 export const canUpload = () => Promise.resolve(false);

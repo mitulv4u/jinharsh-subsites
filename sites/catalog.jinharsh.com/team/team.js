@@ -148,6 +148,37 @@ $('#refresh').addEventListener('click', (e) => {
 });
 $('#signOut').addEventListener('click', () => signOut());
 
+// ---------- your account: tap your initial (on a phone it is the only way to Sign out, so the bar stays tidy) ----------
+const who = $('#who');
+who.setAttribute('role', 'button'); who.tabIndex = 0; who.setAttribute('aria-haspopup', 'menu'); who.setAttribute('aria-label', 'Your account');
+who.addEventListener('click', (e) => { e.stopPropagation(); if ($('.acct')) closeAcct(); else openAcct(); });
+who.addEventListener('keydown', (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); who.click(); } });
+const outside = (e) => { if (!e.target.closest('.acct') && !e.target.closest('#who')) closeAcct(); };
+const acctKey = (e) => { if (e.key === 'Escape') { closeAcct(); who.focus(); } };
+function openAcct() {
+  const r = who.getBoundingClientRect(), email = (USER && USER.email) || '';
+  const el = document.createElement('div');
+  el.className = 'acct'; el.setAttribute('role', 'menu');
+  el.style.top = `${Math.round(r.bottom + 10)}px`;
+  el.style.right = `${Math.max(12, Math.round(innerWidth - r.right))}px`;
+  el.innerHTML = `<div class="acct-who"><span class="av">${esc((email[0] || '?').toUpperCase())}</span>
+      <span style="min-width:0"><b>${esc(email)}</b><span class="ju-pill ${isAdmin() ? 'ok' : 'blue'}">${isAdmin() ? 'Admin' : 'Upload only'}</span></span></div>
+    <a href="/" role="menuitem">${icon('globe')}Catalogue site</a>
+    <button type="button" class="out" role="menuitem" data-out>${icon('arrow-left')}Sign out</button>`;
+  document.body.appendChild(el);
+  M.play(el, [{ opacity: 0, transform: 'scale(.92) translateY(-6px)' }, { opacity: 1, transform: 'none' }], { duration: 240, easing: 'cubic-bezier(.2,.9,.3,1.2)' });
+  el.querySelector('[data-out]').addEventListener('click', () => { closeAcct(); signOut(); });
+  setTimeout(() => document.addEventListener('pointerdown', outside), 0);
+  document.addEventListener('keydown', acctKey);
+}
+function closeAcct() {
+  const el = $('.acct');
+  document.removeEventListener('pointerdown', outside);
+  document.removeEventListener('keydown', acctKey);
+  if (!el) return;
+  M.play(el, [{ opacity: 1, transform: 'none' }, { opacity: 0, transform: 'scale(.95) translateY(-4px)' }], { duration: 160, easing: 'ease-in' }).then(() => el.remove());
+}
+
 // ---------- sign in ----------
 let tries = 0;
 function googleButton() {

@@ -537,6 +537,37 @@ switch ($action) {
         exit;
     }
 
+    case 'ping': {
+        // public: "who else is looking right now". Each open catalogue page says where it is about every 30 s
+        // (a catalogue id, or '' for the front page); the answer is only counts. Kept for 75 s, nothing personal.
+        $body = read_json_body();
+        $id   = substr(preg_replace('/[^a-z0-9]/i', '', (string)($body['id'] ?? '')), 0, 24);
+        if ($id === '') $id = substr(hash('sha256', get_client_ip() . ($_SERVER['HTTP_USER_AGENT'] ?? '')), 0, 16);
+        $key  = 'v' . $id;
+        $cat  = substr(preg_replace('/[^a-z0-9-]/i', '', (string)($body['code'] ?? '')), 0, 120);
+        $now  = time();
+        $seen = [];
+        $fh   = @fopen($DATA_DIR . '/presence.json', 'c+');
+        if ($fh) {
+            flock($fh, LOCK_EX);
+            $seen = json_decode((string)stream_get_contents($fh), true) ?: [];
+            foreach ($seen as $k => $v) if (!is_array($v) || $now - (int)($v['t'] ?? 0) > 75) unset($seen[$k]);
+            if (!empty($body['leave'])) unset($seen[$key]);
+            elseif (isset($seen[$key]) || count($seen) < 5000) $seen[$key] = ['c' => $cat, 't' => $now];
+            ftruncate($fh, 0);
+            rewind($fh);
+            fwrite($fh, json_encode((object)$seen));
+            fflush($fh);
+            flock($fh, LOCK_UN);
+            fclose($fh);
+        }
+        $cats = [];
+        foreach ($seen as $v) { $c = (string)($v['c'] ?? ''); if ($c !== '') $cats[$c] = ($cats[$c] ?? 0) + 1; }
+        header('Cache-Control: no-store');
+        echo json_encode(['ok' => true, 'total' => count($seen), 'cats' => (object)$cats]);
+        break;
+    }
+
     case 'health': {
         // can the hub save its records (sign-in, visits, queries, uploads)? Only yes/no and which place, nothing else.
         echo json_encode([

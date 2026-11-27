@@ -49,5 +49,6 @@ export function cardHtml(d, i = 99) {
       </div>
     </a>
     <button class="ju-icon cc-qr" type="button" data-qr="${esc(d.code)}" aria-label="QR code for ${esc(d.title)}" title="QR code">${icon('qr-code')}</button>
+    ${d.peek && d.peek.length ? `<button class="ju-icon cc-peek" type="button" data-peek="${esc(d.code)}" aria-label="Quick look: ${esc(d.title)}" title="Quick look">${icon('eye')}</button>` : ''}
   </article>`;
 }
