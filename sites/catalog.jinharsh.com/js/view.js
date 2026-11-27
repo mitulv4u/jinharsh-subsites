@@ -13,6 +13,7 @@ import { configure } from './lookup.js';
 import { startHelper } from './assistant.js';
 import { watchGoodbye } from './goodbye.js';
 import { querySheet } from './visitor.js';
+import { depthSwitch } from './depth.js';
 
 const $ = (s, el = document) => el.querySelector(s);
 
@@ -124,7 +125,7 @@ function showDoc() {
   const arrived = app.querySelector('.v-cover img'); // the cover the page came with (already on screen)
   app.innerHTML = `
     <section class="v-hero">
-      <div class="v-cover">${cover}</div>
+      <div class="v-cover"${D.previews && D.pages > 1 ? ` data-previews="${esc(D.previews)}" data-pages="${D.pages}"` : ''}>${cover}</div>
       <div class="v-text">
         <div class="ju-eyebrow">${D.brand ? `<span class="brand-pill">${esc(D.brand)}</span>` : ''}PDF${D.pages ? ' · ' + D.pages + (D.pages === 1 ? ' page' : ' pages') : ''} · ${fmtSize(D.size)}</div>
         <h1>${esc(D.title)}</h1>
@@ -156,6 +157,7 @@ function showDoc() {
   // (when idle it is only downloaded, not run, so it costs the phone nothing until Read now)
   if (!perf.lite && !(navigator.connection && navigator.connection.saveData)) idle(() => warmModule('/hub/vendor/pdfjs/pdf.min.js'), 3500);
   ui(() => $('.v-cover img').addEventListener('click', read));
+  ui(() => depthSwitch({ inside: $('.v-cover') }));   // 3D: the switch under the cover (off until turned on)
   document.querySelectorAll('a[download]').forEach((a) => a.addEventListener('click', () => M.nudgeDown(a.querySelector('.i'))));
   wireDownload($('#dlBtn'));
   // start fetching the reader in the background, so it opens fast

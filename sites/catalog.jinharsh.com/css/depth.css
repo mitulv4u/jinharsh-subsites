@@ -1,0 +1,82 @@
+/* Spatial 3D (js/depth.js). Fetched only once someone turns 3D on.
+   --tx / --ty (-1 to 1): where the viewer is (+x seen from the right, +y seen from below), on springs.
+   --lift (0 to 1): how far the layers have lifted apart; it springs up when 3D is turned on and settles when off.
+   Far layers move with the viewer, near ones against it, each by its own amount. Nothing glows or shines. */
+
+/* far: the sky ("Follow the sun") */
+html.depth[data-sky]::before { translate: calc(var(--tx) * 28px) calc(var(--ty) * 28px); scale: calc(1 + var(--lift) * .04); }
+
+/* ---------- home ---------- */
+html.depth .hub-hero h1 { position: relative; z-index: 3; translate: calc(var(--tx) * -6px) calc(var(--ty) * -4px); }
+html.depth .hub-hero .ju-eyebrow, html.depth .hub-hero .lead { translate: calc(var(--tx) * -2px) calc(var(--ty) * -1.5px); }
+
+/* the lock-screen scene: the newest covers stand behind the big title, one stands in front of it */
+.hero-scene { position: relative; height: calc(var(--lift) * 116px); margin: 4px 0 calc(var(--lift) * -46px); pointer-events: none; }
+.hero-scene img { position: absolute; left: 50%; top: 0; height: auto; aspect-ratio: 210 / 297; object-fit: cover; object-position: top;
+  background: #fff; border-radius: 6px; opacity: var(--lift); }
+/* (the covers behind fade out downwards, so the title in front of them stays easy to read) */
+.hs-back { -webkit-mask-image: linear-gradient(to bottom, #000 36%, transparent 92%); mask-image: linear-gradient(to bottom, #000 36%, transparent 92%);
+  box-shadow: 0 0 0 1px rgba(0,0,0,.05); }
+.hs-back.b0 { width: 92px; margin-left: -46px; z-index: 2;
+  translate: calc(var(--tx) * 9px) calc(var(--ty) * 9px + (1 - var(--lift)) * 26px); }
+.hs-back.b1 { width: 80px; margin-left: -40px; top: 16px; z-index: 1; rotate: calc(var(--lift) * -11deg);
+  translate: calc(var(--tx) * 6px - var(--lift) * 74px) calc(var(--ty) * 6px + (1 - var(--lift)) * 26px); }
+.hs-back.b2 { width: 80px; margin-left: -40px; top: 16px; z-index: 1; rotate: calc(var(--lift) * 11deg);
+  translate: calc(var(--tx) * 6px + var(--lift) * 74px) calc(var(--ty) * 6px + (1 - var(--lift)) * 26px); }
+.hero-scene .hs-front { width: 46px; margin-left: 100px; top: 42px; z-index: 4; rotate: calc(var(--lift) * 9deg);
+  translate: calc(var(--tx) * -13px) calc(var(--ty) * -10px + (1 - var(--lift)) * 34px);
+  box-shadow: 0 0 0 1px rgba(0,0,0,.06), calc(var(--tx) * 8px) calc(12px + var(--ty) * 8px) 22px -8px rgba(20,22,28,.45); }
+@media (min-width: 761px) {
+  .hero-scene { height: calc(var(--lift) * 158px); margin-bottom: calc(var(--lift) * -62px); }
+  .hs-back.b0 { width: 124px; margin-left: -62px; }
+  .hs-back.b1, .hs-back.b2 { width: 108px; margin-left: -54px; top: 20px; }
+  .hs-back.b1 { translate: calc(var(--tx) * 8px - var(--lift) * 104px) calc(var(--ty) * 8px + (1 - var(--lift)) * 30px); }
+  .hs-back.b2 { translate: calc(var(--tx) * 8px + var(--lift) * 104px) calc(var(--ty) * 8px + (1 - var(--lift)) * 30px); }
+  .hero-scene .hs-front { width: 62px; margin-left: 148px; top: 50px; }
+}
+
+/* the cards: lifted a little off the page, their covers higher still, the round buttons nearest */
+html.depth .cat-card:not(.ghost-card) { transition: none;
+  transform: perspective(1100px) rotateX(calc(var(--ty) * -2.2deg)) rotateY(calc(var(--tx) * 2.8deg)) translateY(calc(var(--lift) * -3px));
+  box-shadow: var(--shadow), calc(var(--tx) * 8px) calc(12px + var(--ty) * 8px + var(--lift) * 6px) calc(26px + var(--lift) * 8px) -16px rgba(20,22,28,calc(.06 + var(--lift) * .14)); }
+html.depth .cat-card:not(.ghost-card):active { scale: .985; }
+html.depth .cc-cover > img, html.depth .cc-cover .blank-cover {
+  translate: calc(var(--tx) * -10px) calc(var(--ty) * -8px - var(--lift) * 4px); scale: calc(1 + var(--lift) * .035);
+  box-shadow: 0 0 0 1px rgba(0,0,0,.05), calc(var(--tx) * 10px) calc(12px + var(--ty) * 9px + var(--lift) * 6px) calc(24px + var(--lift) * 10px) -10px rgba(20,22,28,calc(.24 + var(--lift) * .14)); }
+html.depth .cc-qr, html.depth .cc-peek { translate: calc(var(--tx) * -13px) calc(var(--ty) * -10px); }
+
+/* ---------- a catalogue ---------- */
+html.depth .v-cover > img { position: relative; z-index: 2;
+  translate: calc(var(--tx) * -12px) calc(var(--ty) * -9px - var(--lift) * 6px); scale: calc(1 + var(--lift) * .02);
+  box-shadow: 0 0 0 1px rgba(0,0,0,.05), calc(var(--tx) * 14px) calc(22px + var(--ty) * 12px + var(--lift) * 10px) calc(56px + var(--lift) * 18px) -18px rgba(20,22,28,calc(.30 + var(--lift) * .12)); }
+html.depth .v-text > * { translate: calc(var(--tx) * -3px) calc(var(--ty) * -2px); }
+/* the next pages, behind the cover like a real book; tilting fans them out */
+.v-stack { position: absolute; z-index: 1; pointer-events: none; }
+.v-cover .vs-page { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: top; border-radius: 14px; background: #fff;
+  animation: none; transition: none; cursor: default; transform-origin: 30% 100%; opacity: var(--lift);
+  box-shadow: 0 0 0 1px rgba(0,0,0,.06), 0 12px 26px -12px rgba(20,22,28,.32); }
+.vs-page.p0 { z-index: 3; scale: .985; rotate: calc(var(--lift) * 2.5deg + var(--tx) * 1deg);
+  translate: calc(var(--lift) * 12px + var(--tx) * 3px) calc(var(--lift) * -9px + var(--ty) * 3px); }
+.vs-page.p1 { z-index: 2; scale: .97; rotate: calc(var(--lift) * 5deg + var(--tx) * 2deg);
+  translate: calc(var(--lift) * 22px + var(--tx) * 6px) calc(var(--lift) * -16px + var(--ty) * 6px); }
+.vs-page.p2 { z-index: 1; scale: .955; rotate: calc(var(--lift) * 7.5deg + var(--tx) * 3deg);
+  translate: calc(var(--lift) * 31px + var(--tx) * 9px) calc(var(--lift) * -22px + var(--ty) * 9px); }
+.dark .v-cover .vs-page { box-shadow: 0 0 0 1px rgba(255,255,255,.06), 0 12px 26px -12px rgba(0,0,0,.8); }
+
+/* ---------- Team Portal ---------- */
+html.depth .gate-card { translate: calc(var(--tx) * -8px) calc(var(--ty) * -6px - var(--lift) * 4px);
+  box-shadow: var(--shadow), calc(var(--tx) * 10px) calc(18px + var(--ty) * 10px) 44px -18px rgba(20,22,28,calc(.10 + var(--lift) * .14)); }
+html.depth .gate-mark { translate: calc(var(--tx) * -6px) calc(var(--ty) * -5px); }
+html.depth .kpi { translate: calc(var(--tx) * -4px) calc(var(--ty) * -3px); }
+html.depth .kpi .k-ic { translate: calc(var(--tx) * -4px) calc(var(--ty) * -3px); }
+
+/* ---------- Jini sways with the phone and looks where it tips ---------- */
+html.depth .jini-body { transform-origin: 50% 100%; rotate: calc(var(--tx) * 8deg); }
+html.depth .j-eyes { translate: calc(var(--tx) * 1.4px) calc(var(--ty) * 1px); }
+
+/* phones: the cover is centred with little room beside it, so the pages fan out less */
+@media (max-width: 760px) {
+  .vs-page.p0 { translate: calc(var(--lift) * 8px + var(--tx) * 2px) calc(var(--lift) * -7px + var(--ty) * 2px); }
+  .vs-page.p1 { translate: calc(var(--lift) * 14px + var(--tx) * 4px) calc(var(--lift) * -12px + var(--ty) * 4px); rotate: calc(var(--lift) * 4deg + var(--tx) * 1.5deg); }
+  .vs-page.p2 { translate: calc(var(--lift) * 19px + var(--tx) * 5px) calc(var(--lift) * -16px + var(--ty) * 5px); rotate: calc(var(--lift) * 5.5deg + var(--tx) * 2deg); }
+}

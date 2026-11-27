@@ -140,22 +140,8 @@
 }
 @media (prefers-reduced-motion: reduce) { .cat-card.tilt { transform: none; } }
 
-/* ---------- 3D tilt (depth.js): off until the person turns it on ----------
-   --tx / --ty (-1 to 1) say where the viewer is. Far layers (the sky) move with the viewer, near ones (the covers,
-   the round buttons, the big title) against, by different amounts; the cards turn a little to face the viewer.
-   Only the layers move: no glow, no shine. */
 /* the cards' entrance (the kit's ju-rise) lets go of them when it ends, so the mouse lean and the 3D tilt can turn them */
 .cards.ju-enter > .cat-card { animation-fill-mode: backwards; }
-.tilt-row { display: flex; justify-content: center; margin-top: 14px; animation: ju-rise var(--sp-gentle-ms, .6s) var(--sp-gentle, var(--ease)) .15s both; }
-.tilt-sw .i { width: 16px; height: 16px; transition: transform .6s var(--sp-gentle, var(--ease)); }
-.tilt-sw.on .i { transform: rotate(-180deg); }
-html.depth .hub-hero h1 { translate: calc(var(--tx, 0) * -7px) calc(var(--ty, 0) * -5px); }
-html.depth .hub-hero .ju-eyebrow, html.depth .hub-hero .lead { translate: calc(var(--tx, 0) * -3px) calc(var(--ty, 0) * -2px); }
-html.depth .cat-card:not(.ghost-card) { transform: perspective(900px) rotateX(calc(var(--ty, 0) * -6deg)) rotateY(calc(var(--tx, 0) * 8deg));
-  transition: box-shadow .35s var(--ease); }
-html.depth .cat-card:not(.ghost-card):active { scale: .985; }
-html.depth .cc-cover > img, html.depth .cc-cover .blank-cover { translate: calc(var(--tx, 0) * -9px) calc(var(--ty, 0) * -7px);
-  box-shadow: 0 0 0 1px rgba(0,0,0,.05), calc(var(--tx, 0) * 12px) calc(14px + var(--ty, 0) * 9px) 30px -10px rgba(20,22,28,.34); }
-html.depth .cc-qr, html.depth .cc-peek { translate: calc(var(--tx, 0) * -12px) calc(var(--ty, 0) * -9px); }
-html.depth[data-sky]::before { translate: calc(var(--tx, 0) * 34px) calc(var(--ty, 0) * 34px); }
-@media (prefers-reduced-motion: reduce) { .tilt-row { display: none; } }
+/* 3D (depth.js, depth.css): when it was left on, the home page keeps room for its scene from the first paint */
+html.depth-pre .hub-hero h1 { margin-top: 86px; }
+@media (min-width: 761px) { html.depth-pre .hub-hero h1 { margin-top: 110px; } }

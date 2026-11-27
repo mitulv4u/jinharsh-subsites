@@ -734,3 +734,17 @@ body:has(.ju-overlay) .jini, body:has(.reader-ov) .jini, body:has(.bye-ov) .jini
 .as-list { margin: 6px 0 8px; padding-left: 18px; }
 .as-list li { margin: 2px 0; }
 .as-soft { font-size: 12px; color: var(--muted); }
+
+/* ---------- the 3D switch (depth.js; the layers themselves are in depth.css, fetched when it is turned on) ---------- */
+.tilt-row { display: flex; justify-content: center; margin-top: 16px; }
+.v-cover .tilt-row { margin-top: 20px; }
+.tilt-sw { gap: 9px; padding: 6px 7px 6px 13px; }
+.tilt-sw .i, .tilt-ic .i { width: 16px; height: 16px; transition: transform .7s var(--sp-gentle, var(--ease)); }
+.tilt-sw[aria-checked="true"] .i, .tilt-ic[aria-checked="true"] .i { transform: rotate(-180deg); }
+.tilt-sw .tg { position: relative; flex: none; width: 30px; height: 18px; border-radius: 999px; background: var(--line); transition: background-color .25s var(--ease); }
+.tilt-sw .tg::after { content: ''; position: absolute; top: 2px; left: 2px; width: 14px; height: 14px; border-radius: 50%; background: #fff;
+  box-shadow: 0 1px 2px rgba(0,0,0,.25); transition: transform .42s cubic-bezier(.3,1.35,.5,1); }
+.tilt-sw[aria-checked="true"] .tg { background: var(--accent); }
+.tilt-sw[aria-checked="true"] .tg::after { transform: translateX(12px); }
+.ju .ju-top .ju-icon.tilt-ic[aria-checked="true"], .ju .ju-icon.tilt-ic[aria-checked="true"] { background: var(--ink); color: var(--ink-text); }
+@media (prefers-reduced-motion: reduce) { .tilt-row, .tilt-ic { display: none; } }
