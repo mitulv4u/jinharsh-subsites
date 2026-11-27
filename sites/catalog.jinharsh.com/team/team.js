@@ -466,6 +466,7 @@ function paintEvents(animate = false, fresh = new Set()) {
   const all = newest(DATA.events).filter((ev) => (F.type === 'ALL' || ev.type === F.type) && (F.phase === 'ALL' || ev.phase === F.phase)
     && (!F.q || JSON.stringify(ev).toLowerCase().includes(F.q)));
   const list = all.slice(0, 200);
+  ELIST = list;
   const box = $('#events');
   if (!list.length) {
     box.innerHTML = `<div class="empty"><span class="ti">${icon('users')}</span>${(DATA.events || []).length ? 'Nothing matches these filters.' : 'No visitors yet. They appear here as soon as someone opens the catalogue site.'}</div>`;
@@ -473,10 +474,10 @@ function paintEvents(animate = false, fresh = new Set()) {
     return;
   }
   box.innerHTML = `<div class="row hd"><span></span><span>Catalogue</span><span>Visitor</span><span>Where</span><span>When</span><span>From</span></div>`
-    + list.map((ev) => {
+    + list.map((ev, i) => {
       const a = ACTIONS[ev.type] || { ic: 'file-text', word: ev.type || 'Action' };
       const who = ev.email ? `<a class="lk" href="mailto:${esc(ev.email)}">${esc(ev.email)}</a>` : ev.name ? esc(ev.name) : '<span class="ju-muted">Anonymous</span>';
-      return `<div class="row${fresh.has(evKey(ev)) ? ' is-new' : ''}${secsAgo(ev.timestamp_ist) < 180 ? ' fresh' : ''}" data-ts="${esc(ev.timestamp_ist)}">
+      return `<div class="row tap${fresh.has(evKey(ev)) ? ' is-new' : ''}${secsAgo(ev.timestamp_ist) < 180 ? ' fresh' : ''}" data-ts="${esc(ev.timestamp_ist)}" data-i="${i}" role="button" tabindex="0" aria-label="Details: ${esc(a.word)} ${esc(ev.catalog_title || 'Front page')}">
         <span class="a-ic ${esc(ev.type)}" title="${esc(a.word)}">${icon(a.ic)}</span>
         <span><span class="main">${esc(ev.catalog_title || 'Front page')}</span><span class="sub">${esc(a.word)}${ev.brand ? ' · ' + esc(ev.brand) : ''}</span></span>
         <span><span class="main" style="font-weight:550">${who}</span><span class="sub">${esc(ev.company || '')}</span></span>
@@ -495,22 +496,146 @@ function paintEvents(animate = false, fresh = new Set()) {
 // ---------- queries ----------
 function paintQueries(fresh = new Set()) {
   const list = newest(DATA.inquiries);
+  QLIST = list;
   const box = $('#queries');
   if (!list.length) {
     box.innerHTML = `<div class="empty"><span class="ti">${icon('message-square-text')}</span>No queries yet. They appear here as soon as someone sends one from the catalogue site.</div>`;
     return;
   }
   box.innerHTML = `<div class="row hd"><span>From</span><span>Contact</span><span>About</span><span>Message</span><span>When</span></div>`
-    + list.map((r) => `<div class="row${fresh.has(qKey(r)) ? ' is-new' : ''}">
+    + list.map((r, i) => `<div class="row tap${fresh.has(qKey(r)) ? ' is-new' : ''}" data-i="${i}" role="button" tabindex="0" aria-label="Open the query from ${esc(r.name || 'a visitor')}">
       <span><span class="main">${esc(r.name || 'No name')}</span><span class="sub">${esc(r.company || '')}</span></span>
       <span>${r.email ? `<a class="lk sub" style="font-size:13.5px" href="mailto:${esc(r.email)}">${esc(r.email)}</a>` : ''}${r.phone ? `<a class="lk sub" style="font-size:13.5px" href="tel:${esc(r.phone)}">${esc(r.phone)}</a>` : ''}</span>
       <span><span class="main" style="font-weight:550">${esc(r.catalog_title || 'General')}</span><span class="sub">${esc(r.brand || '')}</span></span>
-      <span class="msg" title="Click to read it all">${esc(r.message || '')}</span>
+      <span class="msg">${esc(r.message || '')}</span>
       <span><span class="main" style="font-weight:500" data-ago="${esc(r.timestamp_ist)}" title="${esc(when(r.timestamp_ist))}">${ago(r.timestamp_ist)}</span><span class="sub">${esc(place(r))}</span></span>
     </div>`).join('');
   M.rise($$('.row.is-new', box), { step: 70, y: -10 });
 }
-$('#queries').addEventListener('click', (e) => { const m = e.target.closest('.msg'); if (m) m.classList.toggle('open'); });
+// ---------- a row opens its details in a window ----------
+let QLIST = [], ELIST = [];
+function wireRows(box, open) {
+  box.addEventListener('click', (e) => {
+    if (e.target.closest('a, button')) return;   // (a phone number or an email link still works by itself)
+    const r = e.target.closest('.row.tap'); if (r) open(+r.dataset.i, r);
+  });
+  box.addEventListener('keydown', (e) => {
+    const r = e.target.closest && e.target.closest('.row.tap');
+    if (r && (e.key === 'Enter' || e.key === ' ')) { e.preventDefault(); open(+r.dataset.i, r); }
+  });
+}
+wireRows($('#queries'), (i, from) => openQuery(i, from));
+wireRows($('#events'), (i, from) => openEvent(i, from));
+
+const digits = (s) => String(s || '').replace(/\D/g, '');
+const waLink = (phone) => { let d = digits(phone); if (d.length === 10) d = '91' + d; return d.length >= 11 ? `https://wa.me/${d}` : ''; };
+const pageOf = (msg) => { const m = /page (\d+)/i.exec(msg || ''); return m ? +m[1] : 0; };
+const catLink = (id, page = 0) => (id ? `/?cat=${encodeURIComponent(id)}${page > 1 ? `&page=${page}` : ''}` : '/');
+const fact = (label, value) => (value ? `<div class="fact"><span>${label}</span><b>${value}</b></div>` : '');
+const recent = (ts) => (secsAgo(ts) < 3600 ? ` <span class="ju-muted">· ${esc(ago(ts))}</span>` : '');   // ("· 5 min ago" within the hour)
+const placeOf = (o) => [o.city, o.region, o.country].filter((x) => x && x !== 'Unknown').join(', ');
+
+// one window for both: a title, the details, buttons; the arrows (or the keyboard's < >) go to the one before / after
+function detailSheet({ list, i, from, render }) {
+  let at = i;
+  const ov = document.createElement('div');
+  ov.className = 'ju-overlay';
+  ov.innerHTML = `<div class="ju-sheet detail" role="dialog" aria-modal="true">
+    <div class="detail-top">
+      <button class="ju-icon prev" type="button" data-step="-1" aria-label="Newer">${icon('chevron-right')}</button>
+      <span class="detail-pos ju-small ju-muted"></span>
+      <button class="ju-icon" type="button" data-step="1" aria-label="Older">${icon('chevron-right')}</button>
+      <span style="flex:1"></span>
+      <button class="ju-icon" type="button" data-x aria-label="Close">${icon('x')}</button>
+    </div>
+    <div class="detail-body"></div></div>`;
+  document.body.appendChild(ov);
+  document.body.style.overflow = 'hidden';
+  const sheet = ov.querySelector('.detail'), body = ov.querySelector('.detail-body');
+  const paint = (dir = 0) => {
+    body.innerHTML = render(list[at]);
+    sheet.setAttribute('aria-label', body.querySelector('h2')?.textContent || 'Details');
+    ov.querySelector('.detail-pos').textContent = `${at + 1} of ${list.length}`;
+    ov.querySelector('[data-step="-1"]').disabled = at === 0;
+    ov.querySelector('[data-step="1"]').disabled = at === list.length - 1;
+    if (dir) M.play(body, [{ opacity: 0, transform: `translateX(${dir * 18}px)` }, { opacity: 1, transform: 'none' }], { duration: 220, easing: 'ease-out' });
+  };
+  paint();
+  // the window grows out of the row that was pressed
+  if (from && from.getBoundingClientRect) {
+    const r = from.getBoundingClientRect(), b = sheet.getBoundingClientRect();
+    M.play(sheet, [{ opacity: 0, transform: `translate(${(r.left + r.width / 2) - (b.left + b.width / 2)}px, ${(r.top + r.height / 2) - (b.top + b.height / 2)}px) scale(.6)` }, { opacity: 1, transform: 'none' }],
+      { duration: 380, easing: 'cubic-bezier(.2,.9,.3,1.1)' });
+  }
+  const step = (d) => { const n = at + d; if (n < 0 || n >= list.length) return; at = n; paint(d); };
+  const close = () => {
+    document.removeEventListener('keydown', key);
+    M.play(sheet, [{ opacity: 1, transform: 'none' }, { opacity: 0, transform: 'translateY(12px) scale(.97)' }], { duration: 200, easing: 'ease-in' })
+      .then(() => { ov.remove(); document.body.style.overflow = ''; });
+  };
+  const key = (e) => { if (e.key === 'Escape') close(); if (e.key === 'ArrowLeft') step(-1); if (e.key === 'ArrowRight') step(1); };
+  document.addEventListener('keydown', key);
+  ov.addEventListener('click', async (e) => {
+    if (e.target === ov || e.target.closest('[data-x]')) return close();
+    const s = e.target.closest('[data-step]'); if (s) { step(+s.dataset.step); return; }
+    const c = e.target.closest('[data-copy]');
+    if (c) { if (await copyText(c.dataset.copy)) { showCopied(c); toast('Copied'); } else window.prompt('Copy this:', c.dataset.copy); }
+  });
+  setTimeout(() => ov.querySelector('[data-x]').focus({ preventScroll: true }), 60);
+}
+
+// a query: who, how to reach them (call, WhatsApp, email), what about, the whole message, where and when
+function openQuery(i, from) {
+  detailSheet({ list: QLIST, i, from, render: (r) => {
+    const page = pageOf(r.message), wa = waLink(r.phone);
+    const subject = `Your query${r.catalog_title ? ' about ' + r.catalog_title : ''} - Jinharsh`;
+    const all = [`Name: ${r.name || ''}`, r.company ? `Company: ${r.company}` : '', r.phone ? `Phone: ${r.phone}` : '', r.email ? `Email: ${r.email}` : '',
+      r.catalog_title ? `About: ${r.catalog_title}${r.brand ? ' (' + r.brand + ')' : ''}` : '', `Message: ${r.message || ''}`, `When: ${when(r.timestamp_ist)}`,
+      placeOf(r) ? `Where: ${placeOf(r)}` : ''].filter(Boolean).join('\n');
+    return `<div class="detail-head">
+        <span class="detail-ic q">${icon('message-square-text')}</span>
+        <div><div class="ju-eyebrow">Query · ${pill(r.phase)}</div><h2>${esc(r.name || 'No name')}</h2>${r.company ? `<p class="ju-muted">${esc(r.company)}</p>` : ''}</div>
+      </div>
+      <div class="reach">
+        ${r.phone ? `<a class="ju-btn accent" href="tel:${esc(r.phone)}">${icon('phone')}Call ${esc(r.phone)}</a>` : ''}
+        ${wa ? `<a class="ju-btn" href="${esc(wa)}" target="_blank" rel="noopener">${icon('message-circle')}WhatsApp</a>` : ''}
+        ${r.email ? `<a class="ju-btn" href="mailto:${esc(r.email)}?subject=${encodeURIComponent(subject)}">${icon('mail')}${esc(r.email)}</a>` : ''}
+      </div>
+      <div class="detail-msg">
+        <div class="detail-label"><span>Message</span><button class="ju-btn sm ghost" type="button" data-copy="${esc(r.message || '')}">${icon('copy')}Copy</button></div>
+        <p>${esc(r.message || '(no message)')}</p>
+      </div>
+      <div class="facts">
+        ${fact('About', r.catalog_title ? `<a class="lk" href="${esc(catLink(r.catalog_id, page))}" target="_blank" rel="noopener">${esc(r.catalog_title)}${page > 1 ? ` · page ${page}` : ''}</a>${r.brand ? ` <span class="ju-muted">· ${esc(r.brand)}</span>` : ''}` : 'General question')}
+        ${fact('Received', `${esc(when(r.timestamp_ist))}${recent(r.timestamp_ist)}`)}
+        ${fact('Where', esc(placeOf(r)))}
+        ${fact('Came from', esc(r.source || ''))}
+      </div>
+      <div class="btns detail-btns"><button class="ju-btn" type="button" data-copy="${esc(all)}">${icon('copy')}Copy all details</button></div>`;
+  } });
+}
+
+// a visit, a read, a download...: what, who (when known), where from, when, how they came
+function openEvent(i, from) {
+  detailSheet({ list: ELIST, i, from, render: (ev) => {
+    const a = ACTIONS[ev.type] || { ic: 'file-text', word: ev.type || 'Action' };
+    let ref = '';
+    try { ref = ev.referrer ? new URL(ev.referrer).hostname.replace(/^www\./, '') : ''; } catch {}
+    return `<div class="detail-head">
+        <span class="detail-ic a-ic ${esc(ev.type)}">${icon(a.ic)}</span>
+        <div><div class="ju-eyebrow">${esc(a.word)} · ${pill(ev.phase)}</div><h2>${esc(ev.catalog_title || 'Front page')}</h2>${ev.brand ? `<p class="ju-muted">${esc(ev.brand)}</p>` : ''}</div>
+      </div>
+      ${ev.email ? `<div class="reach"><a class="ju-btn" href="mailto:${esc(ev.email)}">${icon('mail')}${esc(ev.email)}</a></div>` : ''}
+      <div class="facts">
+        ${fact('Who', `${esc(ev.name || ev.email || 'Anonymous visitor')}${ev.company ? ` <span class="ju-muted">· ${esc(ev.company)}</span>` : ''}`)}
+        ${fact('When', `${esc(when(ev.timestamp_ist))}${recent(ev.timestamp_ist)}`)}
+        ${fact('Where', esc(placeOf(ev) || 'Unknown'))}
+        ${fact('Came from', esc([ev.source || 'direct', ref && ref !== ev.source ? ref : ''].filter(Boolean).join(' · ')))}
+        ${fact('Device', esc(ev.device || ''))}
+        ${fact('Catalogue', ev.catalog_id ? `<a class="lk" href="${esc(catLink(ev.catalog_id))}" target="_blank" rel="noopener">Open its page</a>` : '')}
+      </div>`;
+  } });
+}
 
 $$('[data-export]').forEach((b) => b.addEventListener('click', () => {
   M.nudgeDown(b.querySelector('.i'));
