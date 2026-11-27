@@ -2,9 +2,9 @@
    straight away (no dark flash on phones set to dark).
 
    Three choices, kept on this device:  light (the default) · sun · dark
-   "Follow the sun": light by day, dark at night. About 45 minutes before sunset the background slowly warms, like
-   evening light; at sunset the page fades softly into dark, still warm, cooling to night over the next 45 minutes.
-   Before sunrise the same happens in reverse. Sunrise and sunset are worked out for Mumbai (or, outside India, from
+   "Follow the sun": the page sits on a soft sky that slowly drifts (app.css), and its colours follow the day: rose
+   at dawn, clear in the morning, warming through the afternoon, golden before sunset; at sunset the page fades softly
+   into a warm plum dusk that cools to night. Sunrise and sunset are worked out for Mumbai (or, outside India, from
    the device's time zone): no location permission is asked.
 
    window.JDTheme.mode()        'light' | 'sun' | 'dark'
@@ -44,39 +44,62 @@
     if (/Kolkata|Calcutta/.test(tz)) return [19.076, 72.878]; // Mumbai
     return [20, -new Date().getTimezoneOffset() / 4];          // the time zone gives a rough longitude
   }
-  var W = 45 * 60e3; // the warm, slow part before and after sunrise and sunset
   var ease = function (x) { x = Math.max(0, Math.min(1, x)); return x * x * (3 - 2 * x); };
-  // what the sky is doing now: dark or not, and how warm (0..1)
+
+  // ---- the sky through the day: three colours of a soft gradient, top to bottom ----
+  var C = {
+    night: [[13, 17, 32], [11, 11, 15], [20, 15, 13]],
+    predawn: [[26, 32, 54], [46, 32, 48], [69, 40, 31]],
+    dawn: [[248, 216, 224], [251, 228, 206], [226, 236, 251]],
+    morning: [[222, 235, 252], [242, 243, 248], [251, 236, 218]],
+    noon: [[228, 238, 252], [247, 242, 234], [252, 226, 196]],
+    afternoon: [[251, 232, 210], [251, 221, 190], [249, 202, 162]],
+    golden: [[254, 222, 192], [251, 202, 162], [246, 186, 142]],
+    dusk: [[60, 35, 52], [68, 39, 29], [30, 21, 18]],
+  };
+  var blend = function (a, b, k) { return a.map(function (c, i) { return c.map(function (v, j) { return v + (b[i][j] - v) * k; }); }); };
+  // what the sky is doing now: dark or not, and its three colours
+  // (to see another time of day, add ?sky=17.5 to the address: the sky of 5:30 pm today)
+  var TRY = (function () { try { var m = /[?&]sky=(\d{1,2}(?:\.\d+)?)/.exec(location.search); return m ? +m[1] : null; } catch (e) { return null; } })();
   function sky(now) {
+    if (!now && TRY !== null) { var d1 = new Date(); d1.setHours(0, 0, 0, 0); now = d1.valueOf() + TRY * 3600e3; }
     now = now || Date.now();
-    var p = place(), s = sunTimes(new Date(now), p[0], p[1]), R = s.rise, S = s.set;
-    if (!isFinite(R) || !isFinite(S)) { var d0 = new Date(now); d0.setHours(0, 0, 0, 0); R = d0.valueOf() + 6.5 * 3600e3; S = d0.valueOf() + 18.5 * 3600e3; }
-    if (now < R - W) return { dark: true, warm: 0 };
-    if (now < R) return { dark: true, warm: ease((now - (R - W)) / W) };
-    if (now < R + W) return { dark: false, warm: ease(1 - (now - R) / W) };
-    if (now < S - W) return { dark: false, warm: 0 };
-    if (now < S) return { dark: false, warm: ease((now - (S - W)) / W) };
-    if (now < S + W) return { dark: true, warm: ease(1 - (now - S) / W) };
-    return { dark: true, warm: 0 };
+    var p = place(), s = sunTimes(new Date(now), p[0], p[1]), R = s.rise, S = s.set, h = 3600e3;
+    if (!isFinite(R) || !isFinite(S) || S - R < 5 * h) { var d0 = new Date(now); d0.setHours(0, 0, 0, 0); R = d0.valueOf() + 6.5 * h; S = d0.valueOf() + 18.5 * h; }
+    var marks = [   // [moment, colours, dark]; it is dark until sunrise and from sunset
+      [R - 1.5 * h, C.night, 1], [R, C.predawn, 1],
+      [R, C.dawn, 0], [R + 1.5 * h, C.morning, 0], [(R + S) / 2, C.noon, 0], [S - 2 * h, C.afternoon, 0], [S, C.golden, 0],
+      [S, C.dusk, 1], [S + 1.5 * h, C.night, 1],
+    ];
+    for (var i = 0; i < marks.length - 1; i++) {
+      var a = marks[i], b = marks[i + 1];
+      if (now >= a[0] && now < b[0]) return { dark: !!a[2], stops: blend(a[1], b[1], ease((now - a[0]) / (b[0] - a[0]))) };
+    }
+    return { dark: true, stops: C.night };
   }
 
-  // ---- the background colours ----
-  var BASE = { light: [244, 244, 246], dark: [10, 10, 10] };
-  var WARM = { light: [251, 222, 196], dark: [58, 34, 22] };   // evening peach · ember
-  var mix = function (a, b, k) { return 'rgb(' + a.map(function (v, i) { return Math.round(v + (b[i] - v) * k); }).join(',') + ')'; };
-  function paint(dark, warm) {
+  // ---- painting it ----
+  var rgb = function (c) { return 'rgb(' + c.map(Math.round).join(',') + ')'; };
+  var VARS = ['--bg', '--sky1', '--sky2', '--sky3', '--muted'];
+  function paint(dark, stops) {
     H.classList.toggle('dark', dark);
     put('jui_dark', dark ? '1' : '0'); // keeps the UI kit in step
-    var k = dark ? 0.62 * warm : 0.58 * warm;
-    var bg = k > 0.004 ? mix(BASE[dark ? 'dark' : 'light'], WARM[dark ? 'dark' : 'light'], k) : '';
-    if (bg) H.style.setProperty('--bg', bg); else H.style.removeProperty('--bg');
+    var bg = stops ? rgb(stops[1]) : '';
+    if (stops) {
+      H.style.setProperty('--bg', bg);
+      H.style.setProperty('--sky1', rgb(stops[0]));
+      H.style.setProperty('--sky2', bg);
+      H.style.setProperty('--sky3', rgb(stops[2]));
+      // on the warm light sky, small grey text gets a touch more ink so it stays easy to read
+      if (dark) H.style.removeProperty('--muted'); else H.style.setProperty('--muted', '#525259');
+    } else VARS.forEach(function (v) { H.style.removeProperty(v); });
     var meta = document.querySelectorAll('meta[name="theme-color"]');
     for (var i = 0; i < meta.length; i++) { meta[i].removeAttribute('media'); meta[i].setAttribute('content', bg || (dark ? '#0a0a0a' : '#f4f4f6')); }
   }
   function apply(m) {
     m = m || mode();
-    if (m === 'sun') { H.dataset.sky = '1'; var s = sky(); paint(s.dark, s.warm); }
-    else { delete H.dataset.sky; paint(m === 'dark', 0); }
+    if (m === 'sun') { H.dataset.sky = '1'; var s = sky(); paint(s.dark, s.stops); }
+    else { delete H.dataset.sky; paint(m === 'dark', null); }
   }
 
   // following the sun: a small step every half minute (the background eases between steps); the switch between
@@ -88,12 +111,12 @@
     timer = setInterval(function () {
       if (mode() !== 'sun') { clearInterval(timer); return; }
       var s = sky(), was = H.classList.contains('dark');
-      if (s.dark === was) { paint(s.dark, s.warm); return; }
+      if (s.dark === was) { paint(s.dark, s.stops); return; }
       if (document.startViewTransition && !document.hidden) {
         H.classList.add('vt-sky');
-        var t = document.startViewTransition(function () { paint(s.dark, s.warm); });
+        var t = document.startViewTransition(function () { paint(s.dark, s.stops); });
         t.finished.then(function () { H.classList.remove('vt-sky'); }, function () { H.classList.remove('vt-sky'); });
-      } else paint(s.dark, s.warm);
+      } else paint(s.dark, s.stops);
     }, 30e3);
   }
 

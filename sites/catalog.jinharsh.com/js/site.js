@@ -38,7 +38,7 @@ export function wireNav(SITE, { code = '', title = '' } = {}) {
   const el = document.createElement('nav');
   el.className = 'top-nav';
   el.setAttribute('aria-label', 'More from the hub');
-  el.innerHTML = (nav.query ? `<button class="ju-btn sm accent nav-q" type="button" aria-label="Send a query">${icon('message-square-text')}<span>Send query</span></button>` : '')
+  el.innerHTML = (nav.query ? `<button class="ju-btn sm accent nav-q" type="button" aria-label="Send query">${icon('message-square-text')}<span>Send query</span></button>` : '')
     + items.map((it) => `<a class="ju-btn sm ghost nav-l" ${attrs(it)}>${esc(it.label)}${it.external ? ' ↗' : ''}</a>`).join('')
     + (items.length ? `<button class="ju-icon nav-more" type="button" aria-label="More" aria-haspopup="menu" aria-expanded="false">${icon('layout-grid')}</button>` : '');
   bar.insertBefore(el, bar.querySelector('#hubUpload, #hubQr, #themeTop') || null);

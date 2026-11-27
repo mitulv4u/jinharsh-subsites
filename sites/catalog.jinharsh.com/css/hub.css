@@ -30,7 +30,7 @@
 .cc-body { padding: 16px 18px 16px; display: flex; flex-direction: column; gap: 6px; flex: 1; }
 .cc-top { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; min-height: 22px; }
 .cc-cat { font-size: 12px; color: var(--muted); }
-.cc-body h3 { margin: 2px 0 0; font-size: 16.5px; line-height: 1.3; letter-spacing: -.015em; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+.cc-body h2 { margin: 2px 0 0; font-size: 16.5px; font-weight: 700; line-height: 1.3; letter-spacing: -.015em; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
 .cc-body p { margin: 0; font-size: 13.5px; color: var(--muted); line-height: 1.45; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
 .cc-foot { margin-top: auto; padding-top: 8px; display: flex; align-items: center; justify-content: space-between; gap: 8px; }
 .cc-meta { font-size: 12.5px; color: var(--muted); font-variant-numeric: tabular-nums; }
@@ -44,7 +44,7 @@
 .ghost-card .cc-body i + i { width: 60%; }
 .ghost-card { pointer-events: none; }
 .empty-hub { grid-column: 1 / -1; text-align: center; padding: 40px 24px; }
-.empty-hub h3 { margin: 0 0 6px; font-size: 19px; }
+.empty-hub h2 { margin: 0 0 6px; font-size: 19px; font-weight: 700; }
 .empty-hub p { margin: 0 0 16px; }
 #contact { margin-top: 34px; }
 
@@ -59,7 +59,7 @@
   .cat-card { border-radius: 20px; contain-intrinsic-size: auto 250px; }
   .cc-cover { padding: 12px 12px 0; }
   .cc-body { padding: 12px 12px 12px; }
-  .cc-body h3 { font-size: 14.5px; }
+  .cc-body h2 { font-size: 14.5px; }
   .cc-body p { display: none; }
   .cc-qr { top: 8px; right: 8px; width: 34px; height: 34px; }
 }
@@ -68,6 +68,7 @@
 /* the team's Upload button in the top bar */
 .ju .ju-top .hub-upload { margin-right: 4px; }
 @media (max-width: 420px) {
-  .hub .brand span { display: none; }
+  /* logo only on small phones; the name stays for screen readers (a link needs a name) */
+  .hub .brand > span { position: absolute !important; width: 1px !important; height: 1px !important; padding: 0 !important; margin: -1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
   .ju .ju-top .hub-upload { padding: 0 14px; }
 }
