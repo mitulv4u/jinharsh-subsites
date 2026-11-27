@@ -41,6 +41,8 @@ function toDoc(c, covers) {
     pages: m.pages || null, size: m.size || bytesOf(c.pages),
     // pictures of pages 2-5 (tools/php-hub/make-extras.mjs), for Quick look and the cards' turning pages
     peek: pdf && m.peek ? Array.from({ length: m.peek }, (_, i) => `/hub/covers/${c.id}-p${i + 2}.webp`) : [],
+    // a small picture of every page, for the reader to show at once (make-extras.mjs)
+    previews: pdf && m.prev ? `/hub/previews/${c.id}/` : '',
     file: pdf ? here || url : '', download: pdf ? here || url : '', name: `${c.id}.pdf`,
     // a PDF on another website with no copy here cannot be read from here: Google's viewer shows it (as the hub did)
     frame: pdf && !here ? `https://docs.google.com/gview?embedded=true&url=${encodeURIComponent(abs)}` : '', frameLabel: 'Google viewer',
