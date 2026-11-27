@@ -9,6 +9,7 @@ import { swallow, pourInto, sparkle } from './particles.js';
 import { sendTrack, sendInquiry } from './backend.js';
 import { loadPages, findPages, findCatalogs, findBrands, catalogOf } from './lookup.js';
 import { byeHtml } from './goodbye.js';
+import { jiniSvg } from './jini.js';
 
 const KEY = 'jd_visitor', ASKED = 'jd_dl_asked', SRC = 'jd_src';
 const esc = (s) => String(s ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
@@ -148,14 +149,22 @@ export function querySheet({ code = '', title = '', from = null, onTop = false, 
   const s = openSheet(`
     <div class="ju-eyebrow q-eyebrow">${icon('message-square-text')}Send a query</div>
     <h2>What do you need?</h2>
-    <p class="ju-muted form-sub">A part number, a product or a brand: our team replies with price, stock and delivery.</p>
+    <div class="q-host form-sub"><span class="q-jini">${jiniSvg()}</span><p>Tell me what you need: a part number, a product or a brand. I will pass it straight to our team, and they will reply with price, stock and delivery.</p></div>
     <form novalidate class="q-form">
       <div class="q-about" hidden></div>
       <div class="q-box">
         <textarea class="ju-inp area q-msg" name="message" rows="3" maxlength="2000" placeholder="${esc(EXAMPLES[0])}" aria-label="What you need" autofocus>${esc(message)}</textarea>
         <div class="q-sugg" role="listbox" aria-label="From our catalogues" hidden></div>
       </div>
+      <div class="q-label">What would you like to know?</div>
       <div class="q-needs" role="group" aria-label="What would you like to know">${NEEDS.map((n) => `<button type="button" class="ju-chip" aria-pressed="false" data-need="${esc(n)}">${esc(n)}</button>`).join('')}</div>
+      <div class="q-more">
+        <div class="q-qty"><span class="q-label">How many</span>
+          <span class="q-step"><button type="button" data-qty="-1" aria-label="Fewer">−</button><input name="qty" inputmode="numeric" maxlength="7" placeholder="Qty" aria-label="Quantity"><button type="button" data-qty="1" aria-label="More">+</button></span>
+          <select class="ju-inp q-unit" name="unit" aria-label="Unit">${['nos', 'sets', 'metres', 'litres', 'kg', 'boxes'].map((u) => `<option>${u}</option>`).join('')}</select></div>
+        <div class="q-when"><span class="q-label">Needed</span>
+          <select class="ju-inp" name="when" aria-label="When it is needed"><option value="">Any time</option><option>Urgently</option><option>This week</option><option>This month</option><option>Just checking the price</option></select></div>
+      </div>
       ${known ? `<div class="q-me">${icon('user')}<span>We will reply to <b>${esc(v.name)}</b> · ${esc(v.phone || v.email)}</span><button type="button" class="q-change">Change</button></div>` : ''}
       <div class="q-contact"${known ? ' hidden' : ''}>
         <div class="two">
@@ -219,6 +228,18 @@ export function querySheet({ code = '', title = '', from = null, onTop = false, 
     msg.focus();
   });
 
+  // − / + on the quantity (typing works too)
+  form.querySelector('.q-step').addEventListener('click', (e) => {
+    const b = e.target.closest('[data-qty]'); if (!b) return;
+    const q = form.elements.qty, n = Math.max(0, (parseInt(q.value, 10) || 0) + Number(b.dataset.qty));
+    q.value = n ? String(n) : '';
+    M.bump(q, 1.08);
+  });
+  form.elements.qty.addEventListener('input', (e) => { e.target.value = e.target.value.replace(/[^0-9]/g, ''); });
+  // Jini talks for a moment when the window opens
+  const jiniEl = s.sheet.querySelector('.q-jini');
+  if (jiniEl) { jiniEl.classList.add('talk', 'wave'); setTimeout(() => jiniEl.classList.remove('talk'), 2200); setTimeout(() => jiniEl.classList.remove('wave'), 2300); }
+
   // price / stock / delivery... one tap each
   form.querySelector('.q-needs').addEventListener('click', (e) => {
     const b = e.target.closest('[data-need]'); if (!b) return;
@@ -244,7 +265,9 @@ export function querySheet({ code = '', title = '', from = null, onTop = false, 
     if (!name) { form.querySelector('.q-contact').hidden = false; return fail(form.elements.name, 'Please add your name, so we know who to reply to.'); }
     if (!okReach(reach)) { form.querySelector('.q-contact').hidden = false; return fail(form.elements.reach, 'Please add a phone number or an email, so we can reply.'); }
     const r = reachOf(reach), company = form.elements.company.value.trim();
-    const full = [text, needs.length ? `Need: ${needs.join(', ')}` : '', about && about.page > 1 ? `Catalogue: ${about.title}, page ${about.page}` : ''].filter(Boolean).join('\n');
+    const qty = form.elements.qty.value.trim(), when_ = form.elements.when.value;
+    const full = [text, needs.length ? `Need: ${needs.join(', ')}` : '', qty ? `Quantity: ${qty} ${form.elements.unit.value}` : '', when_ ? `Needed: ${when_.toLowerCase()}` : '',
+      about && about.page > 1 ? `Catalogue: ${about.title}, page ${about.page}` : ''].filter(Boolean).join('\n');
     remember({ name, company, email: r.email, phone: r.phone });
     btn.disabled = true;
     btn.innerHTML = `${icon('send')}Sending…`;

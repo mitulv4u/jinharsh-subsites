@@ -180,6 +180,12 @@ function format_bytes(int $bytes): string {
     return $bytes . ' B PDF';
 }
 
+// how far the team has got with each query: { queryId: { s: 'new'|'contacted'|'done', by, at } } (Team Portal)
+function load_query_status(string $dataDir): array {
+    $j = json_decode((string)@file_get_contents($dataDir . '/query-status.json'), true);
+    return is_array($j) ? $j : [];
+}
+
 // who is looking right now (pages say "I am here" with action=ping): { total, cats: { id: n } }, for the Team Portal only
 function presence_counts(string $dataDir): array {
     $seen = json_decode((string)@file_get_contents($dataDir . '/presence.json'), true) ?: [];
@@ -421,6 +427,7 @@ switch ($action) {
             'inquiries'       => $inquiries,
             'custom_catalogs' => array_reverse($custom),
             'live'            => presence_counts($DATA_DIR),
+            'query_status'    => (object)load_query_status($DATA_DIR),
         ], JSON_UNESCAPED_SLASHES);
         break;
     }
@@ -549,6 +556,30 @@ switch ($action) {
         }
         fclose($out);
         exit;
+    }
+
+    case 'query_status': {
+        // the team marks a query as new / contacted / done (anyone signed in to the Team Portal)
+        $user   = require_auth($config, 'uploader');
+        $body   = read_json_body();
+        $id     = substr(preg_replace('/[^a-z0-9]/i', '', (string)($body['id'] ?? '')), 0, 40);
+        $status = (string)($body['status'] ?? '');
+        if ($id === '' || !in_array($status, ['new', 'contacted', 'done'], true)) {
+            http_response_code(400);
+            echo json_encode(['ok' => false, 'error' => 'Unknown query or status']);
+            break;
+        }
+        $fh = @fopen($DATA_DIR . '/query-status.json', 'c+');
+        if (!$fh) { http_response_code(500); echo json_encode(['ok' => false, 'error' => 'Could not save']); break; }
+        flock($fh, LOCK_EX);
+        $all = json_decode((string)stream_get_contents($fh), true) ?: [];
+        if ($status === 'new') unset($all[$id]);
+        else $all[$id] = ['s' => $status, 'by' => (string)($user['email'] ?? ''), 'at' => date('Y-m-d H:i:s')];
+        ftruncate($fh, 0); rewind($fh);
+        fwrite($fh, json_encode((object)$all, JSON_UNESCAPED_SLASHES));
+        fflush($fh); flock($fh, LOCK_UN); fclose($fh);
+        echo json_encode(['ok' => true, 'status' => $all[$id] ?? ['s' => 'new']], JSON_UNESCAPED_SLASHES);
+        break;
     }
 
     case 'ping': {

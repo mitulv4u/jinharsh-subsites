@@ -25,7 +25,7 @@ export function peekSheet(d, from = null) {
     </div>
     <div class="peek-dots" aria-hidden="true">${pages.map((_, i) => `<i${i ? '' : ' class="on"'}></i>`).join('')}</div>
     <div class="btns">
-      <a class="ju-btn primary" href="${esc(catPath(d.code))}">${icon('book-open')}Read all ${d.pages ? d.pages + ' pages' : 'of it'}</a>
+      <a class="ju-btn primary" href="${esc(catPath(d.code))}">${icon('book-open')}${d.pages > 1 ? `Read all ${d.pages} pages` : 'Read it'}</a>
       <button class="ju-btn" type="button" data-ask data-code="${esc(d.code)}" data-title="${esc(d.title)}">${icon('message-square-text')}Ask about it</button>
     </div>
   </div>`;

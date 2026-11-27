@@ -266,7 +266,7 @@ async function load(live = false) {
   paintExhibition();
   paintNumbers(!!prev);
   if (!prev || fresh.length) paintEvents(false, new Set(fresh.map(evKey)));
-  if (!prev || freshQ.length) paintQueries(new Set(freshQ.map(qKey)));
+  if (!prev || freshQ.length || JSON.stringify(prev.query_status || {}) !== JSON.stringify(DATA.query_status || {})) paintQueries(new Set(freshQ.map(qKey)));
   if (!prev || JSON.stringify(prev.custom_catalogs) !== JSON.stringify(DATA.custom_catalogs)) paintUploads();
   paintSettings();
   paintNow();
@@ -494,34 +494,116 @@ function paintEvents(animate = false, fresh = new Set()) {
   else M.rise($$('.row.is-new', box), { step: 70, y: -10 });   // new ones drop in at the top
 }
 
-// ---------- queries ----------
+// ---------- queries: search, filters, "New" since your last look, by day, a status the whole team shares ----------
+const QF = { q: '', f: 'all' };
+const QSEEN = (() => { try { return +(localStorage.getItem('tp_q_seen') || 0); } catch { return 0; } })();   // (when you last looked)
+const STATUS = { new: { word: 'New', next: 'contacted', hint: 'Mark as contacted' }, contacted: { word: 'Contacted', next: 'done', hint: 'Mark as done' }, done: { word: 'Done', next: 'new', hint: 'Mark as new again' } };
+const qStatus = (r) => ((DATA.query_status || {})[r.id] || {}).s || 'new';
+const qStatusInfo = (r) => (DATA.query_status || {})[r.id] || null;
+const isUnseen = (r) => istMs(r.timestamp_ist) > QSEEN;
+const dayLabel = (ts) => {
+  const t = istMs(ts); if (!t) return 'Earlier';
+  const d = new Date(t + 19800000), now = new Date(Date.now() + 19800000);
+  const days = Math.floor(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate()) / 864e5) - Math.floor(Date.UTC(d.getUTCFullYear(), d.getUTCMonth(), d.getUTCDate()) / 864e5);
+  return days === 0 ? 'Today' : days === 1 ? 'Yesterday' : `${d.getUTCDate()} ${MONTHS[d.getUTCMonth()]}${d.getUTCFullYear() !== now.getUTCFullYear() ? ' ' + d.getUTCFullYear() : ''}`;
+};
+const QFILTERS = [['all', 'All', ''], ['new', 'New', 'circle-alert'], ['contacted', 'Contacted', 'phone'], ['done', 'Done', 'circle-check'], ['today', 'Today', 'calendar-days']];
+
 function paintQueries(fresh = new Set()) {
-  const list = newest(DATA.inquiries);
-  QLIST = list;
+  const all = newest(DATA.inquiries);
   const box = $('#queries');
-  if (!list.length) {
-    box.innerHTML = `<div class="empty"><span class="ti">${icon('message-square-text')}</span>No queries yet. They appear here as soon as someone sends one from the catalogue site.</div>`;
-    return;
-  }
-  box.innerHTML = `<div class="row hd"><span>From</span><span>Contact</span><span>About</span><span>Message</span><span>When</span></div>`
-    + list.map((r, i) => `<div class="row tap${fresh.has(qKey(r)) ? ' is-new' : ''}" data-i="${i}" role="button" tabindex="0" aria-label="Open the query from ${esc(r.name || 'a visitor')}">
-      <span><span class="main">${esc(r.name || 'No name')}</span><span class="sub">${esc(r.company || '')}</span></span>
-      <span>${r.email ? `<a class="lk sub" style="font-size:13.5px" href="mailto:${esc(r.email)}">${esc(r.email)}</a>` : ''}${r.phone ? `<a class="lk sub" style="font-size:13.5px" href="tel:${esc(r.phone)}">${esc(r.phone)}</a>` : ''}</span>
-      <span><span class="main" style="font-weight:550">${esc(r.catalog_title || 'General')}</span><span class="sub">${esc(r.brand || '')}</span></span>
-      <span class="msg">${esc(r.message || '')}</span>
-      <span><span class="main" style="font-weight:500" data-ago="${esc(r.timestamp_ist)}" title="${esc(when(r.timestamp_ist))}">${ago(r.timestamp_ist)}</span><span class="sub">${esc(place(r))}</span></span>
-    </div>`).join('');
-  M.rise($$('.row.is-new', box), { step: 70, y: -10 });
+  const counts = { all: all.length, new: 0, contacted: 0, done: 0, today: 0 };
+  for (const r of all) { counts[qStatus(r)]++; if (dayLabel(r.timestamp_ist) === 'Today') counts.today++; }
+  $('#qChips').innerHTML = QFILTERS.map(([k, label, ic]) => `<button type="button" class="ju-chip${QF.f === k ? ' on' : ''}" data-qf="${k}">${ic ? icon(ic) : ''}${label}<b>${counts[k]}</b></button>`).join('');
+  const nNew = all.filter(isUnseen).length;
+  $('#qNew').hidden = !nNew;
+  $('#qNew').innerHTML = `${nNew} new<span class="long"> since you last looked</span>`;
+  const q = QF.q;
+  const list = all.filter((r) => (QF.f === 'all' || (QF.f === 'today' ? dayLabel(r.timestamp_ist) === 'Today' : qStatus(r) === QF.f))
+    && (!q || [r.name, r.company, r.email, r.phone, r.message, r.catalog_title, r.brand, r.city].join(' ').toLowerCase().includes(q)));
+  QLIST = list;
+  if (!all.length) { box.innerHTML = `<div class="empty"><span class="ti">${icon('message-square-text')}</span>No queries yet. They appear here as soon as someone sends one from the catalogue site.</div>`; return; }
+  if (!list.length) { box.innerHTML = `<div class="empty"><span class="ti">${icon('search')}</span>No query matches. <button class="ju-btn sm" type="button" data-qclear>Show all</button></div>`; return; }
+  let day = '', html = '';
+  list.forEach((r, i) => {
+    const d = dayLabel(r.timestamp_ist);
+    if (d !== day) { day = d; html += `<div class="q-day">${esc(d)}</div>`; }
+    const s = qStatus(r), wa = waLink(r.phone), name = r.name || 'No name';
+    html += `<div class="qcard tap st-${s}${isUnseen(r) ? ' unseen' : ''}${fresh.has(qKey(r)) ? ' is-new' : ''}" data-i="${i}" role="button" tabindex="0" aria-label="Open the query from ${esc(name)}">
+      <span class="q-av" style="--h:${hue(name)}">${esc(name[0].toUpperCase())}</span>
+      <div class="q-main">
+        <div class="q-top"><b>${esc(name)}</b>${r.company ? `<span class="q-co">${esc(r.company)}</span>` : ''}${isUnseen(r) ? '<span class="q-newdot">New</span>' : ''}</div>
+        <p class="q-text">${esc(r.message || '(no message)')}</p>
+        <div class="q-meta">${r.catalog_title ? `<span>${icon('book-open')}${esc(r.catalog_title)}</span>` : ''}${place(r) ? `<span>${icon('map-pin')}${esc(place(r))}</span>` : ''}<span title="${esc(when(r.timestamp_ist))}">${esc(ago(r.timestamp_ist))}</span></div>
+      </div>
+      <div class="q-side">
+        ${r.id ? `<button class="q-st" type="button" data-status="${esc(r.id)}" title="${esc(STATUS[s].hint)}">${esc(STATUS[s].word)}</button>` : ''}
+        <span class="q-acts">
+          ${r.phone ? `<a class="ju-icon" href="tel:${esc(r.phone)}" title="Call ${esc(r.phone)}" aria-label="Call">${icon('phone')}</a>` : ''}
+          ${wa ? `<a class="ju-icon" href="${esc(wa)}" target="_blank" rel="noopener" title="WhatsApp" aria-label="WhatsApp">${icon('message-circle')}</a>` : ''}
+          ${r.email ? `<a class="ju-icon" href="mailto:${esc(r.email)}" title="Email ${esc(r.email)}" aria-label="Email">${icon('mail')}</a>` : ''}
+        </span>
+      </div>
+    </div>`;
+  });
+  box.innerHTML = html;
+  M.rise($$('.qcard.is-new', box), { step: 70, y: -10 });
 }
+$('#qChips').addEventListener('click', (e) => {
+  const b = e.target.closest('[data-qf]'); if (!b) return;
+  QF.f = b.dataset.qf; M.bump(b, 1.06); paintQueries();
+  M.rise($$('#queries .qcard').slice(0, 10), { step: 22, y: 6 });
+});
+let qqT = 0;
+$('#qq').addEventListener('input', (e) => { clearTimeout(qqT); qqT = setTimeout(() => { QF.q = e.target.value.trim().toLowerCase(); paintQueries(); }, 150); });
+$('#queries').addEventListener('click', (e) => { if (e.target.closest('[data-qclear]')) { QF.q = ''; QF.f = 'all'; $('#qq').value = ''; paintQueries(); } });
+// once the queries have been on screen for a few seconds, they count as seen (the "New" marks stay until the next visit)
+ui(() => {
+  let t = 0;
+  new IntersectionObserver((en) => {
+    clearTimeout(t);
+    if (en[0].isIntersecting) t = setTimeout(() => { try { localStorage.setItem('tp_q_seen', String(Date.now())); } catch {} }, 4000);
+  }, { threshold: 0.25 }).observe($('#queries'));
+});
+
+// the status: a tap on it moves it on (New -> Contacted -> Done -> New); the whole team sees it
+async function setQueryStatus(id, status, from) {
+  const before = (DATA.query_status || {})[id];
+  DATA.query_status = { ...(DATA.query_status || {}) };
+  if (status === 'new') delete DATA.query_status[id]; else DATA.query_status[id] = { s: status, by: (USER && USER.email) || '', at: '' };
+  paintQueries();
+  dispatchEvent(new Event('tp:status'));
+  if (from) M.bump(from, 1.1);
+  try {
+    const r = await fetch(`${API}?action=query_status`, { method: 'POST', headers: { 'Content-Type': 'application/json', 'X-Team-Token': TOKEN }, body: JSON.stringify({ id, status }) });
+    const j = await r.json().catch(() => ({}));
+    if (r.status === 401) { signOut('Your sign-in has ended. Please sign in again.'); return; }
+    if (!r.ok || !j.ok) throw new Error(j.error || 'Could not save');
+    if (status !== 'new') DATA.query_status[id] = j.status;
+    toast(status === 'done' ? 'Marked as done' : status === 'contacted' ? 'Marked as contacted' : 'Marked as new');
+    dispatchEvent(new Event('tp:status'));
+  } catch {
+    if (before) DATA.query_status[id] = before; else delete DATA.query_status[id];
+    paintQueries(); dispatchEvent(new Event('tp:status'));
+    toast('Could not save the status. Please try again.');
+  }
+}
+document.addEventListener('click', (e) => {
+  const b = e.target.closest('[data-status]');
+  if (b) { e.stopPropagation(); const r = (DATA.inquiries || []).find((x) => x.id === b.dataset.status); if (r) setQueryStatus(r.id, STATUS[qStatus(r)].next, b); return; }
+  const c = e.target.closest('[data-setstatus]');
+  if (c) setQueryStatus(c.dataset.setstatus, c.dataset.s, c);
+}, true);
+
 // ---------- a row opens its details in a window ----------
 let QLIST = [], ELIST = [];
 function wireRows(box, open) {
   box.addEventListener('click', (e) => {
     if (e.target.closest('a, button')) return;   // (a phone number or an email link still works by itself)
-    const r = e.target.closest('.row.tap'); if (r) open(+r.dataset.i, r);
+    const r = e.target.closest('.tap[data-i]'); if (r) open(+r.dataset.i, r);
   });
   box.addEventListener('keydown', (e) => {
-    const r = e.target.closest && e.target.closest('.row.tap');
+    const r = e.target.closest && e.target.closest('.tap[data-i]');
     if (r && (e.key === 'Enter' || e.key === ' ')) { e.preventDefault(); open(+r.dataset.i, r); }
   });
 }
@@ -574,9 +656,12 @@ function detailSheet({ list, i, from, render }) {
   };
   paint();
   growFrom(sheet, from);
+  const onStatus = () => paint();
+  addEventListener('tp:status', onStatus);
   const step = (d) => { const n = at + d; if (n < 0 || n >= list.length) return; at = n; paint(d); };
   const close = () => {
     document.removeEventListener('keydown', key);
+    removeEventListener('tp:status', onStatus);
     M.play(sheet, [{ opacity: 1, transform: 'none' }, { opacity: 0, transform: 'translateY(12px) scale(.97)' }], { duration: 200, easing: 'ease-in' })
       .then(() => { ov.remove(); unlock(); });
   };
@@ -705,6 +790,7 @@ function renderQuery(r) {
       ${wa ? `<a class="ju-btn" href="${esc(wa)}" target="_blank" rel="noopener">${icon('message-circle')}WhatsApp</a>` : ''}
       ${r.email ? `<a class="ju-btn" href="mailto:${esc(r.email)}?subject=${encodeURIComponent(subject)}">${icon('mail')}${esc(r.email)}</a>` : ''}
     </div>
+    ${r.id ? `<div class="q-status-row"><span class="q-label">Status</span>${['new', 'contacted', 'done'].map((k) => `<button type="button" class="ju-chip${qStatus(r) === k ? ' on st-' + k : ''}" data-setstatus="${esc(r.id)}" data-s="${k}">${STATUS[k].word}</button>`).join('')}${qStatusInfo(r) && qStatusInfo(r).by ? `<span class="ju-small ju-muted">by ${esc(qStatusInfo(r).by.split('@')[0])}${qStatusInfo(r).at ? ', ' + esc(when(qStatusInfo(r).at)) : ''}</span>` : ''}</div>` : ''}
     <div class="detail-msg">
       <div class="detail-label"><span>Message</span><button class="ju-btn sm ghost" type="button" data-copy="${esc(r.message || '')}">${icon('copy')}Copy</button></div>
       <p>${esc(r.message || '(no message)')}</p>
