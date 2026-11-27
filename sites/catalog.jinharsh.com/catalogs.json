@@ -98,25 +98,5 @@
     "pdfUrl": "/hub/pdfs/flexco-conveying-catalog.pdf",
     "badge": "Conveying",
     "pages": "2.9 MB PDF"
-  },
-  {
-    "id": "rexnord-colour-coating",
-    "brand": "Regal Rexnord",
-    "category": "Application Hub",
-    "title": "Steel Colour Coating Line Bearings (CB224M60H – FCB224M100H)",
-    "description": "Interactive process-flow bearing guide for continuous steel coil colour coating lines.",
-    "pdfUrl": "https://colourcoating.rexnord.co.in/",
-    "badge": "Interactive Hub",
-    "pages": "Live Portal"
-  },
-  {
-    "id": "timken-borewell-rigs",
-    "brand": "Timken",
-    "category": "Application Hub",
-    "title": "Borewell Drilling Rig Bearings & Drive Components",
-    "description": "Tapered, spherical, and thrust bearings engineered for rotary head & rig gearboxes.",
-    "pdfUrl": "https://borewell.jinharsh.com/",
-    "badge": "Interactive Hub",
-    "pages": "Live Portal"
   }
 ]
