@@ -71,6 +71,22 @@ const dayOf = (iso) => { const m = /^(\d{4})-(\d\d)-(\d\d)/.exec(iso || ''); ret
 const place = (o) => [o.city, o.country].filter((x) => x && x !== 'Unknown').join(', ');
 const hue = (s) => { let h = 0; for (const c of String(s || 'J')) h = (h * 31 + c.charCodeAt(0)) % 360; return h; };
 const pill = (phase) => { const p = PHASES[phase] || PHASES.pre_exhibition; return `<span class="ju-pill ${p.pill}">${p.word}</span>`; };
+// India time "2026-11-27 14:05:33" -> a real moment; the last hour reads "Just now" / "5 min ago"
+const istMs = (ts) => { const m = /^(\d{4})-(\d\d)-(\d\d)[ T](\d\d):(\d\d)(?::(\d\d))?/.exec(String(ts || '')); return m ? Date.UTC(+m[1], +m[2] - 1, +m[3], +m[4], +m[5], +(m[6] || 0)) - 19800000 : 0; };
+const secsAgo = (ts) => { const t = istMs(ts); return t ? (Date.now() - t) / 1000 : Infinity; };
+const ago = (ts) => { const s = secsAgo(ts); return s < 50 ? 'Just now' : s < 3600 ? `${Math.max(1, Math.round(s / 60))} min ago` : when(ts); };
+const evKey = (e) => e.id || [e.timestamp_ist, e.type, e.catalog_id, e.ip, e.city].join('|');
+const qKey = (q) => [q.timestamp_ist, q.name, q.email, q.phone, String(q.message || '').slice(0, 40)].join('|');
+// what someone is doing, in words
+const DOING = {
+  visit: (t) => (t ? `Opened ${t}` : 'On the front page'),
+  view: (t) => `Reading ${t || 'a catalogue'}`,
+  download: (t) => `Downloaded ${t || 'a catalogue'}`,
+  query: () => 'Sent a query',
+  share: (t) => `Shared ${t || 'a catalogue'}`,
+  video: () => 'Watching a video',
+};
+const doing = (e) => (DOING[e.type] || DOING.visit)(e.catalog_title);
 
 function countTo(el, to) {   // the numbers roll up to their value
   const from = Number(el.dataset.n || 0);
@@ -128,7 +144,7 @@ ui(() => {
 $('#refresh').innerHTML = icon('refresh-cw');
 $('#refresh').addEventListener('click', (e) => {
   M.play(e.currentTarget.querySelector('.i'), [{ transform: 'rotate(0)' }, { transform: 'rotate(360deg)' }], { duration: 600, easing: 'cubic-bezier(.4,0,.2,1)' });
-  load().then(() => toast('Up to date'));
+  load().then((n) => { if (n === 0) toast('Up to date'); });
 });
 $('#signOut').addEventListener('click', () => signOut());
 
@@ -178,6 +194,7 @@ function showGate(msg = '') {
 function signOut(msg = '') {
   sessionStorage.removeItem('jh_team_token');
   TOKEN = ''; USER = null; DATA = null; shown = { kpi: {} };
+  clearTimeout(liveTimer);
   ui(() => window.google.accounts.id.disableAutoSelect());
   showGate(msg);
 }
@@ -191,25 +208,125 @@ async function openDash() {
   await load();
   if (tab === 'settings' && !isAdmin()) tab = 'analytics';
   showTab(tab, false);
-  M.rise($$('.dash-head, .kpi, .cities, #tab-analytics .panel'), { step: 40 });
+  M.rise($$('.dash-head, .now, .kpi, .cities, #tab-analytics .panel'), { step: 40 });
+  clearTimeout(liveTimer);
+  liveTimer = setTimeout(tick, LIVE_MS);
 }
 const isAdmin = () => !!(USER && USER.role === 'admin');
 
-async function load() {
+// returns how many new things came in (-1 when it could not look)
+async function load(live = false) {
   let r;
-  try { r = await fetch(`${API}?action=analytics`, { headers: { 'X-Team-Token': TOKEN } }); } catch { toast('No connection. Please try again.'); return; }
-  if (r.status === 401) { signOut('Your sign-in has ended. Please sign in again.'); return; }
-  if (!r.ok) { toast('Could not load the portal. Please try again.'); return; }
-  DATA = await r.json().catch(() => null);
-  if (!DATA) return;
+  const fail = (text) => { if (live) liveState('off'); else toast(text); return -1; };
+  try { r = await fetch(`${API}?action=analytics`, { headers: { 'X-Team-Token': TOKEN }, cache: 'no-store' }); } catch { return fail('No connection. Please try again.'); }
+  if (r.status === 401) { signOut('Your sign-in has ended. Please sign in again.'); return -1; }
+  if (!r.ok) return fail('Could not load the portal. Please try again.');
+  const next = await r.json().catch(() => null);
+  if (!next || !TOKEN) return -1;
+  const prev = DATA;
+  DATA = next;
   USER = DATA.user || USER;
+  // what came in since the last look (nothing is "new" on the very first look)
+  const seen = prev && new Set((prev.events || []).map(evKey));
+  const fresh = seen ? (DATA.events || []).filter((e) => !seen.has(evKey(e))) : [];
+  const seenQ = prev && new Set((prev.inquiries || []).map(qKey));
+  const freshQ = seenQ ? (DATA.inquiries || []).filter((q) => !seenQ.has(qKey(q))) : [];
   paintWho();
   paintExhibition();
-  paintNumbers();
-  paintEvents();
-  paintQueries();
-  paintUploads();
+  paintNumbers(!!prev);
+  if (!prev || fresh.length) paintEvents(false, new Set(fresh.map(evKey)));
+  if (!prev || freshQ.length) paintQueries(new Set(freshQ.map(qKey)));
+  if (!prev || JSON.stringify(prev.custom_catalogs) !== JSON.stringify(DATA.custom_catalogs)) paintUploads();
   paintSettings();
+  paintNow();
+  liveState('on');
+  if (prev) announce(fresh, freshQ);
+  return fresh.length + freshQ.length;
+}
+
+// ---------- live: the portal looks again by itself (every 10 s, every 30 s while the tab is in the background) ----------
+const LIVE_MS = 10000, AWAY_MS = 30000, TITLE = document.title;
+let liveTimer = 0, busy = false, unseen = 0;
+async function tick() {
+  clearTimeout(liveTimer);
+  if (!TOKEN) return;
+  if (!busy) { busy = true; try { await load(true); } catch { /* next time */ } busy = false; }
+  if (TOKEN) liveTimer = setTimeout(tick, document.hidden ? AWAY_MS : LIVE_MS);
+}
+document.addEventListener('visibilitychange', () => {
+  if (document.hidden) return;
+  unseen = 0; document.title = TITLE;
+  if (TOKEN && DATA) tick();   // back on the tab: look straight away
+});
+setInterval(() => {   // "Just now" becomes "1 min ago", and the live dots go out after 3 minutes
+  if (!DATA || document.hidden) return;
+  $$('[data-ago]').forEach((el) => { el.textContent = ago(el.dataset.ago); });
+  $$('#events .row[data-ts]').forEach((row) => row.classList.toggle('fresh', secsAgo(row.dataset.ts) < 180));
+}, 20000);
+
+function liveState(s) {
+  $('#now').classList.toggle('off', s === 'off');
+  $('#nowS').textContent = s === 'off' ? 'Reconnecting…' : 'Live: new visits show up here by themselves';
+}
+
+function announce(fresh, freshQ) {
+  const n = fresh.length + freshQ.length;
+  if (!n) return;
+  if (document.hidden) { unseen += n; document.title = `(${unseen}) ${TITLE}`; return; }   // the tab's title counts them
+  ui(() => M.bump($('#now .pulse'), 1.7));
+  if (freshQ.length) { const q = newest(freshQ)[0]; toast(`New query from ${q.name || q.email || q.phone || 'a visitor'}`); return; }
+  if (n > 1) { toast(`${n} new visitor actions`); return; }
+  const e = fresh[0], d = doing(e);
+  toast(`${e.name || e.email || place(e) || 'Someone'}: ${d[0].toLowerCase()}${d.slice(1)}`);
+}
+
+// who is on the site right now: anyone who did something in the last 5 minutes, with what they did last
+const NOW_SECS = 300;
+function paintNow() {
+  const people = new Map();
+  for (const e of DATA.events || []) {
+    if (secsAgo(e.timestamp_ist) > NOW_SECS) continue;
+    const k = e.ip || [e.city, e.device, e.source].join('|');
+    const had = people.get(k);
+    if (!had || istMs(e.timestamp_ist) >= istMs(had.timestamp_ist)) people.set(k, e);
+  }
+  const list = [...people.entries()].sort((a, b) => istMs(b[1].timestamp_ist) - istMs(a[1].timestamp_ist));
+  const n = list.length, box = $('#nowList');
+  $('#now').classList.toggle('idle', !n);
+  const t = n ? `${n} ${n === 1 ? 'person is' : 'people are'} on the catalogue site right now` : 'Nobody on the catalogue site right now';
+  if ($('#nowT').textContent !== t) $('#nowT').textContent = t;
+  const want = list.slice(0, 6), keep = new Set(want.map(([k]) => k));
+  // the ones who left fade out, new ones pop in, the ones who did something new give a small nod
+  $$('.who-now', box).forEach((el) => {
+    if (keep.has(el.dataset.p)) return;
+    el.dataset.p = '';
+    M.play(el, [{ opacity: 1, transform: 'none' }, { opacity: 0, transform: 'scale(.92)' }], { duration: 260, easing: 'ease-in' }).then(() => el.remove());
+  });
+  [...want].reverse().forEach(([k, e]) => {
+    const label = e.name || e.email || place(e) || 'Someone';
+    const sub = doing(e) + (place(e) && label !== place(e) ? ` · ${place(e)}` : '');
+    const html = `<span class="av" style="--h:${hue(e.city || label)}">${esc(label[0].toUpperCase())}</span>
+      <span><b>${esc(label)}</b><small>${esc(sub)}</small></span><span class="age" data-ago="${esc(e.timestamp_ist)}">${ago(e.timestamp_ist)}</span>`;
+    let el = $$('.who-now', box).find((c) => c.dataset.p === k);
+    if (!el) {
+      el = document.createElement('div');
+      el.className = 'who-now';
+      el.dataset.p = k;
+      el.innerHTML = html;
+      box.prepend(el);
+      M.play(el, [{ opacity: 0, transform: 'scale(.9) translateY(4px)' }, { opacity: 1, transform: 'none' }], { duration: 420, easing: 'cubic-bezier(.2,.9,.3,1.2)' });
+    } else if (el.dataset.e !== evKey(e)) {
+      el.innerHTML = html;
+      M.bump(el.querySelector('.av'), 1.15);
+    }
+    el.dataset.e = evKey(e);
+    el.title = `${label}: ${sub}`;
+  });
+  let more = $('.now-more', box);
+  if (n > want.length) {
+    if (!more) { more = document.createElement('span'); more.className = 'now-more'; box.appendChild(more); }
+    more.textContent = `+${n - want.length} more`;
+  } else if (more) more.remove();
 }
 
 function paintWho() {
@@ -245,15 +362,35 @@ const KPIS = [
   ['total_inquiries', 'Queries', 'message-square-text', 'k-accent'],
   ['known_email_visitors', 'Known emails', 'mail', ''],
 ];
-function paintNumbers() {
+let CITY_N = {};
+function paintNumbers(live = false) {
   const s = DATA.summary || {};
   const box = $('#kpis');
   if (!box.children.length) box.innerHTML = KPIS.map(([k, label, ic, cls]) => `<div class="kpi ${cls}"><span class="k-ic">${icon(ic)}</span><b data-k="${k}">0</b><span>${label}</span></div>`).join('');
-  for (const [k] of KPIS) countTo($(`[data-k="${k}"]`, box), Number(s[k] || 0));
-  const cities = Object.entries(s.top_cities || {});
-  $('#cities').innerHTML = cities.length
-    ? cities.map(([c, n]) => `<span class="ju-pill">${esc(c)}<b>${n}</b></span>`).join('')
+  for (const [k] of KPIS) {
+    const el = $(`[data-k="${k}"]`, box), from = Number(el.dataset.n || 0), to = Number(s[k] || 0);
+    countTo(el, to);
+    if (live && to > from) plus(el.closest('.kpi'), to - from);
+  }
+  const cities = Object.entries(s.top_cities || {}), before = CITY_N;
+  CITY_N = Object.fromEntries(cities);
+  const html = cities.length
+    ? cities.map(([c, n]) => `<span class="ju-pill" data-c="${esc(c)}">${esc(c)}<b>${n}</b></span>`).join('')
     : '<span class="ju-small ju-muted">No locations yet.</span>';
+  if ($('#cities').innerHTML === html) return;
+  $('#cities').innerHTML = html;
+  if (live) $$('#cities [data-c]').forEach((el) => { if ((before[el.dataset.c] || 0) < CITY_N[el.dataset.c]) M.bump(el, 1.12); });
+}
+function plus(tile, n) {   // the tile's icon nods and a small "+1" floats up off it
+  ui(() => {
+    M.bump(tile.querySelector('.k-ic'), 1.2);
+    const p = document.createElement('span');
+    p.className = 'plus';
+    p.textContent = `+${n}`;
+    tile.appendChild(p);
+    M.play(p, [{ opacity: 0, transform: 'translateY(8px) scale(.9)' }, { opacity: 1, transform: 'none', offset: 0.18 }, { opacity: 1, transform: 'translateY(-3px)', offset: 0.75 }, { opacity: 0, transform: 'translateY(-14px)' }],
+      { duration: 2000, easing: 'ease-out' }).then(() => p.remove());
+  });
 }
 
 // ---------- visitor activity ----------
@@ -272,7 +409,7 @@ $('#q').addEventListener('input', (e) => { clearTimeout(qt); qt = setTimeout(() 
 $('#phase').addEventListener('change', (e) => { F.phase = e.target.value; paintEvents(true); });
 
 const newest = (list) => [...(list || [])].sort((a, b) => String(b.timestamp_ist || '').localeCompare(String(a.timestamp_ist || '')));
-function paintEvents(animate = false) {
+function paintEvents(animate = false, fresh = new Set()) {
   if (!DATA) return;
   const all = newest(DATA.events).filter((ev) => (F.type === 'ALL' || ev.type === F.type) && (F.phase === 'ALL' || ev.phase === F.phase)
     && (!F.q || JSON.stringify(ev).toLowerCase().includes(F.q)));
@@ -287,12 +424,12 @@ function paintEvents(animate = false) {
     + list.map((ev) => {
       const a = ACTIONS[ev.type] || { ic: 'file-text', word: ev.type || 'Action' };
       const who = ev.email ? `<a class="lk" href="mailto:${esc(ev.email)}">${esc(ev.email)}</a>` : ev.name ? esc(ev.name) : '<span class="ju-muted">Anonymous</span>';
-      return `<div class="row">
+      return `<div class="row${fresh.has(evKey(ev)) ? ' is-new' : ''}${secsAgo(ev.timestamp_ist) < 180 ? ' fresh' : ''}" data-ts="${esc(ev.timestamp_ist)}">
         <span class="a-ic ${esc(ev.type)}" title="${esc(a.word)}">${icon(a.ic)}</span>
         <span><span class="main">${esc(ev.catalog_title || 'Front page')}</span><span class="sub">${esc(a.word)}${ev.brand ? ' · ' + esc(ev.brand) : ''}</span></span>
         <span><span class="main" style="font-weight:550">${who}</span><span class="sub">${esc(ev.company || '')}</span></span>
         <span><span class="main" style="font-weight:500">${esc(place(ev) || 'Unknown')}</span><span class="sub">${esc(ev.region || '')}</span></span>
-        <span><span class="main" style="font-weight:500">${when(ev.timestamp_ist)}</span><span class="sub">${pill(ev.phase)}</span></span>
+        <span><span class="main" style="font-weight:500" data-ago="${esc(ev.timestamp_ist)}" title="${esc(when(ev.timestamp_ist))}">${ago(ev.timestamp_ist)}</span><span class="sub">${pill(ev.phase)}</span></span>
         <span><span class="main" style="font-weight:500">${esc(ev.source || 'direct')}</span><span class="sub">${esc(ev.device || '')}</span></span>
       </div>`;
     }).join('');
@@ -300,10 +437,11 @@ function paintEvents(animate = false) {
   more.hidden = all.length <= list.length;
   more.textContent = `Showing the newest ${list.length} of ${all.length}. Download the CSV for all of them.`;
   if (animate) M.rise($$('.row:not(.hd)', box).slice(0, 12), { step: 22, y: 6 });
+  else M.rise($$('.row.is-new', box), { step: 70, y: -10 });   // new ones drop in at the top
 }
 
 // ---------- queries ----------
-function paintQueries() {
+function paintQueries(fresh = new Set()) {
   const list = newest(DATA.inquiries);
   const box = $('#queries');
   if (!list.length) {
@@ -311,13 +449,14 @@ function paintQueries() {
     return;
   }
   box.innerHTML = `<div class="row hd"><span>From</span><span>Contact</span><span>About</span><span>Message</span><span>When</span></div>`
-    + list.map((r) => `<div class="row">
+    + list.map((r) => `<div class="row${fresh.has(qKey(r)) ? ' is-new' : ''}">
       <span><span class="main">${esc(r.name || 'No name')}</span><span class="sub">${esc(r.company || '')}</span></span>
       <span>${r.email ? `<a class="lk sub" style="font-size:13.5px" href="mailto:${esc(r.email)}">${esc(r.email)}</a>` : ''}${r.phone ? `<a class="lk sub" style="font-size:13.5px" href="tel:${esc(r.phone)}">${esc(r.phone)}</a>` : ''}</span>
       <span><span class="main" style="font-weight:550">${esc(r.catalog_title || 'General')}</span><span class="sub">${esc(r.brand || '')}</span></span>
       <span class="msg" title="Click to read it all">${esc(r.message || '')}</span>
-      <span><span class="main" style="font-weight:500">${when(r.timestamp_ist)}</span><span class="sub">${esc(place(r))}</span></span>
+      <span><span class="main" style="font-weight:500" data-ago="${esc(r.timestamp_ist)}" title="${esc(when(r.timestamp_ist))}">${ago(r.timestamp_ist)}</span><span class="sub">${esc(place(r))}</span></span>
     </div>`).join('');
+  M.rise($$('.row.is-new', box), { step: 70, y: -10 });
 }
 $('#queries').addEventListener('click', (e) => { const m = e.target.closest('.msg'); if (m) m.classList.toggle('open'); });
 

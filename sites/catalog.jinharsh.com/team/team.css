@@ -138,6 +138,43 @@
 .set-form { max-width: 620px; }
 .set-form .ex-line { margin: 2px 0 16px; }
 
+/* ---------- live: who is on the site right now, and what just happened ---------- */
+.now { padding: 14px 18px; margin-bottom: 12px; display: grid; gap: 12px; }
+.now-h { display: flex; align-items: center; flex-wrap: wrap; gap: 4px 10px; }
+.now-h b { font-size: 15px; letter-spacing: -.01em; }
+.pulse { position: relative; width: 10px; height: 10px; border-radius: 50%; background: var(--ok); flex: none; transition: background .4s; }
+.pulse::after { content: ''; position: absolute; inset: 0; border-radius: 50%; border: 2px solid var(--ok); animation: tp-ping 2s cubic-bezier(.2,.6,.3,1) infinite; }
+@keyframes tp-ping { from { transform: scale(1); opacity: .75; } to { transform: scale(2.8); opacity: 0; } }
+.now.idle .pulse { background: color-mix(in srgb, var(--muted) 60%, transparent); }
+.now.idle .pulse::after { animation-duration: 3.2s; border-color: color-mix(in srgb, var(--muted) 60%, transparent); }
+.now.off .pulse { background: var(--warn); }
+.now.off .pulse::after { animation: none; opacity: 0; }
+.now-list { display: flex; flex-wrap: wrap; gap: 8px; }
+.now-list:empty { display: none; }
+.who-now { display: flex; align-items: center; gap: 10px; padding: 7px 12px 7px 7px; border-radius: 16px; background: var(--hover); min-width: 0; max-width: 100%; }
+.who-now .av { width: 32px; height: 32px; border-radius: 50%; display: grid; place-items: center; flex: none; font-weight: 750; font-size: 13.5px;
+  background: hsl(var(--h) 70% 92%); color: hsl(var(--h) 55% 32%); position: relative; }
+.ju.dark .who-now .av { background: hsl(var(--h) 35% 22%); color: hsl(var(--h) 70% 82%); }
+.who-now .av::after { content: ''; position: absolute; right: -1px; bottom: -1px; width: 9px; height: 9px; border-radius: 50%; background: var(--ok); box-shadow: 0 0 0 2px var(--hover); }
+.who-now > span:nth-child(2) { min-width: 0; }
+.who-now b { display: block; font-size: 13.5px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.who-now small { display: block; font-size: 12.5px; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 300px; }
+.who-now .age { font-size: 11.5px; color: var(--muted); font-weight: 600; white-space: nowrap; }
+.now-more { align-self: center; font-size: 13px; color: var(--muted); font-weight: 600; padding: 0 6px; }
+
+/* a number that just went up: a small "+1" floats off it */
+.kpi { position: relative; }
+.kpi .plus { position: absolute; top: 16px; right: 16px; font-size: 13px; font-weight: 750; color: var(--k, var(--ok)); background: var(--k-soft, var(--ok-soft));
+  padding: 2px 8px; border-radius: 999px; pointer-events: none; }
+
+/* new activity slides in on a soft tint that fades away; things from the last 3 minutes keep a small live dot */
+.row.is-new { animation: tp-new 4.5s ease-out both; }
+@keyframes tp-new { 0% { background: var(--blue-soft); } 60% { background: color-mix(in srgb, var(--blue-soft) 60%, transparent); } 100% { background: transparent; } }
+.row .a-ic { position: relative; }
+.row.fresh .a-ic::after { content: ''; position: absolute; right: -2px; top: -2px; width: 9px; height: 9px; border-radius: 50%; background: var(--ok); box-shadow: 0 0 0 2px var(--card); animation: tp-blink 1.6s ease-in-out infinite; }
+@keyframes tp-blink { 50% { opacity: .35; } }
+@media (prefers-reduced-motion: reduce) { .pulse::after, .row.fresh .a-ic::after { animation: none; } .row.is-new { animation-duration: .01s; } }
+
 /* ---------- phones ---------- */
 @media (max-width: 1000px) {
   .kpis { grid-template-columns: repeat(3, minmax(0, 1fr)); }
@@ -151,6 +188,8 @@
   .team .tabs button { flex: 1; justify-content: center; padding: 9px 8px; }
   .kpis { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .kpi b { font-size: 26px; }
+  .who-now { flex: 1 1 100%; }
+  .who-now small { max-width: none; }
   .three { grid-template-columns: 1fr 1fr; }
   .team .ju-top .who .em { display: none; }
   .team .ju-top .brand > span { display: none; }   /* (just the logo: room for your account and Sign out) */

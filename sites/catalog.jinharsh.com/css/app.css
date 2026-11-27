@@ -492,8 +492,20 @@ html.lite.ju.dark .ju-overlay { background: rgba(0, 0, 0, .62); }
 
 /* Follow the sun (theme-boot.js): the background drifts between small steps every half minute; the switch between
    light and dark at sunset and sunrise is a slow cross-fade. A choice made by hand stays instant. */
-html[data-sky] body { transition: background-color 28s linear; }
 html.vt-theme body, html.vt-sky body { transition: none; }
+/* the sky itself: a soft gradient behind the page that drifts slowly back and forth; the panels on it stay flat.
+   Its colours (--sky1..3) come from theme-boot.js and follow the time of day. */
+html[data-sky] { background: var(--bg); }
+html[data-sky] body { background: transparent; }
+html[data-sky]::before { content: ''; position: fixed; inset: -18vmax; z-index: -1; pointer-events: none;
+  background: linear-gradient(160deg, var(--sky1) 22%, var(--sky2) 50%, var(--sky3) 78%);
+  animation: sky-drift 26s ease-in-out infinite alternate; will-change: transform; }
+@keyframes sky-drift {
+  from { transform: translate3d(-7vmax, -9vmax, 0) rotate(-3deg); }
+  to { transform: translate3d(7vmax, 9vmax, 0) rotate(3deg); }
+}
+html.lite[data-sky]::before { animation: none; }
+@media (prefers-reduced-motion: reduce) { html[data-sky]::before { animation: none; } }
 html.vt-sky::view-transition-old(root), html.vt-sky::view-transition-new(root) { animation-duration: 2.8s; animation-timing-function: ease-in-out; }
 
 /* see-through windows sit over a dimmed page: their small grey texts need a touch more ink to stay readable (contrast 4.5:1) */
