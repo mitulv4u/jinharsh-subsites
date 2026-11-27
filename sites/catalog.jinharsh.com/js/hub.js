@@ -8,6 +8,7 @@ import { saveFiles } from './handoff.js';
 import { track } from './visitor.js';
 import { catPath, teamPath, canUpload } from './backend.js';
 import { cardFx } from './cardfx.js';
+import { depthSwitch } from './depth.js';
 import { peekSheet } from './peek.js';
 import { watchLive } from './live.js';
 import { finder } from './finder.js';
@@ -97,6 +98,7 @@ async function load() {
   }
   // cards that react to the mouse, search inside the catalogues, and (for the team) who is looking right now
   ui(() => cardFx($('#cards'), (code) => S.all.find((d) => d.code === code)));
+  ui(() => depthSwitch($('.hub-search')));   // 3D tilt: the switch under the search box (phones and tablets; off until turned on)
   configure({ catalogs: S.all, search: S.searchUrl });
   ui(() => finder({ input: $('#q'), onAsk: (t) => querySheet({ message: t, from: $('#q') }) }));
   // the helper in the corner, and a warm goodbye when someone is leaving
