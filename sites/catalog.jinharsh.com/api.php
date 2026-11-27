@@ -11,11 +11,26 @@ const ALLOWED_DOMAIN   = 'jinharsh.com';
 const ADMIN_EMAILS     = ['mitul.vasa@jinharsh.com', 'content@jinharsh.com', 'content@jinhars.com'];
 
 $BASE_DIR = __DIR__;
-$DATA_DIR = $BASE_DIR . '/data';
 $PDF_DIR  = $BASE_DIR . '/pdfs';
-
-if (!is_dir($DATA_DIR)) @mkdir($DATA_DIR, 0755, true);
 if (!is_dir($PDF_DIR))  @mkdir($PDF_DIR, 0755, true);
+
+// Where the hub keeps its own records (settings and the sign-in key, visits, queries, the uploaded-catalogue list).
+// hub/data is the place, but the website may not be allowed to create a folder inside hub/ (the deploy owns hub/):
+// then nothing was saved, a new sign-in key was made on every request and every sign-in was refused. So: a place that
+// already holds the records is kept (they never move); otherwise the first of these the website can write to is used.
+// Each gets the same "no public access" lock below. Deploys never touch data/ or pdfs/, and hub-data sits outside hub/.
+function hub_data_dir(string $base, string $pdfDir): string {
+    $places = [$base . '/data', dirname($base) . '/hub-data', $pdfDir . '/_data'];
+    foreach ($places as $dir) {
+        if (@is_file($dir . '/config.json') && @is_writable($dir)) return $dir;
+    }
+    foreach ($places as $dir) {
+        if (!@is_dir($dir)) @mkdir($dir, 0755, true);
+        if (@is_dir($dir) && @is_writable($dir)) return $dir;
+    }
+    return $places[0];
+}
+$DATA_DIR = hub_data_dir($BASE_DIR, $PDF_DIR);
 
 $htaccessPath = $DATA_DIR . '/.htaccess';
 if (!file_exists($htaccessPath)) {
@@ -544,6 +559,16 @@ switch ($action) {
         }
         fclose($out);
         exit;
+    }
+
+    case 'health': {
+        // can the hub save its records (sign-in, visits, queries, uploads)? Only yes/no and which place, nothing else.
+        echo json_encode([
+            'ok'     => true,
+            'saving' => @is_writable($DATA_DIR) && @is_file($CONFIG_FILE),
+            'place'  => basename(dirname($DATA_DIR)) . '/' . basename($DATA_DIR),
+        ]);
+        break;
     }
 
     default:
