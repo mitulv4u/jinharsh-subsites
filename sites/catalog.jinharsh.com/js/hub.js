@@ -98,7 +98,7 @@ async function load() {
   }
   // cards that react to the mouse, search inside the catalogues, and (for the team) who is looking right now
   ui(() => cardFx($('#cards'), (code) => S.all.find((d) => d.code === code)));
-  ui(() => depthSwitch($('.hub-search')));   // 3D tilt: the switch under the search box (phones and tablets; off until turned on)
+  ui(() => depthSwitch({ after: $('.hub-search') }));   // 3D tilt: the switch under the search box (phones and tablets; off until turned on)
   configure({ catalogs: S.all, search: S.searchUrl });
   ui(() => finder({ input: $('#q'), onAsk: (t) => querySheet({ message: t, from: $('#q') }) }));
   // the helper in the corner, and a warm goodbye when someone is leaving

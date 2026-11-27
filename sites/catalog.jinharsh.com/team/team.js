@@ -6,6 +6,7 @@ import { icon } from '/hub/vendor/icons.js?v=3';
 import * as M from '/hub/js/motion.js';
 import { qrSvg, qrPng, saveBlob } from '/hub/js/qr.js';
 import { copyText, showCopied } from '/hub/js/copy.js';
+import { depthSwitch } from '/hub/js/depth.js';
 
 const API = '/hub/api.php';
 const CLIENT_ID = '232694715908-2575cktv96o2l83tsi5oo4u3cs5g0anc.apps.googleusercontent.com';
@@ -141,6 +142,8 @@ ui(() => {
     toast(T.label(next));
   });
 });
+// 3D (the same as on the catalogue pages): a round switch in the top bar, off until turned on
+ui(() => depthSwitch({ before: $('#themeTop'), icon: true }));
 $('#refresh').innerHTML = icon('refresh-cw');
 $('#refresh').addEventListener('click', (e) => {
   M.play(e.currentTarget.querySelector('.i'), [{ transform: 'rotate(0)' }, { transform: 'rotate(360deg)' }], { duration: 600, easing: 'cubic-bezier(.4,0,.2,1)' });

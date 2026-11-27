@@ -161,6 +161,14 @@ export function startJini({ onOpen = () => {}, tips = [], hello = '', name = 'Ji
   el.addEventListener('pointerenter', (e) => { if (e.pointerType === 'mouse' && !moving && bubble.hidden) { wave(1); say('Need help? Click me to chat.', 2600); } });
   function open() { hideSay(); onOpen(); }
 
+  // a quick shake of the phone (with 3D on, depth.js) calls her: she waves and asks what they are looking for
+  addEventListener('jd:shake', () => {
+    if (hidden) return;
+    manualUntil = Date.now() + 60000;
+    wave(3);
+    say('You shook the phone! 😊 What are you looking for? Tap me and tell me.', 7000);
+  });
+
   // she glances up when the page scrolls
   let scrollT = 0;
   addEventListener('scroll', () => { el.classList.add('look'); clearTimeout(scrollT); scrollT = setTimeout(() => el.classList.remove('look'), 600); }, { passive: true });
