@@ -48,7 +48,6 @@ function load_config(string $path): array {
         'exhibition_name' => 'JinHarsh Industrial Exhibition 2026',
         'start_date'      => date('Y-m-d'),
         'end_date'        => date('Y-m-d', strtotime('+3 days')),
-        'passcode'        => 'jinharsh2026',
         'hmac_secret'     => bin2hex(random_bytes(24)),
     ];
     if (!file_exists($path)) {
@@ -163,11 +162,7 @@ function require_auth(array $config, string $minRole = 'uploader'): array {
         }
     }
 
-    $provided = $_SERVER['HTTP_X_TEAM_PASSCODE'] ?? $_GET['passcode'] ?? $_POST['passcode'] ?? '';
-    if ($provided !== '' && hash_equals((string)$config['passcode'], (string)$provided)) {
-        return ['email' => 'team-passcode@jinharsh.com', 'name' => 'JinHarsh Team', 'role' => 'admin'];
-    }
-
+    // (team members sign in with their @jinharsh.com Google account only; the old shared passcode is no longer accepted)
     http_response_code(401);
     echo json_encode(['ok' => false, 'error' => 'Authentication required']);
     exit;
@@ -366,25 +361,6 @@ switch ($action) {
         break;
     }
 
-    case 'auth': {
-        $body = read_json_body();
-        $pass = (string)($body['passcode'] ?? '');
-        if (hash_equals((string)$config['passcode'], $pass)) {
-            $user = [
-                'email' => 'team-passcode@jinharsh.com',
-                'name'  => 'JinHarsh Team',
-                'role'  => 'admin',
-                'exp'   => time() + 86400 * 7,
-            ];
-            $token = sign_session($user, (string)$config['hmac_secret']);
-            echo json_encode(['ok' => true, 'token' => $token, 'user' => $user]);
-        } else {
-            http_response_code(401);
-            echo json_encode(['ok' => false, 'error' => 'Incorrect passcode']);
-        }
-        break;
-    }
-
     case 'analytics': {
         $user      = require_auth($config, 'uploader');
         $events    = read_jsonl($EVENTS_FILE, 1500);
@@ -441,7 +417,7 @@ switch ($action) {
         if (!empty($body['exhibition_name'])) $config['exhibition_name'] = trim((string)$body['exhibition_name']);
         if (!empty($body['start_date']))      $config['start_date'] = trim((string)$body['start_date']);
         if (!empty($body['end_date']))        $config['end_date'] = trim((string)$body['end_date']);
-        if (!empty($body['new_passcode']))    $config['passcode'] = trim((string)$body['new_passcode']);
+        unset($config['passcode']);   // the old shared passcode is gone; drop it from the saved settings too
         @file_put_contents($CONFIG_FILE, json_encode($config, JSON_PRETTY_PRINT), LOCK_EX);
         echo json_encode(['ok' => true, 'current_phase' => get_exhibition_phase($config)]);
         break;
