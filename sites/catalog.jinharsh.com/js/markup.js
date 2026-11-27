@@ -39,11 +39,11 @@ export function cardHtml(d, i = 99) {
   const meta = d.waiting ? (d.sourceUrl ? 'On the maker’s website' : 'Coming soon')
     : [d.pages ? `${d.pages} pages` : null, fmtSize(d.size)].filter(Boolean).join(' · ');
   return `<article class="cat-card${d.waiting ? ' is-waiting' : ''}" data-key="${esc(d.code)}">
-    <a class="cc-link" href="${esc(catPath(d.code))}" aria-label="${esc(d.title)}">
+    <a class="cc-link" href="${esc(catPath(d.code))}">
       <div class="cc-cover">${d.cover ? `<img src="${esc(d.thumb || d.cover)}" alt="" width="${d.coverW || 720}" height="${d.coverH || 1018}" loading="${i < 4 ? 'eager' : 'lazy'}" decoding="async"${i < 2 ? ' fetchpriority="high"' : ''} style="view-transition-name:cover-${esc(d.code)}">` : blankCover(d)}</div>
       <div class="cc-body">
         <div class="cc-top">${d.brand ? `<span class="brand-pill">${esc(d.brand)}</span>` : ''}${d.category ? `<span class="cc-cat">${esc(d.category)}</span>` : ''}</div>
-        <h3>${esc(d.title)}</h3>
+        <h2>${esc(d.title)}</h2>
         ${d.note ? `<p>${esc(d.note)}</p>` : ''}
         <div class="cc-foot"><span class="${d.waiting ? 'ju-pill warn' : 'cc-meta'}">${esc(meta)}</span><span class="cc-go">${icon(d.waiting ? 'external-link' : 'book-open')}</span></div>
       </div>

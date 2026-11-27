@@ -69,7 +69,7 @@ async function load() {
     if (!j) { const r = await fetch('/api/catalogs'); j = await r.json(); }
     S.all = j.catalogs || []; S.publicUrl = (j.publicUrl || location.origin).replace(/\/$/, ''); S.site = j.site || {}; S.printable = j.printable !== false;
   } catch {
-    $('#cards').innerHTML = `<div class="ju-card empty-hub"><h3>The catalogues could not be loaded</h3><p class="ju-muted">Please check the internet connection and try again.</p><button class="ju-btn primary" type="button" data-reload>Try again</button></div>`;
+    $('#cards').innerHTML = `<div class="ju-card empty-hub"><h2>The catalogues could not be loaded</h2><p class="ju-muted">Please check the internet connection and try again.</p><button class="ju-btn primary" type="button" data-reload>Try again</button></div>`;
     return;
   }
   // catalogues with a PDF first (newest first), then those still waiting
@@ -103,7 +103,7 @@ function draw(first) {
   if (!first) ui(() => { done = JUI.flip(box); });
   box.classList.toggle('ju-enter', !!first);
   box.innerHTML = list.length ? list.map(card).join('')
-    : `<div class="ju-card empty-hub"><h3>No catalogue matches “${esc(S.q || S.brand)}”</h3><p class="ju-muted">Try another word, or ask us: we will send you the right catalogue.</p><button class="ju-btn" type="button" data-clear>Show all catalogues</button></div>`;
+    : `<div class="ju-card empty-hub"><h2>No catalogue matches “${esc(S.q || S.brand)}”</h2><p class="ju-muted">Try another word, or ask us: we will send you the right catalogue.</p><button class="ju-btn" type="button" data-clear>Show all catalogues</button></div>`;
   done();
 }
 

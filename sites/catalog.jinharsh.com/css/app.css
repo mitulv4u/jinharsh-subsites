@@ -495,3 +495,6 @@ html.lite.ju.dark .ju-overlay { background: rgba(0, 0, 0, .62); }
 html[data-sky] body { transition: background-color 28s linear; }
 html.vt-theme body, html.vt-sky body { transition: none; }
 html.vt-sky::view-transition-old(root), html.vt-sky::view-transition-new(root) { animation-duration: 2.8s; animation-timing-function: ease-in-out; }
+
+/* see-through windows sit over a dimmed page: their small grey texts need a touch more ink to stay readable (contrast 4.5:1) */
+.ju:not(.dark) .ju-sheet { --muted: #5f5f66; }
