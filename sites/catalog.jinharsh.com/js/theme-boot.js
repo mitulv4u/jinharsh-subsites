@@ -121,7 +121,7 @@
   }
 
   var LABEL = { light: 'Light', sun: 'Follow the sun', dark: 'Dark' };
-  try { if (localStorage.getItem('jd_tilt') === '1' && !matchMedia('(prefers-reduced-motion: reduce)').matches) document.documentElement.classList.add('depth-pre'); } catch (e) {}
+  try { if (localStorage.getItem('jd_tilt') === '1') document.documentElement.classList.add('depth-pre'); } catch (e) {}
   window.JDTheme = {
     mode: mode,
     set: function (m) { put(KEY, m); apply(m); follow(); return m; },

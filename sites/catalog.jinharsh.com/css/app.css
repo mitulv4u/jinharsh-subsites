@@ -747,4 +747,3 @@ body:has(.ju-overlay) .jini, body:has(.reader-ov) .jini, body:has(.bye-ov) .jini
 .tilt-sw[aria-checked="true"] .tg { background: var(--accent); }
 .tilt-sw[aria-checked="true"] .tg::after { transform: translateX(12px); }
 .ju .ju-top .ju-icon.tilt-ic[aria-checked="true"], .ju .ju-icon.tilt-ic[aria-checked="true"] { background: var(--ink); color: var(--ink-text); }
-@media (prefers-reduced-motion: reduce) { .tilt-row, .tilt-ic { display: none; } }

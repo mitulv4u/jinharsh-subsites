@@ -8,9 +8,11 @@
 //   - each catalogue: the next pages stand behind the cover like a real book, and fan out as it tilts
 //   - Jini sways as the phone tilts; a quick shake of the phone calls her (the "jd:shake" event, jini.js)
 // It is OFF until the person turns it on with the 3D switch (under the search box, under a catalogue's cover, in
-// the Team Portal's top bar). Never offered when the device asks for calm motion ("reduce motion"). iPhones ask
-// once for "Motion & Orientation"; a device without a motion sensor hides the switch. The choice is kept on this
-// device (theme-boot.js reads it early, so the home page keeps room for its scene from the first paint).
+// the Team Portal's top bar). The switch is on every device: phones and tablets tilt, computers follow the mouse,
+// and a device with no motion sensor gets a slow, gentle drift instead. It shows even when the device asks for calm
+// motion ("reduce motion", which many Android phones turn on with battery saver): the 3D only ever runs when the
+// person turns it on themselves. iPhones ask once for "Motion & Orientation". The choice is kept on this device
+// (theme-boot.js reads it early, so the home page keeps room for its scene from the first paint).
 import * as M from './motion.js';
 
 const KEY = 'jd_tilt';
@@ -34,12 +36,18 @@ const clamp1 = (v) => Math.max(-1, Math.min(1, v));
 // --lift: 0 = flat, 1 = the layers lifted apart. Each has a goal and moves to it on a spring.
 const spring = (k, zeta) => ({ x: 0, v: 0, g: 0, k, c: 2 * Math.sqrt(k) * zeta });
 const TX = spring(64, 0.74), TY = spring(64, 0.74), LIFT = spring(38, 0.8);
-let raf = 0, last = 0, running = false, how = '', got = false, base = null, fx = 0, fy = 0, lastT = 0, cssP = null;
+let raf = 0, last = 0, running = false, how = '', got = false, drifting = false, base = null, fx = 0, fy = 0, lastT = 0, cssP = null;
 function frame(now) {
   raf = 0;
   const dt = last ? Math.min(0.05, (now - last) / 1000) : 1 / 60;
   last = now;
   let busy = false;
+  if (drifting) {   // (no motion sensor: the scene sways slowly by itself)
+    const t = now / 1000;
+    TX.g = 0.5 * Math.sin(t * 0.6);
+    TY.g = 0.36 * Math.sin(t * 0.45 + 1.3);
+    busy = running;
+  }
   for (const s of [TX, TY, LIFT]) {
     s.v += (s.k * (s.g - s.x) - s.c * s.v) * dt;
     s.x += s.v * dt;
@@ -61,6 +69,7 @@ const kick = () => { if (!raf) { last = 0; raf = requestAnimationFrame(frame); }
 function onTurn(e) {
   if (e.beta == null || e.gamma == null) return;
   got = true;
+  drifting = false;   // (readings after all: they take over from the drift)
   // held sideways: the readings turn with the screen
   const o = screen.orientation && typeof screen.orientation.angle === 'number' ? screen.orientation.angle : (window.orientation || 0);
   const a = ((o % 360) + 360) % 360;
@@ -140,9 +149,10 @@ function teardown() {
 // ---------- on and off ----------
 function start() {
   if (running) return;
-  running = true; got = how === 'mouse'; base = null; lastT = 0;
+  running = true; got = how !== 'tilt'; base = null; lastT = 0;
+  drifting = how === 'drift';
   if (how === 'mouse') { addEventListener('pointermove', onMouse, { passive: true }); document.addEventListener('mouseout', onLeave); }
-  else { addEventListener('deviceorientation', onTurn); addEventListener('devicemotion', onMotion); }
+  else if (how === 'tilt') { addEventListener('deviceorientation', onTurn); addEventListener('devicemotion', onMotion); }
   const pre = root.classList.contains('depth-pre');   // (remembered: the home page kept room for its scene)
   loadCss().then(() => {
     if (!running) return;
@@ -156,7 +166,7 @@ function start() {
   });
 }
 function stop() {
-  running = false;
+  running = false; drifting = false;
   removeEventListener('pointermove', onMouse); document.removeEventListener('mouseout', onLeave);
   removeEventListener('deviceorientation', onTurn); removeEventListener('devicemotion', onMotion);
   TX.g = 0; TY.g = 0; LIFT.g = 0;
@@ -176,11 +186,10 @@ async function ask() {
 const switches = [];
 const paint = () => switches.forEach((b) => b.setAttribute('aria-checked', String(running)));
 export function depthSwitch({ after = null, inside = null, before = null, icon = false } = {}) {
-  if (M.calm()) { root.classList.remove('depth-pre'); return; }
-  how = tilts() ? 'tilt' : mouses() ? 'mouse' : '';
-  if (!how || !(after || inside || before) || switches.some((b) => b.isConnected)) return;
+  how = tilts() ? 'tilt' : mouses() ? 'mouse' : 'drift';
+  if (!(after || inside || before) || switches.some((b) => b.isConnected)) return;
   const label = how === 'tilt' ? 'Tilt for 3D' : '3D view';
-  const tip = how === 'tilt' ? '3D: tilt the phone to see the page in depth' : '3D: move the mouse to see the page in depth';
+  const tip = how === 'tilt' ? '3D: tilt the phone to see the page in depth' : how === 'mouse' ? '3D: move the mouse to see the page in depth' : '3D: see the page in depth';
   let b, row = null;
   if (icon) {
     b = document.createElement('button');
@@ -199,9 +208,7 @@ export function depthSwitch({ after = null, inside = null, before = null, icon =
   b.type = 'button';
   b.setAttribute('role', 'switch');
   switches.push(b);
-  try { matchMedia('(prefers-reduced-motion: reduce)').addEventListener('change', (e) => { if (e.matches && running) { stop(); paint(); } }); } catch {}
-  const gone = () => { switches.forEach((s) => (s.closest('.tilt-row') || s).remove()); };
-  // no readings soon after it starts: an iPhone that wants a tap again, or no motion sensor at all
+  // no readings soon after it starts: an iPhone that wants a tap again, or no motion sensor at all (then it drifts)
   const check = (fromTap) => setTimeout(() => {
     if (!running || got || how !== 'tilt') return;
     if (asksFirst() && !fromTap) {
@@ -210,8 +217,8 @@ export function depthSwitch({ after = null, inside = null, before = null, icon =
       addEventListener('touchend', again, true);
       return;
     }
-    stop(); paint(); keep(false); gone();
-    if (fromTap) toast('This device has no motion sensor, so 3D cannot work here.');
+    drifting = true; kick();
+    if (fromTap) toast('This device has no motion sensor, so the 3D sways gently by itself.');
   }, 1600);
   b.addEventListener('click', async () => {
     try { M.bump(b, 1.06); } catch {}
