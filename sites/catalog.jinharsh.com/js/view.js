@@ -9,6 +9,10 @@ import { track, needsDetails, beforeDownload } from './visitor.js';
 import { mediaHtml as renderMedia, wireMedia } from './media.js';
 import { catPath } from './backend.js';
 import { watchLive, others } from './live.js';
+import { configure } from './lookup.js';
+import { startHelper } from './assistant.js';
+import { watchGoodbye } from './goodbye.js';
+import { querySheet } from './visitor.js';
 
 const $ = (s, el = document) => el.querySelector(s);
 
@@ -158,6 +162,10 @@ function showDoc() {
   wireCommon(D.title, linkOf(D.code));
 
   countVisit();
+  // the helper in the corner (it knows which catalogue this is), and a warm goodbye when someone is leaving
+  configure({ catalogs: (BOOT.menu || []).map((m) => ({ ...m, thumb: m.thumb })), search: BOOT.search || '' });
+  ui(() => startHelper({ site: SITE, current: { code: D.code, title: D.title } }));
+  ui(() => watchGoodbye({ onQuery: () => querySheet({ code: D.code, title: D.title }) }));
   if (START > 1) setTimeout(() => openReader(START), 700);   // (after the page has finished arriving)
   // "2 others are looking at this catalogue right now"
   ui(() => watchLive(D.code, (c) => {

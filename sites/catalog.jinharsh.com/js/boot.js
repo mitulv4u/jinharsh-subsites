@@ -68,7 +68,8 @@ if (doc) {
   useShell('view');
   const others = docs.filter((d) => !d.waiting && d.code !== doc.code && d.cover).slice(0, 24);
   const menu = docs.map((d) => ({ code: d.code, title: d.title, brand: d.brand, category: d.category, thumb: d.thumb || d.cover, waiting: !!d.waiting, link: !!d.waiting && !!d.sourceUrl }));
-  boot = { status: doc.waiting ? 'waiting' : 'live', doc, countsScans: false, others, menu, site: SITE, publicUrl: location.origin, printable: true };
+  boot = { status: doc.waiting ? 'waiting' : 'live', doc, countsScans: false, others, menu, site: SITE, publicUrl: location.origin, printable: true,
+    search: '/hub/search/index.json' };
   document.title = `${doc.title} · ${SITE.company?.short || 'Jinharsh'}`;
   entry = '/hub/js/view.js';
 } else {

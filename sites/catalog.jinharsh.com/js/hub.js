@@ -11,6 +11,10 @@ import { cardFx } from './cardfx.js';
 import { peekSheet } from './peek.js';
 import { watchLive, others } from './live.js';
 import { finder } from './finder.js';
+import { configure } from './lookup.js';
+import { startHelper } from './assistant.js';
+import { watchGoodbye } from './goodbye.js';
+import { querySheet } from './visitor.js';
 
 const $ = (s, el = document) => el.querySelector(s);
 const params = new URLSearchParams(location.search);
@@ -93,7 +97,11 @@ async function load() {
   }
   // cards that react to the mouse, search inside the catalogues, and who else is looking right now
   ui(() => cardFx($('#cards'), (code) => S.all.find((d) => d.code === code)));
-  ui(() => finder({ input: $('#q'), url: S.searchUrl, docs: () => S.all }));
+  configure({ catalogs: S.all, search: S.searchUrl });
+  ui(() => finder({ input: $('#q'), onAsk: (t) => querySheet({ message: t, from: $('#q') }) }));
+  // the helper in the corner, and a warm goodbye when someone is leaving
+  ui(() => startHelper({ site: S.site }));
+  ui(() => watchGoodbye({ onQuery: () => querySheet({}) }));
   ui(() => watchLive('', (c) => { S.live = c; paintLive(); }));
   // catalog.jinharsh.com/?qr=1 opens QR Studio straight away (the address the team was given for it)
   if (new URLSearchParams(location.search).get('qr') === '1') studio();
