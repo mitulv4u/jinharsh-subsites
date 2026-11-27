@@ -197,6 +197,9 @@ function wireDownload(a) {
   });
 }
 
+// a small, light picture of a page (tools/php-hub/make-extras.mjs): shown at once, until the sharp page is drawn on top
+const previewImg = (i) => (D && D.previews ? `<img class="pv" data-src="${esc(D.previews)}${i}.webp" alt="" decoding="async">` : '');   // (src set when it is near)
+
 // ---------- the reader: a full-screen window over the page ----------
 // The cover breaks into coloured grains that bind together as page 1, then the real pages are drawn as you scroll.
 // Closes with the X, the Esc key or the phone's Back button.
@@ -229,7 +232,7 @@ function openReader(startAt = 1) {
   const n0 = D.pages || 1;
   let html = '';
   for (let i = 1; i <= n0; i++) {
-    html += `<div class="page" data-n="${i}" style="aspect-ratio:${ratio}">${i === 1 && D.cover ? `<img class="ph" src="${esc(D.cover)}" alt="">` : ''}<span class="pno">${i}</span></div>`;
+    html += `<div class="page" data-n="${i}" style="aspect-ratio:${ratio}">${i === 1 && D.cover ? `<img class="ph" src="${esc(D.cover)}" alt="">` : previewImg(i)}<span class="pno">${i}</span></div>`;
   }
   pagesEl.innerHTML = html;
 
@@ -297,7 +300,7 @@ async function startReader(pagesEl, scroller, box) {
   const L = await pdfjs();
   // only the pieces of the PDF the pages on screen need (disableStream: no download of the whole file in the
   // background, which for a big catalogue crowded out the pieces for page 1 and used a phone's data)
-  if (!pdfDoc) pdfDoc = await L.getDocument({ url: D.file, rangeChunkSize: 256 * 1024, disableAutoFetch: true, disableStream: true, ...PDF_OPTS }).promise;
+  if (!pdfDoc) pdfDoc = await L.getDocument({ url: D.file, rangeChunkSize: 512 * 1024, disableAutoFetch: true, disableStream: true, ...PDF_OPTS }).promise;
   const pdf = pdfDoc;
   if (!box.isConnected) return () => {};
   const n = pdf.numPages;
@@ -306,7 +309,7 @@ async function startReader(pagesEl, scroller, box) {
   if (have !== n) {
     const ratio = pagesEl.firstElementChild?.style.aspectRatio || String(210 / 297);
     let extra = '';
-    for (let i = have + 1; i <= n; i++) extra += `<div class="page" data-n="${i}" style="aspect-ratio:${ratio}"><span class="pno">${i}</span></div>`;
+    for (let i = have + 1; i <= n; i++) extra += `<div class="page" data-n="${i}" style="aspect-ratio:${ratio}">${previewImg(i)}<span class="pno">${i}</span></div>`;
     pagesEl.insertAdjacentHTML('beforeend', extra);
     while (pagesEl.children.length > n) pagesEl.lastElementChild.remove();
   }
@@ -320,6 +323,7 @@ async function startReader(pagesEl, scroller, box) {
   const form = (el) => {
     const num = Number(el.dataset.n), cv = el.querySelector('canvas');
     if (!cv || formed.has(num)) return;
+    if (el.querySelector('img.pv')) { formed.add(num); M.play(cv, [{ opacity: 0 }, { opacity: 1 }], { duration: 220, easing: 'ease-out' }); return; }
     if (!seen.has(num)) { cv.style.visibility = 'hidden'; el.classList.add('forming'); return; }
     formed.add(num);
     formPage(el, cv);
@@ -355,6 +359,9 @@ async function startReader(pagesEl, scroller, box) {
 
   async function pump() {
     if (busy) return;
+    if (flinging()) { clearTimeout(pump.wait); pump.wait = setTimeout(pump, 140); return; }
+    // the small pictures of the pages around here come first (they are tiny, so they show almost at once)
+    for (const num of near) { const pv = pagesEl.children[num - 1]?.querySelector('img.pv'); if (pv && !pv.getAttribute('src')) pv.src = pv.dataset.src; }
     busy = true;
     try {
       // nearest pages to the middle of the screen first
@@ -371,8 +378,41 @@ async function startReader(pagesEl, scroller, box) {
     if (todo) setTimeout(pump, 0);
   }
 
+  // how fast the pages are moving: over about 1.5 screens a second counts as a fling
+  let lastTop = 0, lastT = 0, speed = 0;
+  scroller.addEventListener('scroll', () => {
+    const now = performance.now(), dt = Math.max(1, now - lastT);
+    speed = Math.abs(scroller.scrollTop - lastTop) / dt;
+    lastTop = scroller.scrollTop; lastT = now;
+  }, { passive: true });
+  const flinging = () => performance.now() - lastT < 120 && speed > (scroller.clientHeight * 1.5) / 1000;
+
+  // tap "Page 12 of 372" to go straight to any page (or to the first or the last)
+  const posEl = $$('#pos');
+  posEl.setAttribute('role', 'button'); posEl.tabIndex = 0; posEl.title = 'Go to a page';
+  const goTo = (v) => { v = Math.max(1, Math.min(n, v)); pagesEl.children[v - 1].scrollIntoView({ block: 'start' }); };
+  const ask = () => {
+    if (posEl.querySelector('input')) return;
+    const cur = Number(($$('#posN') || {}).textContent) || 1;
+    posEl.innerHTML = `<button type="button" class="go-end" data-go="1" title="First page">1</button><input type="number" min="1" max="${n}" value="${cur}" inputmode="numeric" aria-label="Go to page"><button type="button" class="go-end" data-go="${n}" title="Last page">${n}</button>`;
+    const inp = posEl.querySelector('input');
+    let done = false;
+    const finish = (v) => {
+      if (done) return; done = true;
+      posEl.innerHTML = `Page <span class="rollbox"><span class="n" id="posN">${cur}</span></span> of ${n}`;
+      if (v) { goTo(v); M.roll($$('#posN'), v); }
+    };
+    inp.focus(); inp.select();
+    inp.addEventListener('keydown', (e) => { if (e.key === 'Enter') finish(parseInt(inp.value, 10) || cur); if (e.key === 'Escape') { e.stopPropagation(); finish(0); } });
+    inp.addEventListener('blur', () => setTimeout(() => { const v = parseInt(inp.value, 10); finish(v && v !== cur ? v : 0); }, 150));
+    posEl.querySelectorAll('[data-go]').forEach((b) => b.addEventListener('pointerdown', (e) => { e.preventDefault(); finish(Number(b.dataset.go)); }));
+  };
+  posEl.addEventListener('click', (e) => { if (!e.target.closest('input, [data-go]')) ask(); });
+  posEl.addEventListener('keydown', (e) => { if ((e.key === 'Enter' || e.key === ' ') && !e.target.closest('input')) { e.preventDefault(); ask(); } });
+
   function release(num) {
     const s = state.get(num); const el = pagesEl.children[num - 1];
+    const pv = el?.querySelector('img.pv'); if (pv && !pv.complete) pv.removeAttribute('src');   // (passed by: not needed any more)
     if (s?.task) { try { s.task.cancel(); } catch {} }
     const cv = el?.querySelector('canvas'); if (cv) { cv.width = cv.height = 0; cv.remove(); }
     state.delete(num);

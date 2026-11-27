@@ -40,6 +40,13 @@
 .dark .page { box-shadow: 0 0 0 1px rgba(255,255,255,.06), 0 18px 50px -12px rgba(0,0,0,.85); }
 .page canvas, .page img.ph { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
 .page img.ph { object-fit: cover; }
+/* the small picture of a page, shown at once; the sharp page is drawn on top of it */
+.page img.pv { position: absolute; inset: 0; width: 100%; height: 100%; display: block; object-fit: contain; background: #fff; }
+/* "Page 12 of 372" can be tapped to type a page number (or jump to the first or the last) */
+.reader-ov #pos { cursor: pointer; border-radius: 999px; padding: 2px 8px; transition: background-color .15s; }
+.reader-ov #pos:hover { background: var(--hover); }
+.reader-ov #pos input { width: 64px; height: 30px; border: 0; border-radius: 999px; background: var(--hover); color: var(--text); font: inherit; font-weight: 700; text-align: center; outline: 2px solid var(--blue); }
+.reader-ov #pos .go-end { height: 30px; min-width: 30px; padding: 0 9px; margin: 0 4px; border: 0; border-radius: 999px; background: var(--hover); color: var(--text); font: inherit; font-size: 12.5px; font-weight: 700; cursor: pointer; }
 .page .pno { position: absolute; right: 10px; bottom: 10px; padding: 2px 9px; border-radius: 999px; font-size: 11.5px; font-weight: 700;
   background: rgba(20,20,22,.6); color: #fff; font-variant-numeric: tabular-nums; z-index: 2; }
 .reader-note { text-align: center; color: var(--muted); font-size: 14px; margin: -6px 0 26px; }
