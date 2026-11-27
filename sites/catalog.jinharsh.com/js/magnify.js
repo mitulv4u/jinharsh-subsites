@@ -1,14 +1,14 @@
-// The top bar as a clear magnifying glass: what scrolls under it is shown a little bigger, the SAME shape (never
-// stretched), sharp (no blur), and bent gently only right at its upper and lower edge, like the rim of a lens.
-// It replaces the kit's "liquid glass" bend for this site's bars (that one stretched text up to 11 times at the rim).
+// The top bar as a clear magnifying glass, like a lens: what scrolls under it is sharp (no blur) and looks bigger in
+// the middle of the bar, easing back to its real size and place at the bar's top and bottom edges, so there is no
+// hard line where the bar meets the page. Things are moved sideways only a little (at most SIDE px), so a wide
+// screen never sees pictures jump across. It replaces the kit's "liquid glass" bend for this site's bars.
 //
 // Only Chrome and Edge can bend what is behind an element; other browsers, slower phones and the Solid / Frosted
 // glass settings keep the kit's plain glass. The kit file itself is not changed.
 import { perf } from './particles.js';
 
-const ZOOM = 1.12;       // how much bigger things look under the bar
-const RIM = 10;          // px: the soft bend along the edges
-const RIM_PULL = 5;      // px: how far the rim pulls inward
+const ZOOM = 1.15;       // how much bigger things look in the middle of the bar
+const SIDE = 26;         // px: the most anything is moved sideways
 
 let svg = null, made = '', bars = [];
 const COLS = 96;          // columns in the map picture (stretched across the bar; exact, as it changes evenly across)
@@ -60,18 +60,22 @@ function mapOf(w, h) {
   if (maps.has(key)) return maps.get(key);
   const cx = w / 2, cy = h / 2, k = 1 - 1 / ZOOM;
   const cols = Math.min(w, COLS), step = w / cols;
-  const scale = 2 * Math.max(cx * k, cy * k + RIM_PULL) + 2;
+  // how much of the lens each row gets: all of it in the middle, none at the very top and bottom (no seam)
+  const fade = (y) => { const t = Math.min(1, Math.min(y + 0.5, h - y - 0.5) / (h / 2)); return t * (2 - t); };
+  // across: like zooming about the middle, but never more than SIDE px (smoothly), so nothing travels far
+  const DX = [];
+  for (let x = 0; x < cols; x++) { const raw = (cx - (x + 0.5) * step) * k; DX.push(SIDE * Math.tanh(raw / SIDE)); }
+  const F = [], DY = [];
+  let most = 1;
+  for (let y = 0; y < h; y++) { F.push(fade(y)); DY.push((cy - (y + 0.5)) * k * F[y]); most = Math.max(most, Math.abs(DY[y])); }
+  for (let x = 0; x < cols; x++) most = Math.max(most, Math.abs(DX[x]));
+  const scale = 2 * most + 2;
   const d = new Uint8Array(cols * h * 3);
-  const R = [];
-  for (let x = 0; x < cols; x++) R.push(Math.round(128 + (((cx - (x + 0.5) * step) * k) / scale) * 255)); // the middle of each column
   for (let y = 0; y < h; y++) {
-    let dy = (cy - (y + 0.5)) * k;                          // towards the middle line: bigger
-    const edge = Math.min(y + 0.5, h - y - 0.5);
-    if (edge < RIM) { const t = 1 - edge / RIM; dy += (y < cy ? 1 : -1) * RIM_PULL * t * t; } // the rim bends a little more
-    const G = Math.round(128 + (dy / scale) * 255);
+    const G = Math.round(128 + (DY[y] / scale) * 255);
     for (let x = 0; x < cols; x++) {
       const i = (y * cols + x) * 3;
-      d[i] = R[x]; d[i + 1] = G; d[i + 2] = 128;
+      d[i] = Math.round(128 + ((DX[x] * F[y]) / scale) * 255); d[i + 1] = G; d[i + 2] = 128;
     }
   }
   const m = { url: pngUrl(cols, h, d), scale: Math.round(scale * 100) / 100 };

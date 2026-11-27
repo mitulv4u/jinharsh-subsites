@@ -25,10 +25,10 @@
 .brand b { font-size: 15.5px; font-weight: 750; letter-spacing: -.015em; white-space: nowrap; }
 .brand small { font-size: 12px; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .top-in { width: 100%; max-width: 1080px; margin: 0 auto; display: flex; align-items: center; gap: 6px; }
-/* the top bar as clear "liquid glass" (like iOS): what scrolls under it stays in view, only a touch softer and brighter,
-   behind a thin tint with a bright rim; it stays in place (no magnifying, so nothing shifts). Works in every browser, iPhones included; slower phones (html.lite) keep a solid bar. */
-.ju:not(.lite) .ju-top.ju-glass { background: color-mix(in srgb, var(--bg) 24%, transparent);
-  -webkit-backdrop-filter: blur(3px) saturate(1.5) brightness(1.08); backdrop-filter: blur(3px) saturate(1.5) brightness(1.08);
+/* the top bar as clear glass: what scrolls under it stays sharp (no blur), a touch brighter, behind a very thin tint with
+   a bright rim. On Chrome and Edge it is also a magnifying lens (magnify.js). Slower phones (html.lite) keep a solid bar. */
+.ju:not(.lite) .ju-top.ju-glass { background: color-mix(in srgb, var(--bg) 14%, transparent);
+  -webkit-backdrop-filter: saturate(1.45) brightness(1.06); backdrop-filter: saturate(1.45) brightness(1.06);
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, .85), inset 0 -1px 0 rgba(255, 255, 255, .45), 0 12px 32px -18px rgba(20, 22, 28, .35); }
 /* on the clear bar, the name, the links and the round buttons each sit on a small tinted capsule (as in iOS), so they
    read clearly whatever scrolls underneath - a dark photo or a big heading - while the bar itself stays clear */
@@ -40,8 +40,8 @@
 .ju:not(.lite) .ju-top .nav-l:hover, .ju:not(.lite) .ju-top .ju-icon:hover { background: color-mix(in srgb, var(--bg) 92%, transparent); }
 .ju.dark:not(.lite) .ju-top .brand > span, .ju.dark:not(.lite) .ju-top .nav-l, .ju.dark:not(.lite) .ju-top .ju-icon {
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, .12), 0 0 0 1px rgba(255, 255, 255, .08); }
-.ju.dark:not(.lite) .ju-top.ju-glass { background: color-mix(in srgb, var(--bg) 32%, transparent);
-  -webkit-backdrop-filter: blur(3px) saturate(1.5) brightness(.92); backdrop-filter: blur(3px) saturate(1.5) brightness(.92);
+.ju.dark:not(.lite) .ju-top.ju-glass { background: color-mix(in srgb, var(--bg) 22%, transparent);
+  -webkit-backdrop-filter: saturate(1.45) brightness(.92); backdrop-filter: saturate(1.45) brightness(.92);
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, .2), inset 0 -1px 0 rgba(255, 255, 255, .08), 0 12px 32px -18px rgba(0, 0, 0, .6); }
 /* extra top-bar buttons a site asks for (site.json "nav"): all of them on wide screens, one menu button on phones */
 .top-nav { display: flex; align-items: center; gap: 6px; margin-left: 8px; }
