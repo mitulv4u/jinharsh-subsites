@@ -1,15 +1,50 @@
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+
+  # 1. Support root-relative /images/* and /catalogs/* paths seamlessly
+  RewriteCond %{REQUEST_URI} ^/images/
+  RewriteRule ^images/(.*)$ public/images/$1 [L]
+
+  RewriteCond %{REQUEST_URI} ^/catalogs/
+  RewriteRule ^catalogs/(.*)$ public/catalogs/$1 [L]
+
+  # 2. Transparently serve pre-compressed WebP when supported by browser
+  RewriteCond %{HTTP_ACCEPT} image/webp
+  RewriteCond %{REQUEST_FILENAME}.webp -f
+  RewriteRule ^(.+)\.(png|jpe?g)$ $1.$2.webp [T=image/webp,E=WEBP:1,L]
+</IfModule>
+
+<IfModule mod_mime.c>
+  AddType image/webp .webp
+  AddType font/woff2 .woff2
+</IfModule>
+
+<IfModule mod_deflate.c>
+  AddOutputFilterByType DEFLATE text/html text/plain text/xml text/css application/javascript text/javascript application/json image/svg+xml application/xml
+</IfModule>
+
 <IfModule mod_expires.c>
   ExpiresActive On
-  ExpiresByType text/css "access plus 30 days"
-  ExpiresByType application/javascript "access plus 30 days"
-  ExpiresByType image/webp "access plus 90 days"
-  ExpiresByType image/png "access plus 90 days"
-  ExpiresByType image/jpeg "access plus 90 days"
-  ExpiresByType image/svg+xml "access plus 90 days"
+  ExpiresByType text/css "access plus 1 year"
+  ExpiresByType application/javascript "access plus 1 year"
+  ExpiresByType font/woff2 "access plus 1 year"
+  ExpiresByType image/webp "access plus 1 year"
+  ExpiresByType image/png "access plus 1 year"
+  ExpiresByType image/jpeg "access plus 1 year"
+  ExpiresByType image/svg+xml "access plus 1 year"
+  ExpiresByType application/json "access plus 1 day"
 </IfModule>
 
 <IfModule mod_headers.c>
-  <FilesMatch "\.(css|js|webp|png|jpg|jpeg|svg|woff2)$">
-    Header set Cache-Control "public, max-age=2592000"
+  Header append Vary Accept env=REDIRECT_WEBP
+  Header append Vary Accept env=WEBP
+  Header set Connection keep-alive
+
+  <FilesMatch "\.(css|js|woff2|webp|png|jpg|jpeg|svg|ico)$">
+    Header set Cache-Control "public, max-age=31536000, immutable"
+  </FilesMatch>
+
+  <FilesMatch "\.(html|htm)$">
+    Header set Cache-Control "public, max-age=60, stale-while-revalidate=86400"
   </FilesMatch>
 </IfModule>
