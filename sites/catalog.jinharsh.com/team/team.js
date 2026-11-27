@@ -319,8 +319,8 @@ function paintOpen(live) {
   for (const e of DATA.events || []) if (e.catalog_id && e.catalog_title && !titles[e.catalog_id]) titles[e.catalog_id] = e.catalog_title;
   const cats = Object.entries((live && live.cats) || {}).sort((a, b) => b[1] - a[1]);
   const front = live ? live.total - cats.reduce((s, [, k]) => s + k, 0) : 0;
-  const rows = [...cats.map(([id, k]) => [titles[id] || id, k]), ...(front > 0 ? [['Front page', front]] : [])];
-  const html = rows.length ? `<span class="now-open-h">Open now</span>${rows.map(([t, k]) => `<span class="ju-pill" title="${esc(t)}"><i class="eye">${icon('eye')}</i><span class="t">${esc(t)}</span><b>${k}</b></span>`).join('')}` : '';
+  const rows = [...cats.map(([id, k]) => [titles[id] || id, k, 'cat', id]), ...(front > 0 ? [['Front page', front, 'front', '']] : [])];
+  const html = rows.length ? `<span class="now-open-h">Open now</span>${rows.map(([t, k, kind, id]) => `<span class="ju-pill tap" title="${esc(t)}" ${drillAttrs(kind, id, `${t}: see its visitors`)}><i class="eye">${icon('eye')}</i><span class="t">${esc(t)}</span><b>${k}</b></span>`).join('')}` : '';
   if (el.innerHTML === html) return;
   const was = el.innerHTML;
   el.innerHTML = html;
@@ -362,8 +362,9 @@ function paintNow() {
     let el = $$('.who-now', box).find((c) => c.dataset.p === k);
     if (!el) {
       el = document.createElement('div');
-      el.className = 'who-now';
+      el.className = 'who-now tap';
       el.dataset.p = k;
+      el.dataset.drill = 'who'; el.dataset.arg = k; el.setAttribute('role', 'button'); el.tabIndex = 0;
       el.innerHTML = html;
       box.prepend(el);
       M.play(el, [{ opacity: 0, transform: 'scale(.9) translateY(4px)' }, { opacity: 1, transform: 'none' }], { duration: 420, easing: 'cubic-bezier(.2,.9,.3,1.2)' });
@@ -393,8 +394,8 @@ function paintWho() {
 }
 
 const shift = (iso, n) => { const m = /^(\d{4})-(\d\d)-(\d\d)/.exec(iso || ''); if (!m) return ''; const d = new Date(Date.UTC(+m[1], +m[2] - 1, +m[3] + n)); return d.toISOString().slice(0, 10); };
-function lineHtml(start, end, phase) {   // Before: to the day before it starts · During: its days · After: from the day after it ends
-  const seg = (k, title, sub) => `<div class="seg${phase === k ? ' on' : ''}"><b>${title}</b>${sub}</div>`;
+function lineHtml(start, end, phase, tap = false) {   // Before: to the day before it starts · During: its days · After: from the day after it ends
+  const seg = (k, title, sub) => `<div class="seg${phase === k ? ' on' : ''}${tap ? ' tap' : ''}"${tap ? ` ${drillAttrs('phase', k, `${title} the exhibition: see the visitors`)}` : ''}><b>${title}</b>${sub}</div>`;
   return seg('pre_exhibition', 'Before', start ? `to ${dayOf(shift(start, -1))}` : '')
     + seg('during_exhibition', 'During', start && end ? `${dayOf(start)} – ${dayOf(end)}` : '')
     + seg('post_exhibition', 'After', end ? `from ${dayOf(shift(end, 1))}` : '');
@@ -404,7 +405,7 @@ function paintExhibition() {
   $('#exName').textContent = c.exhibition_name || 'Exhibition';
   const p = PHASES[DATA.current_phase] || PHASES.pre_exhibition;
   $('#exPhase').innerHTML = `<span class="ju-pill ${p.pill}">${DATA.current_phase === 'during_exhibition' ? 'On now' : DATA.current_phase === 'post_exhibition' ? 'Finished' : 'Coming up'}</span>`;
-  $('#exLine').innerHTML = lineHtml(c.start_date, c.end_date, DATA.current_phase);
+  $('#exLine').innerHTML = lineHtml(c.start_date, c.end_date, DATA.current_phase, true);
 }
 
 const KPIS = [
@@ -418,7 +419,7 @@ let CITY_N = {};
 function paintNumbers(live = false) {
   const s = DATA.summary || {};
   const box = $('#kpis');
-  if (!box.children.length) box.innerHTML = KPIS.map(([k, label, ic, cls]) => `<div class="kpi ${cls}"><span class="k-ic">${icon(ic)}</span><b data-k="${k}">0</b><span>${label}</span></div>`).join('');
+  if (!box.children.length) box.innerHTML = KPIS.map(([k, label, ic, cls]) => `<div class="kpi tap ${cls}" ${drillAttrs('kpi', k, label + ': see them all')}><span class="k-ic">${icon(ic)}</span><b data-k="${k}">0</b><span>${label}</span><span class="k-go">${icon('chevron-right')}</span></div>`).join('');
   for (const [k] of KPIS) {
     const el = $(`[data-k="${k}"]`, box), from = Number(el.dataset.n || 0), to = Number(s[k] || 0);
     countTo(el, to);
@@ -427,7 +428,7 @@ function paintNumbers(live = false) {
   const cities = Object.entries(s.top_cities || {}), before = CITY_N;
   CITY_N = Object.fromEntries(cities);
   const html = cities.length
-    ? cities.map(([c, n]) => `<span class="ju-pill" data-c="${esc(c)}">${esc(c)}<b>${n}</b></span>`).join('')
+    ? cities.map(([c, n]) => `<span class="ju-pill tap" data-c="${esc(c)}" ${drillAttrs('city', c, `${c}: ${n} visitors`)}>${esc(c)}<b>${n}</b></span>`).join('')
     : '<span class="ju-small ju-muted">No locations yet.</span>';
   if ($('#cities').innerHTML === html) return;
   $('#cities').innerHTML = html;
@@ -535,7 +536,18 @@ const fact = (label, value) => (value ? `<div class="fact"><span>${label}</span>
 const recent = (ts) => (secsAgo(ts) < 3600 ? ` <span class="ju-muted">· ${esc(ago(ts))}</span>` : '');   // ("· 5 min ago" within the hour)
 const placeOf = (o) => [o.city, o.region, o.country].filter((x) => x && x !== 'Unknown').join(', ');
 
-// one window for both: a title, the details, buttons; the arrows (or the keyboard's < >) go to the one before / after
+// windows can sit on top of each other (a list, then one of its items): Esc and the arrows act on the top one only,
+// and the page scrolls again once the last one has closed
+const isTop = (ov) => { const all = document.querySelectorAll('.ju-overlay'); return all[all.length - 1] === ov; };
+const unlock = () => { if (!document.querySelector('.ju-overlay')) document.body.style.overflow = ''; };
+function growFrom(sheet, from) {   // a window grows out of what was pressed
+  if (!from || !from.getBoundingClientRect) return;
+  const r = from.getBoundingClientRect(), b = sheet.getBoundingClientRect();
+  M.play(sheet, [{ opacity: 0, transform: `translate(${(r.left + r.width / 2) - (b.left + b.width / 2)}px, ${(r.top + r.height / 2) - (b.top + b.height / 2)}px) scale(.6)` }, { opacity: 1, transform: 'none' }],
+    { duration: 380, easing: 'cubic-bezier(.2,.9,.3,1.1)' });
+}
+
+// one item's details: a title, the details, buttons; the arrows (or the keyboard's < >) go to the one before / after
 function detailSheet({ list, i, from, render }) {
   let at = i;
   const ov = document.createElement('div');
@@ -561,19 +573,14 @@ function detailSheet({ list, i, from, render }) {
     if (dir) M.play(body, [{ opacity: 0, transform: `translateX(${dir * 18}px)` }, { opacity: 1, transform: 'none' }], { duration: 220, easing: 'ease-out' });
   };
   paint();
-  // the window grows out of the row that was pressed
-  if (from && from.getBoundingClientRect) {
-    const r = from.getBoundingClientRect(), b = sheet.getBoundingClientRect();
-    M.play(sheet, [{ opacity: 0, transform: `translate(${(r.left + r.width / 2) - (b.left + b.width / 2)}px, ${(r.top + r.height / 2) - (b.top + b.height / 2)}px) scale(.6)` }, { opacity: 1, transform: 'none' }],
-      { duration: 380, easing: 'cubic-bezier(.2,.9,.3,1.1)' });
-  }
+  growFrom(sheet, from);
   const step = (d) => { const n = at + d; if (n < 0 || n >= list.length) return; at = n; paint(d); };
   const close = () => {
     document.removeEventListener('keydown', key);
     M.play(sheet, [{ opacity: 1, transform: 'none' }, { opacity: 0, transform: 'translateY(12px) scale(.97)' }], { duration: 200, easing: 'ease-in' })
-      .then(() => { ov.remove(); document.body.style.overflow = ''; });
+      .then(() => { ov.remove(); unlock(); });
   };
-  const key = (e) => { if (e.key === 'Escape') close(); if (e.key === 'ArrowLeft') step(-1); if (e.key === 'ArrowRight') step(1); };
+  const key = (e) => { if (!isTop(ov)) return; if (e.key === 'Escape') close(); if (e.key === 'ArrowLeft') step(-1); if (e.key === 'ArrowRight') step(1); };
   document.addEventListener('keydown', key);
   ov.addEventListener('click', async (e) => {
     if (e.target === ov || e.target.closest('[data-x]')) return close();
@@ -584,58 +591,156 @@ function detailSheet({ list, i, from, render }) {
   setTimeout(() => ov.querySelector('[data-x]').focus({ preventScroll: true }), 60);
 }
 
-// a query: who, how to reach them (call, WhatsApp, email), what about, the whole message, where and when
-function openQuery(i, from) {
-  detailSheet({ list: QLIST, i, from, render: (r) => {
-    const page = pageOf(r.message), wa = waLink(r.phone);
-    const subject = `Your query${r.catalog_title ? ' about ' + r.catalog_title : ''} - Jinharsh`;
-    const all = [`Name: ${r.name || ''}`, r.company ? `Company: ${r.company}` : '', r.phone ? `Phone: ${r.phone}` : '', r.email ? `Email: ${r.email}` : '',
-      r.catalog_title ? `About: ${r.catalog_title}${r.brand ? ' (' + r.brand + ')' : ''}` : '', `Message: ${r.message || ''}`, `When: ${when(r.timestamp_ist)}`,
-      placeOf(r) ? `Where: ${placeOf(r)}` : ''].filter(Boolean).join('\n');
-    return `<div class="detail-head">
-        <span class="detail-ic q">${icon('message-square-text')}</span>
-        <div><div class="ju-eyebrow">Query · ${pill(r.phase)}</div><h2>${esc(r.name || 'No name')}</h2>${r.company ? `<p class="ju-muted">${esc(r.company)}</p>` : ''}</div>
-      </div>
-      <div class="reach">
-        ${r.phone ? `<a class="ju-btn accent" href="tel:${esc(r.phone)}">${icon('phone')}Call ${esc(r.phone)}</a>` : ''}
-        ${wa ? `<a class="ju-btn" href="${esc(wa)}" target="_blank" rel="noopener">${icon('message-circle')}WhatsApp</a>` : ''}
-        ${r.email ? `<a class="ju-btn" href="mailto:${esc(r.email)}?subject=${encodeURIComponent(subject)}">${icon('mail')}${esc(r.email)}</a>` : ''}
-      </div>
-      <div class="detail-msg">
-        <div class="detail-label"><span>Message</span><button class="ju-btn sm ghost" type="button" data-copy="${esc(r.message || '')}">${icon('copy')}Copy</button></div>
-        <p>${esc(r.message || '(no message)')}</p>
-      </div>
-      <div class="facts">
-        ${fact('About', r.catalog_title ? `<a class="lk" href="${esc(catLink(r.catalog_id, page))}" target="_blank" rel="noopener">${esc(r.catalog_title)}${page > 1 ? ` · page ${page}` : ''}</a>${r.brand ? ` <span class="ju-muted">· ${esc(r.brand)}</span>` : ''}` : 'General question')}
-        ${fact('Received', `${esc(when(r.timestamp_ist))}${recent(r.timestamp_ist)}`)}
-        ${fact('Where', esc(placeOf(r)))}
-        ${fact('Came from', esc(r.source || ''))}
-      </div>
-      <div class="btns detail-btns"><button class="ju-btn" type="button" data-copy="${esc(all)}">${icon('copy')}Copy all details</button></div>`;
-  } });
+// a drill-down: everything behind a number, a place, a phase, a catalogue or a person, as a list;
+// each item opens its details (on top, so closing them comes back to the list)
+function drillSheet({ eyebrow, title, sub = '', items, kind = 'event', from, actions = '' }) {
+  const ov = document.createElement('div');
+  ov.className = 'ju-overlay';
+  const row = (x, i) => {
+    if (kind === 'query') {
+      return `<button class="drill-row" type="button" data-i="${i}"><span class="a-ic query">${icon('message-square-text')}</span>
+        <span class="dr-t"><b>${esc(x.name || 'No name')}${x.company ? ` <span class="ju-muted">· ${esc(x.company)}</span>` : ''}</b><small>${esc(x.message || '')}</small></span>
+        <span class="dr-w">${esc(ago(x.timestamp_ist))}</span></button>`;
+    }
+    const a = ACTIONS[x.type] || { ic: 'file-text', word: x.type || 'Action' };
+    const who = x.name || x.email || '';
+    return `<button class="drill-row" type="button" data-i="${i}"><span class="a-ic ${esc(x.type)}">${icon(a.ic)}</span>
+      <span class="dr-t"><b>${esc(x.catalog_title || 'Front page')}</b><small>${esc([a.word, who, placeOf(x) || '', x._n > 1 ? `${x._n} actions` : ''].filter(Boolean).join(' · '))}</small></span>
+      <span class="dr-w">${esc(ago(x.timestamp_ist))}</span></button>`;
+  };
+  ov.innerHTML = `<div class="ju-sheet tp-drill" role="dialog" aria-modal="true" aria-label="${esc(title)}">
+    <div class="drill-head">
+      <div><div class="ju-eyebrow">${esc(eyebrow)} · <b>${items.length}</b></div><h2>${esc(title)}</h2>${sub ? `<p class="ju-muted">${sub}</p>` : ''}</div>
+      <button class="ju-icon" type="button" data-x aria-label="Close">${icon('x')}</button>
+    </div>
+    ${actions ? `<div class="reach">${actions}</div>` : ''}
+    <div class="drill-list">${items.length ? items.slice(0, 300).map(row).join('') : `<div class="empty"><span class="ti">${icon('users')}</span>Nothing here yet.</div>`}</div>
+    ${items.length > 300 ? `<p class="more ju-small ju-muted">Showing the newest 300 of ${items.length}. Download the CSV for all of them.</p>` : ''}
+  </div>`;
+  document.body.appendChild(ov);
+  document.body.style.overflow = 'hidden';
+  const sheet = ov.querySelector('.tp-drill');
+  growFrom(sheet, from);
+  M.rise([...ov.querySelectorAll('.drill-row')].slice(0, 14), { delay: 120, step: 22, y: 6 });
+  const close = () => {
+    document.removeEventListener('keydown', key);
+    M.play(sheet, [{ opacity: 1, transform: 'none' }, { opacity: 0, transform: 'translateY(12px) scale(.97)' }], { duration: 200, easing: 'ease-in' })
+      .then(() => { ov.remove(); unlock(); });
+  };
+  const key = (e) => { if (isTop(ov) && e.key === 'Escape') close(); };
+  document.addEventListener('keydown', key);
+  ov.addEventListener('click', (e) => {
+    if (e.target === ov || e.target.closest('[data-x]')) return close();
+    const r = e.target.closest('.drill-row');
+    if (r) detailSheet({ list: items, i: +r.dataset.i, from: r, render: kind === 'query' ? renderQuery : renderEvent });
+  });
+  setTimeout(() => ov.querySelector('[data-x]').focus({ preventScroll: true }), 60);
 }
 
-// a visit, a read, a download...: what, who (when known), where from, when, how they came
-function openEvent(i, from) {
-  detailSheet({ list: ELIST, i, from, render: (ev) => {
-    const a = ACTIONS[ev.type] || { ic: 'file-text', word: ev.type || 'Action' };
-    let ref = '';
-    try { ref = ev.referrer ? new URL(ev.referrer).hostname.replace(/^www\./, '') : ''; } catch {}
-    return `<div class="detail-head">
-        <span class="detail-ic a-ic ${esc(ev.type)}">${icon(a.ic)}</span>
-        <div><div class="ju-eyebrow">${esc(a.word)} · ${pill(ev.phase)}</div><h2>${esc(ev.catalog_title || 'Front page')}</h2>${ev.brand ? `<p class="ju-muted">${esc(ev.brand)}</p>` : ''}</div>
-      </div>
-      ${ev.email ? `<div class="reach"><a class="ju-btn" href="mailto:${esc(ev.email)}">${icon('mail')}${esc(ev.email)}</a></div>` : ''}
-      <div class="facts">
-        ${fact('Who', `${esc(ev.name || ev.email || 'Anonymous visitor')}${ev.company ? ` <span class="ju-muted">· ${esc(ev.company)}</span>` : ''}`)}
-        ${fact('When', `${esc(when(ev.timestamp_ist))}${recent(ev.timestamp_ist)}`)}
-        ${fact('Where', esc(placeOf(ev) || 'Unknown'))}
-        ${fact('Came from', esc([ev.source || 'direct', ref && ref !== ev.source ? ref : ''].filter(Boolean).join(' · ')))}
-        ${fact('Device', esc(ev.device || ''))}
-        ${fact('Catalogue', ev.catalog_id ? `<a class="lk" href="${esc(catLink(ev.catalog_id))}" target="_blank" rel="noopener">Open its page</a>` : '')}
-      </div>`;
-  } });
+// ---------- what each click opens ----------
+const personKey = (e) => e.ip || [e.city, e.device, e.source].join('|');
+const catTitle = (id) => ((DATA.events || []).find((e) => e.catalog_id === id) || {}).catalog_title || id;
+const PHASE_WORDS = { pre_exhibition: 'Before the exhibition', during_exhibition: 'During the exhibition', post_exhibition: 'After the exhibition' };
+function drill(kind, arg, from) {
+  const ev = newest(DATA.events), q = newest(DATA.inquiries);
+  if (kind === 'kpi') {
+    if (arg === 'total_inquiries') return drillSheet({ eyebrow: 'Queries', title: 'Every query', items: q, kind: 'query', from });
+    if (arg === 'known_email_visitors') {   // one line per person, their latest action, how many in all
+      const seen = new Map();
+      for (const e of ev) { if (!e.email) continue; const p = seen.get(e.email); if (p) p._n++; else seen.set(e.email, { ...e, _n: 1 }); }
+      return drillSheet({ eyebrow: 'Known emails', title: 'People who gave their email', sub: 'Their latest action; open one to see it, or tap their email inside.', items: [...seen.values()], from });
+    }
+    const pick = { total_visits: ['Visits', 'Every visit', (e) => e.type === 'visit'], post_exhibition_visits: ['After the exhibition', 'Visits after it ended', (e) => e.type === 'visit' && e.phase === 'post_exhibition'],
+      total_downloads: ['Downloads', 'Every download', (e) => e.type === 'download'] }[arg];
+    if (pick) return drillSheet({ eyebrow: pick[0], title: pick[1], items: ev.filter(pick[2]), from });
+  }
+  if (kind === 'city') return drillSheet({ eyebrow: 'Where visitors are', title: arg, items: ev.filter((e) => e.city === arg), from });
+  if (kind === 'phase') return drillSheet({ eyebrow: 'Exhibition', title: PHASE_WORDS[arg] || arg, items: ev.filter((e) => e.phase === arg), from });
+  if (kind === 'cat') {
+    return drillSheet({ eyebrow: 'Catalogue', title: catTitle(arg), items: ev.filter((e) => e.catalog_id === arg), from,
+      actions: `<a class="ju-btn" href="${esc(catLink(arg))}" target="_blank" rel="noopener">${icon('external-link')}Open its page</a>${q.some((x) => x.catalog_id === arg) ? `<button class="ju-btn" type="button" data-drill="catq" data-arg="${esc(arg)}">${icon('message-square-text')}Its queries</button>` : ''}` });
+  }
+  if (kind === 'catq') return drillSheet({ eyebrow: 'Queries', title: catTitle(arg), items: q.filter((x) => x.catalog_id === arg), kind: 'query', from });
+  if (kind === 'front') return drillSheet({ eyebrow: 'Front page', title: 'The front page', items: ev.filter((e) => !e.catalog_id), from });
+  if (kind === 'who') {
+    const items = ev.filter((e) => personKey(e) === arg), p = items[0] || {};
+    return drillSheet({ eyebrow: 'Visitor', title: p.name || p.email || place(p) || 'A visitor', sub: esc([place(p), p.device, p.source].filter(Boolean).join(' · ')), items, from });
+  }
+  if (kind === 'email') {
+    const items = ev.filter((e) => e.email === arg), p = items[0] || {};
+    return drillSheet({ eyebrow: 'Visitor', title: p.name || arg, sub: esc([arg, p.company].filter(Boolean).join(' · ')), items, from,
+      actions: `<a class="ju-btn" href="mailto:${esc(arg)}">${icon('mail')}${esc(arg)}</a>${q.some((x) => x.email === arg) ? `<button class="ju-btn" type="button" data-drill="qby" data-arg="${esc(arg)}">${icon('message-square-text')}Their queries</button>` : ''}` });
+  }
+  if (kind === 'qby') return drillSheet({ eyebrow: 'Queries', title: `From ${arg}`, items: q.filter((x) => x.email === arg || (x.phone && x.phone === arg)), kind: 'query', from });
+  return null;
 }
+// anything marked data-drill opens its list (numbers, places, phases, "open now", people, links inside windows)
+document.addEventListener('click', (e) => {
+  const d = e.target.closest('[data-drill]');
+  if (!d || !DATA) return;
+  e.preventDefault();
+  M.bump(d, 1.03);
+  drill(d.dataset.drill, d.dataset.arg || '', d);
+});
+document.addEventListener('keydown', (e) => {
+  const d = e.target.closest && e.target.closest('[data-drill]');
+  if (d && (e.key === 'Enter' || e.key === ' ') && d.tagName !== 'BUTTON') { e.preventDefault(); d.click(); }
+});
+const drillAttrs = (kind, arg, label) => `data-drill="${kind}" data-arg="${esc(arg)}" role="button" tabindex="0" aria-label="${esc(label)}"`;
+
+// a query: who, how to reach them (call, WhatsApp, email), what about, the whole message, where and when
+function renderQuery(r) {
+  const page = pageOf(r.message), wa = waLink(r.phone);
+  const subject = `Your query${r.catalog_title ? ' about ' + r.catalog_title : ''} - Jinharsh`;
+  const all = [`Name: ${r.name || ''}`, r.company ? `Company: ${r.company}` : '', r.phone ? `Phone: ${r.phone}` : '', r.email ? `Email: ${r.email}` : '',
+    r.catalog_title ? `About: ${r.catalog_title}${r.brand ? ' (' + r.brand + ')' : ''}` : '', `Message: ${r.message || ''}`, `When: ${when(r.timestamp_ist)}`,
+    placeOf(r) ? `Where: ${placeOf(r)}` : ''].filter(Boolean).join('\n');
+  const more = (DATA.inquiries || []).filter((x) => x !== r && ((r.email && x.email === r.email) || (r.phone && x.phone === r.phone))).length;
+  return `<div class="detail-head">
+      <span class="detail-ic q">${icon('message-square-text')}</span>
+      <div><div class="ju-eyebrow">Query · ${pill(r.phase)}</div><h2>${esc(r.name || 'No name')}</h2>${r.company ? `<p class="ju-muted">${esc(r.company)}</p>` : ''}</div>
+    </div>
+    <div class="reach">
+      ${r.phone ? `<a class="ju-btn accent" href="tel:${esc(r.phone)}">${icon('phone')}Call ${esc(r.phone)}</a>` : ''}
+      ${wa ? `<a class="ju-btn" href="${esc(wa)}" target="_blank" rel="noopener">${icon('message-circle')}WhatsApp</a>` : ''}
+      ${r.email ? `<a class="ju-btn" href="mailto:${esc(r.email)}?subject=${encodeURIComponent(subject)}">${icon('mail')}${esc(r.email)}</a>` : ''}
+    </div>
+    <div class="detail-msg">
+      <div class="detail-label"><span>Message</span><button class="ju-btn sm ghost" type="button" data-copy="${esc(r.message || '')}">${icon('copy')}Copy</button></div>
+      <p>${esc(r.message || '(no message)')}</p>
+    </div>
+    <div class="facts">
+      ${fact('About', r.catalog_title ? `<a class="lk" href="${esc(catLink(r.catalog_id, page))}" target="_blank" rel="noopener">${esc(r.catalog_title)}${page > 1 ? ` · page ${page}` : ''}</a>${r.brand ? ` <span class="ju-muted">· ${esc(r.brand)}</span>` : ''}${r.catalog_id ? `<button class="drill-link" type="button" data-drill="cat" data-arg="${esc(r.catalog_id)}">Everyone on this catalogue ›</button>` : ''}` : 'General question')}
+      ${fact('Received', `${esc(when(r.timestamp_ist))}${recent(r.timestamp_ist)}`)}
+      ${fact('Where', esc(placeOf(r)) ? `${esc(placeOf(r))}${r.city ? `<button class="drill-link" type="button" data-drill="city" data-arg="${esc(r.city)}">Everyone from ${esc(r.city)} ›</button>` : ''}` : '')}
+      ${fact('Came from', esc(r.source || ''))}
+      ${more ? fact('Before', `<button class="drill-link" type="button" data-drill="qby" data-arg="${esc(r.email || r.phone)}">${more} more ${more === 1 ? 'query' : 'queries'} from them ›</button>`) : ''}
+    </div>
+    <div class="btns detail-btns"><button class="ju-btn" type="button" data-copy="${esc(all)}">${icon('copy')}Copy all details</button></div>`;
+}
+
+// a visit, a read, a download...: what, who (when known), where from, when, how they came; each can be opened further
+function renderEvent(ev) {
+  const a = ACTIONS[ev.type] || { ic: 'file-text', word: ev.type || 'Action' };
+  let ref = '';
+  try { ref = ev.referrer ? new URL(ev.referrer).hostname.replace(/^www\./, '') : ''; } catch {}
+  const visits = (DATA.events || []).filter((e) => personKey(e) === personKey(ev)).length;
+  return `<div class="detail-head">
+      <span class="detail-ic a-ic ${esc(ev.type)}">${icon(a.ic)}</span>
+      <div><div class="ju-eyebrow">${esc(a.word)} · ${pill(ev.phase)}</div><h2>${esc(ev.catalog_title || 'Front page')}</h2>${ev.brand ? `<p class="ju-muted">${esc(ev.brand)}</p>` : ''}</div>
+    </div>
+    ${ev.email ? `<div class="reach"><a class="ju-btn" href="mailto:${esc(ev.email)}">${icon('mail')}${esc(ev.email)}</a></div>` : ''}
+    <div class="facts">
+      ${fact('Who', `${esc(ev.name || ev.email || 'Anonymous visitor')}${ev.company ? ` <span class="ju-muted">· ${esc(ev.company)}</span>` : ''}${ev.email ? `<button class="drill-link" type="button" data-drill="email" data-arg="${esc(ev.email)}">All they did ›</button>` : visits > 1 ? `<button class="drill-link" type="button" data-drill="who" data-arg="${esc(personKey(ev))}">${visits} actions from this visitor ›</button>` : ''}`)}
+      ${fact('When', `${esc(when(ev.timestamp_ist))}${recent(ev.timestamp_ist)}`)}
+      ${fact('Where', `${esc(placeOf(ev) || 'Unknown')}${ev.city && ev.city !== 'Unknown' ? `<button class="drill-link" type="button" data-drill="city" data-arg="${esc(ev.city)}">Everyone from ${esc(ev.city)} ›</button>` : ''}`)}
+      ${fact('Came from', esc([ev.source || 'direct', ref && ref !== ev.source ? ref : ''].filter(Boolean).join(' · ')))}
+      ${fact('Device', esc(ev.device || ''))}
+      ${fact('Catalogue', ev.catalog_id ? `<a class="lk" href="${esc(catLink(ev.catalog_id))}" target="_blank" rel="noopener">Open its page</a><button class="drill-link" type="button" data-drill="cat" data-arg="${esc(ev.catalog_id)}">Everyone on it ›</button>` : `<button class="drill-link" type="button" data-drill="front" data-arg="">Everyone on the front page ›</button>`)}
+    </div>`;
+}
+function openQuery(i, from) { detailSheet({ list: QLIST, i, from, render: renderQuery }); }
+function openEvent(i, from) { detailSheet({ list: ELIST, i, from, render: renderEvent }); }
 
 $$('[data-export]').forEach((b) => b.addEventListener('click', () => {
   M.nudgeDown(b.querySelector('.i'));
