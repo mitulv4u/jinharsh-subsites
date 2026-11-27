@@ -729,3 +729,8 @@ body:has(.ju-overlay) .jini, body:has(.reader-ov) .jini, body:has(.bye-ov) .jini
 .q-when select { height: 40px; padding: 0 12px; width: auto; min-width: 160px; }
 @media (max-width: 420px) { .q-when { flex: 1 1 100%; } .q-when select { width: 100%; } }
 @media (min-width: 1100px) { .jini { width: 86px; height: 120px; } }
+
+/* Jini explaining things: a short list, a quiet note */
+.as-list { margin: 6px 0 8px; padding-left: 18px; }
+.as-list li { margin: 2px 0; }
+.as-soft { font-size: 12px; color: var(--muted); }
