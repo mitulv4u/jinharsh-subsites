@@ -281,3 +281,11 @@ html.lite .drawer-ov { background: rgba(12, 12, 14, .6); }
   .cd-item.here { background: var(--accent-soft); }
   .cd-thumb { width: 48px; height: 64px; }
 }
+
+/* "2 others are looking at this catalogue right now" (live.js) */
+.live-note { display: flex; align-items: center; gap: 9px; margin: 14px 0 0; font-size: 13.5px; font-weight: 600; color: var(--muted); }
+.live-note .dot { position: relative; width: 8px; height: 8px; border-radius: 50%; background: var(--ok); flex: none; }
+.live-note .dot::after { content: ''; position: absolute; inset: 0; border-radius: 50%; border: 2px solid var(--ok); animation: live-ping 2s cubic-bezier(.2,.6,.3,1) infinite; }
+@keyframes live-ping { from { transform: scale(1); opacity: .7; } to { transform: scale(2.7); opacity: 0; } }
+@media (max-width: 760px) { .live-note { justify-content: center; } }
+@media (prefers-reduced-motion: reduce) { .live-note .dot::after { animation: none; } }

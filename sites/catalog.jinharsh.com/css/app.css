@@ -510,3 +510,6 @@ html.vt-sky::view-transition-old(root), html.vt-sky::view-transition-new(root) {
 
 /* see-through windows sit over a dimmed page: their small grey texts need a touch more ink to stay readable (contrast 4.5:1) */
 .ju:not(.dark) .ju-sheet { --muted: #5f5f66; }
+
+/* the small note at the bottom: as wide as its words (up to the screen), not squeezed into half the screen on phones */
+.ju-toast { width: max-content; max-width: calc(100vw - 32px); box-sizing: border-box; text-align: center; line-height: 1.35; }

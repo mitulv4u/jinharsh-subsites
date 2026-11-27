@@ -8,6 +8,7 @@ import { bindImage, swallow, formPage, perf } from './particles.js';
 import { track, needsDetails, beforeDownload } from './visitor.js';
 import { mediaHtml as renderMedia, wireMedia } from './media.js';
 import { catPath } from './backend.js';
+import { watchLive, others } from './live.js';
 
 const $ = (s, el = document) => el.querySelector(s);
 
@@ -17,6 +18,8 @@ const SITE = BOOT.site || {};
 const D = BOOT.doc;
 const app = $('#app');
 const preview = new URLSearchParams(location.search).has('preview');
+// ?page=37 (from a search result or a Quick look page): the reader opens straight at that page
+const START = Math.max(0, parseInt(new URLSearchParams(location.search).get('page') || '', 10) || 0);
 const PUBLIC = (BOOT.publicUrl || location.origin).replace(/\/$/, '');
 const linkOf = (code) => `${PUBLIC}${catPath(code)}`;
 // product videos, installation videos, trials & recommendations (added by the team under Edit details)
@@ -155,7 +158,24 @@ function showDoc() {
   wireCommon(D.title, linkOf(D.code));
 
   countVisit();
-
+  if (START > 1) setTimeout(() => openReader(START), 700);   // (after the page has finished arriving)
+  // "2 others are looking at this catalogue right now"
+  ui(() => watchLive(D.code, (c) => {
+    const n = Math.max(0, ((c.cats || {})[D.code] || 1) - 1);
+    let el = $('#liveNote');
+    if (!n) { if (el) el.hidden = true; return; }
+    if (!el) {
+      el = document.createElement('p');
+      el.id = 'liveNote'; el.className = 'live-note'; el.setAttribute('aria-live', 'polite');
+      $('.v-actions').after(el);
+    }
+    const t = `${others(n)} ${n === 1 ? 'is' : 'are'} looking at this catalogue right now`;
+    if (el.dataset.t === t && !el.hidden) return;
+    const was = el.hidden || !el.dataset.t;
+    el.innerHTML = `<i class="dot"></i>${t}`; el.dataset.t = t; el.hidden = false;
+    if (was) M.play(el, [{ opacity: 0, transform: 'translateY(4px)' }, { opacity: 1, transform: 'none' }], { duration: 340, easing: 'ease-out' });
+    else M.bump(el.querySelector('.dot'), 1.6);
+  }));
 }
 
 // one visit per catalogue per visit to the site (the team's own "Open page" adds ?preview=1 and is not counted)
@@ -190,7 +210,7 @@ function wireDownload(a) {
 // Closes with the X, the Esc key or the phone's Back button.
 let pdfDoc = null;            // the PDF stays loaded after the first open, so opening again is instant
 let reader = null;
-function openReader() {
+function openReader(startAt = 1) {
   if (reader) return;
   const ratio = D.coverW && D.coverH ? D.coverW / D.coverH : 210 / 297;
   const dl = D.download || D.file + '?dl=1';
@@ -264,11 +284,13 @@ function openReader() {
     return;
   }
 
-  // the cover dissolves into grains that bind together as page 1
+  // the cover dissolves into grains that bind together as page 1 (or, opened at another page, it goes straight there)
   const from = $('.v-cover img') || $('.v-cover .blank-cover');
   const first = pagesEl.firstElementChild;
   M.play($('.rbar', ov), [{ transform: 'translateY(-24px)' }, { transform: 'none' }], { duration: M.SPRING.gentle.duration, easing: M.SPRING.gentle.easing });
-  bindImage(from, first).then(() => M.bump(first, 1.015));
+  const target = startAt > 1 && pagesEl.children[startAt - 1];
+  if (target) requestAnimationFrame(() => { target.scrollIntoView({ block: 'start' }); M.roll($('#posN', ov), startAt); });
+  else bindImage(from, first).then(() => M.bump(first, 1.015));
 
   startReader(pagesEl, $('#rScroll', ov), ov).then((stop) => { stopReader = stop || stopReader; }).catch((e) => {
     console.error(e);

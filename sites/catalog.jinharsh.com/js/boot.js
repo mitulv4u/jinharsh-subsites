@@ -39,6 +39,8 @@ function toDoc(c, covers) {
     waiting: !pdf, sourceUrl: pdf ? '' : url,
     cover: m.w ? `/hub/covers/${c.id}.webp` : null, thumb: m.w ? `/hub/covers/${c.id}-t.webp` : null, coverW: m.w || null, coverH: m.h || null,
     pages: m.pages || null, size: m.size || bytesOf(c.pages),
+    // pictures of pages 2-5 (tools/php-hub/make-extras.mjs), for Quick look and the cards' turning pages
+    peek: pdf && m.peek ? Array.from({ length: m.peek }, (_, i) => `/hub/covers/${c.id}-p${i + 2}.webp`) : [],
     file: pdf ? here || url : '', download: pdf ? here || url : '', name: `${c.id}.pdf`,
     // a PDF on another website with no copy here cannot be read from here: Google's viewer shows it (as the hub did)
     frame: pdf && !here ? `https://docs.google.com/gview?embedded=true&url=${encodeURIComponent(abs)}` : '', frameLabel: 'Google viewer',
@@ -74,7 +76,8 @@ if (doc) {
   useShell('hub');
   // the hub's own order is kept (the page sorts newest first, so each gets a stand-in date in that order)
   const t0 = Date.UTC(2020, 0, 1);
-  boot = { catalogs: docs.map((d, i) => ({ ...d, updatedAt: new Date(t0 - i * 60000).toISOString() })), publicUrl: location.origin, site: SITE, printable: true };
+  boot = { catalogs: docs.map((d, i) => ({ ...d, updatedAt: new Date(t0 - i * 60000).toISOString() })), publicUrl: location.origin, site: SITE, printable: true,
+    search: '/hub/search/index.json' };   // the text of every page (make-extras.mjs), for searching inside them
   entry = '/hub/js/hub.js';
 }
 const s = document.createElement('script');
