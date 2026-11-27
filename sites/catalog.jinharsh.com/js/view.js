@@ -294,13 +294,42 @@ function openReader(startAt = 1) {
   });
 }
 
+// Opens the PDF reading only the pieces it needs. The first piece is fetched here, and its answer also tells the
+// file's size, so the PDF library never starts downloading the whole file just to find out (on a phone that took
+// about 7 seconds before page 1 could even begin). A piece that fails is asked for again, twice.
+async function openPdf(L) {
+  const CHUNK = 512 * 1024;
+  const opts = { rangeChunkSize: CHUNK, disableAutoFetch: true, disableStream: true, ...PDF_OPTS };
+  const piece = async (a, b, tries = 3) => {
+    for (let i = 0; i < tries; i++) {
+      try { const r = await fetch(D.file, { headers: { Range: `bytes=${a}-${b}` } }); if (r.status === 206) return new Uint8Array(await r.arrayBuffer()); } catch {}
+      await new Promise((ok) => setTimeout(ok, 600 * (i + 1)));
+    }
+    throw new Error('piece');
+  };
+  try {
+    if (!L.PDFDataRangeTransport) throw new Error('old');
+    const r = await fetch(D.file, { headers: { Range: `bytes=0-${CHUNK - 1}` } });
+    const total = Number((/\/(\d+)\s*$/.exec(r.headers.get('content-range') || '') || [])[1]);
+    if (r.status !== 206 || !total) {   // the server sent the whole file (it cannot send pieces): read it as it is
+      if (r.status === 200) return await L.getDocument({ data: new Uint8Array(await r.arrayBuffer()), ...PDF_OPTS }).promise;
+      throw new Error('no pieces');
+    }
+    const t = new L.PDFDataRangeTransport(total, new Uint8Array(await r.arrayBuffer()));
+    t.requestDataRange = (begin, end) => { piece(begin, end - 1).then((buf) => t.onDataRange(begin, buf)).catch(() => {}); };
+    return await L.getDocument({ range: t, ...opts }).promise;
+  } catch {
+    return L.getDocument({ url: D.file, ...opts }).promise;   // (the library's own way, as before)
+  }
+}
+
 // ---------- drawing pages near the screen ----------
 async function startReader(pagesEl, scroller, box) {
   const $$ = (q) => box.querySelector(q);
   const L = await pdfjs();
   // only the pieces of the PDF the pages on screen need (disableStream: no download of the whole file in the
   // background, which for a big catalogue crowded out the pieces for page 1 and used a phone's data)
-  if (!pdfDoc) pdfDoc = await L.getDocument({ url: D.file, rangeChunkSize: 512 * 1024, disableAutoFetch: true, disableStream: true, ...PDF_OPTS }).promise;
+  if (!pdfDoc) pdfDoc = await openPdf(L);
   const pdf = pdfDoc;
   if (!box.isConnected) return () => {};
   const n = pdf.numPages;

@@ -17,6 +17,12 @@
 .gate-card .ju-eyebrow { margin: 16px 0 0; }
 .gate-card > p.ju-muted { margin: 0 auto 20px; max-width: 320px; font-size: 14.5px; line-height: 1.5; }
 .gate-btn { display: flex; justify-content: center; min-height: 44px; }
+/* the look-alike Google button, until Google's own has loaded (a tap on it loads it) */
+.g-stand { display: inline-flex; align-items: center; justify-content: center; gap: 12px; width: 280px; height: 44px; border-radius: 999px;
+  border: 1px solid #dadce0; background: #fff; color: #1f1f1f; font: 500 14px/1 Roboto, Arial, sans-serif; letter-spacing: .25px; cursor: pointer; }
+.g-stand:hover { background: #f8faff; border-color: #d2e3fc; }
+.g-stand.busy { opacity: .7; }
+.ju.dark .g-stand { background: #131314; color: #e3e3e3; border-color: #8e918f; }
 .gate-msg { margin: 14px 0 0; display: flex; align-items: center; justify-content: center; gap: 7px; font-size: 13.5px; font-weight: 600; }
 .gate-msg.bad { color: var(--bad); }
 .gate-foot { margin: 18px 0 0; }
@@ -432,3 +438,6 @@
   .q-filters .chips::-webkit-scrollbar { display: none; }
 }
 @media (max-width: 760px) { .q-newcount .long { display: none; } }
+
+/* links inside rows (an email, a phone) are big enough to tap: at least 24 px tall */
+.row a.lk, .qcard a.lk { display: inline-block; padding: 3px 0; min-height: 24px; box-sizing: border-box; }
