@@ -36,7 +36,7 @@ export async function sendInquiry(q) {
   if (!r.ok || j.ok === false) throw new Error(j.error || 'Could not send. Please try again, or call us.');
 }
 
-// "who else is looking right now" (his api.php action=ping): where this visitor is -> { total, cats: { id: n } }
+// "I am on this page" (his api.php action=ping), so the Team Portal can show who is looking right now; answers { ok }
 export async function sendPing({ code = '', id = '', leave = false }) {
   const body = JSON.stringify({ code, id, leave });
   if (leave) { try { navigator.sendBeacon('/hub/api.php?action=ping', new Blob([body], { type: 'application/json' })); } catch {} return null; }

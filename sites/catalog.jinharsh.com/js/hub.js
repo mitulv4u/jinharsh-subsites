@@ -9,7 +9,7 @@ import { track } from './visitor.js';
 import { catPath, teamPath, canUpload } from './backend.js';
 import { cardFx } from './cardfx.js';
 import { peekSheet } from './peek.js';
-import { watchLive, others } from './live.js';
+import { watchLive } from './live.js';
 import { finder } from './finder.js';
 import { configure } from './lookup.js';
 import { startHelper } from './assistant.js';
@@ -21,7 +21,7 @@ const params = new URLSearchParams(location.search);
 const cat = params.get('cat');
 if (cat && /^[A-Za-z0-9-]{1,40}$/.test(cat) && !catPath('x').includes('?')) location.replace(catPath(cat.toLowerCase()));
 
-const S = { all: [], brand: '', q: '', publicUrl: location.origin, site: {}, printable: true, searchUrl: '', live: null };
+const S = { all: [], brand: '', q: '', publicUrl: location.origin, site: {}, printable: true, searchUrl: '' };
 
 ui(() => {
   $('#searchIcon').outerHTML = icon('search');
@@ -95,14 +95,14 @@ async function load() {
     $('#chips').innerHTML = chipsHtml(brands, S.brand);
     draw(true);
   }
-  // cards that react to the mouse, search inside the catalogues, and who else is looking right now
+  // cards that react to the mouse, search inside the catalogues, and (for the team) who is looking right now
   ui(() => cardFx($('#cards'), (code) => S.all.find((d) => d.code === code)));
   configure({ catalogs: S.all, search: S.searchUrl });
   ui(() => finder({ input: $('#q'), onAsk: (t) => querySheet({ message: t, from: $('#q') }) }));
   // the helper in the corner, and a warm goodbye when someone is leaving
   ui(() => startHelper({ site: S.site }));
   ui(() => watchGoodbye({ onQuery: () => querySheet({}) }));
-  ui(() => watchLive('', (c) => { S.live = c; paintLive(); }));
+  ui(() => watchLive(''));   // (only the team sees who is looking, in the Team Portal)
   // catalog.jinharsh.com/?qr=1 opens QR Studio straight away (the address the team was given for it)
   if (new URLSearchParams(location.search).get('qr') === '1') studio();
 }
@@ -122,43 +122,6 @@ function draw(first) {
   box.innerHTML = list.length ? list.map(card).join('')
     : `<div class="ju-card empty-hub"><h2>No catalogue matches “${esc(S.q || S.brand)}”</h2><p class="ju-muted">Try another word, or ask us: we will send you the right catalogue.</p><button class="ju-btn" type="button" data-clear>Show all catalogues</button></div>`;
   done();
-  paintLive(false);
-}
-
-// "3 others are looking at catalogues right now", and a small "2 looking" on the covers of the catalogues open now
-function paintLive(animate = true) {
-  const c = S.live;
-  if (!c) return;
-  let pill = $('#livePill');
-  if (!pill) {
-    pill = document.createElement('div');
-    pill.id = 'livePill'; pill.className = 'live-pill'; pill.hidden = true;
-    pill.setAttribute('aria-live', 'polite');
-    $('#cards').before(pill);
-  }
-  const n = Math.max(0, (c.total || 0) - 1);
-  const text = n ? `${others(n)} ${n === 1 ? 'is' : 'are'} looking at catalogues right now` : '';
-  if (text && pill.dataset.t !== text) {
-    pill.innerHTML = `<i class="dot"></i><span>${text}</span>`;
-    if (pill.hidden) { pill.hidden = false; if (animate) M.play(pill, [{ opacity: 0, transform: 'translateY(6px) scale(.96)' }, { opacity: 1, transform: 'none' }], { duration: 360, easing: 'cubic-bezier(.2,.9,.3,1.2)' }); }
-    else if (animate) M.bump(pill.querySelector('.dot'), 1.6);
-  }
-  if (!text) pill.hidden = true;
-  pill.dataset.t = text;
-  document.querySelectorAll('#cards .cat-card[data-key]').forEach((card) => {
-    const k = (c.cats || {})[card.dataset.key] || 0;
-    let b = card.querySelector('.cc-live');
-    if (!k) { if (b) { b.remove(); } return; }
-    const label = `${k} looking`;
-    if (!b) {
-      b = document.createElement('span');
-      b.className = 'cc-live';
-      card.appendChild(b);
-      b.innerHTML = `<i class="dot"></i><span>${label}</span>`;
-      if (animate) M.play(b, [{ opacity: 0, transform: 'scale(.8)' }, { opacity: 1, transform: 'none' }], { duration: 320, easing: 'cubic-bezier(.2,.9,.3,1.3)' });
-    } else if (b.textContent !== label) { b.querySelector('span').textContent = label; if (animate) M.bump(b, 1.12); }
-    b.title = `${k} ${k === 1 ? 'person has' : 'people have'} this catalogue open right now`;
-  });
 }
 
 $('#chips').addEventListener('click', (e) => {

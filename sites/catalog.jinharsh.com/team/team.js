@@ -311,6 +311,23 @@ function announce(fresh, freshQ) {
   toast(`${e.name || e.email || place(e) || 'Someone'}: ${d[0].toLowerCase()}${d.slice(1)}`);
 }
 
+// which catalogues are open right now, and how many people have each one open
+function paintOpen(live) {
+  let el = $('#nowOpen');
+  if (!el) { el = document.createElement('div'); el.id = 'nowOpen'; el.className = 'now-open'; $('#now .now-h').after(el); }
+  const titles = {};
+  for (const e of DATA.events || []) if (e.catalog_id && e.catalog_title && !titles[e.catalog_id]) titles[e.catalog_id] = e.catalog_title;
+  const cats = Object.entries((live && live.cats) || {}).sort((a, b) => b[1] - a[1]);
+  const front = live ? live.total - cats.reduce((s, [, k]) => s + k, 0) : 0;
+  const rows = [...cats.map(([id, k]) => [titles[id] || id, k]), ...(front > 0 ? [['Front page', front]] : [])];
+  const html = rows.length ? `<span class="now-open-h">Open now</span>${rows.map(([t, k]) => `<span class="ju-pill" title="${esc(t)}"><i class="eye">${icon('eye')}</i><span class="t">${esc(t)}</span><b>${k}</b></span>`).join('')}` : '';
+  if (el.innerHTML === html) return;
+  const was = el.innerHTML;
+  el.innerHTML = html;
+  el.hidden = !html;
+  if (html && was) M.rise(el.querySelectorAll('.ju-pill'), { step: 30, y: 4 });
+}
+
 // who is on the site right now: anyone who did something in the last 5 minutes, with what they did last
 const NOW_SECS = 300;
 function paintNow() {
@@ -322,11 +339,15 @@ function paintNow() {
     if (!had || istMs(e.timestamp_ist) >= istMs(had.timestamp_ist)) people.set(k, e);
   }
   const list = [...people.entries()].sort((a, b) => istMs(b[1].timestamp_ist) - istMs(a[1].timestamp_ist));
-  const n = list.length, box = $('#nowList');
+  // the pages open right now (every open page says so every 30 s; only the team sees this), else recent activity
+  const live = DATA.live && typeof DATA.live.total === 'number' ? DATA.live : null;
+  const n = live ? live.total : list.length, box = $('#nowList');
   $('#now').classList.toggle('idle', !n);
+  paintOpen(live);
   const t = n ? `${n} ${n === 1 ? 'person is' : 'people are'} on the catalogue site right now` : 'Nobody on the catalogue site right now';
   if ($('#nowT').textContent !== t) $('#nowT').textContent = t;
-  const want = list.slice(0, 6), keep = new Set(want.map(([k]) => k));
+  // (the people who did something lately; none when the live count says nobody has the site open now)
+  const want = live && !live.total ? [] : list.slice(0, 6), keep = new Set(want.map(([k]) => k));
   // the ones who left fade out, new ones pop in, the ones who did something new give a small nod
   $$('.who-now', box).forEach((el) => {
     if (keep.has(el.dataset.p)) return;
@@ -354,9 +375,9 @@ function paintNow() {
     el.title = `${label}: ${sub}`;
   });
   let more = $('.now-more', box);
-  if (n > want.length) {
+  if (list.length > want.length) {
     if (!more) { more = document.createElement('span'); more.className = 'now-more'; box.appendChild(more); }
-    more.textContent = `+${n - want.length} more`;
+    more.textContent = `+${list.length - want.length} more`;
   } else if (more) more.remove();
 }
 

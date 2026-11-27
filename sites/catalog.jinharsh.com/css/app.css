@@ -640,6 +640,6 @@ html.vt-sky::view-transition-old(root), html.vt-sky::view-transition-new(root) {
 html.lite .as-panel, html.lite .bye-ov { -webkit-backdrop-filter: none; backdrop-filter: none; }
 
 /* (these set their own display, so "hidden" needs saying again) */
-.as-panel[hidden], .as-hint[hidden], .q-sugg[hidden], .q-about[hidden], .q-contact[hidden], .finder[hidden], .live-pill[hidden] { display: none !important; }
+.as-panel[hidden], .as-hint[hidden], .q-sugg[hidden], .q-about[hidden], .q-contact[hidden], .finder[hidden] { display: none !important; }
 /* the helper steps aside while a window or the reader is open */
 body:has(.ju-overlay) .as, body:has(.reader-ov) .as, body:has(.bye-ov) .as { display: none; }

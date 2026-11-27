@@ -180,6 +180,19 @@ function format_bytes(int $bytes): string {
     return $bytes . ' B PDF';
 }
 
+// who is looking right now (pages say "I am here" with action=ping): { total, cats: { id: n } }, for the Team Portal only
+function presence_counts(string $dataDir): array {
+    $seen = json_decode((string)@file_get_contents($dataDir . '/presence.json'), true) ?: [];
+    $now = time(); $total = 0; $cats = [];
+    foreach ($seen as $v) {
+        if (!is_array($v) || $now - (int)($v['t'] ?? 0) > 75) continue;
+        $total++;
+        $c = (string)($v['c'] ?? '');
+        if ($c !== '') $cats[$c] = ($cats[$c] ?? 0) + 1;
+    }
+    return ['total' => $total, 'cats' => (object)$cats];
+}
+
 $config = load_config($CONFIG_FILE);
 $action = $_GET['action'] ?? $_POST['action'] ?? '';
 
@@ -407,6 +420,7 @@ switch ($action) {
             'events'          => $events,
             'inquiries'       => $inquiries,
             'custom_catalogs' => array_reverse($custom),
+            'live'            => presence_counts($DATA_DIR),
         ], JSON_UNESCAPED_SLASHES);
         break;
     }
@@ -538,8 +552,9 @@ switch ($action) {
     }
 
     case 'ping': {
-        // public: "who else is looking right now". Each open catalogue page says where it is about every 30 s
-        // (a catalogue id, or '' for the front page); the answer is only counts. Kept for 75 s, nothing personal.
+        // public: "I am on this page". Each open catalogue page says where it is about every 30 s (a catalogue id, or ''
+        // for the front page). Only the Team Portal sees the counts (action=analytics, signed in); a visitor gets "ok".
+        // Kept for 75 s, nothing personal.
         $body = read_json_body();
         $id   = substr(preg_replace('/[^a-z0-9]/i', '', (string)($body['id'] ?? '')), 0, 24);
         if ($id === '') $id = substr(hash('sha256', get_client_ip() . ($_SERVER['HTTP_USER_AGENT'] ?? '')), 0, 16);
@@ -561,10 +576,8 @@ switch ($action) {
             flock($fh, LOCK_UN);
             fclose($fh);
         }
-        $cats = [];
-        foreach ($seen as $v) { $c = (string)($v['c'] ?? ''); if ($c !== '') $cats[$c] = ($cats[$c] ?? 0) + 1; }
         header('Cache-Control: no-store');
-        echo json_encode(['ok' => true, 'total' => count($seen), 'cats' => (object)$cats]);
+        echo json_encode(['ok' => true]);
         break;
     }
 
