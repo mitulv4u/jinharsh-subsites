@@ -540,7 +540,7 @@ function detailSheet({ list, i, from, render }) {
   let at = i;
   const ov = document.createElement('div');
   ov.className = 'ju-overlay';
-  ov.innerHTML = `<div class="ju-sheet detail" role="dialog" aria-modal="true">
+  ov.innerHTML = `<div class="ju-sheet tp-detail" role="dialog" aria-modal="true">
     <div class="detail-top">
       <button class="ju-icon prev" type="button" data-step="-1" aria-label="Newer">${icon('chevron-right')}</button>
       <span class="detail-pos ju-small ju-muted"></span>
@@ -551,7 +551,7 @@ function detailSheet({ list, i, from, render }) {
     <div class="detail-body"></div></div>`;
   document.body.appendChild(ov);
   document.body.style.overflow = 'hidden';
-  const sheet = ov.querySelector('.detail'), body = ov.querySelector('.detail-body');
+  const sheet = ov.querySelector('.tp-detail'), body = ov.querySelector('.detail-body');
   const paint = (dir = 0) => {
     body.innerHTML = render(list[at]);
     sheet.setAttribute('aria-label', body.querySelector('h2')?.textContent || 'Details');
