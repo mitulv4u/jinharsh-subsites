@@ -8,7 +8,7 @@ import { bindImage, swallow, formPage, perf } from './particles.js';
 import { track, needsDetails, beforeDownload } from './visitor.js';
 import { mediaHtml as renderMedia, wireMedia } from './media.js';
 import { catPath } from './backend.js';
-import { watchLive, others } from './live.js';
+import { watchLive } from './live.js';
 import { configure } from './lookup.js';
 import { startHelper } from './assistant.js';
 import { watchGoodbye } from './goodbye.js';
@@ -167,23 +167,7 @@ function showDoc() {
   ui(() => startHelper({ site: SITE, current: { code: D.code, title: D.title } }));
   ui(() => watchGoodbye({ onQuery: () => querySheet({ code: D.code, title: D.title }) }));
   if (START > 1) setTimeout(() => openReader(START), 700);   // (after the page has finished arriving)
-  // "2 others are looking at this catalogue right now"
-  ui(() => watchLive(D.code, (c) => {
-    const n = Math.max(0, ((c.cats || {})[D.code] || 1) - 1);
-    let el = $('#liveNote');
-    if (!n) { if (el) el.hidden = true; return; }
-    if (!el) {
-      el = document.createElement('p');
-      el.id = 'liveNote'; el.className = 'live-note'; el.setAttribute('aria-live', 'polite');
-      $('.v-actions').after(el);
-    }
-    const t = `${others(n)} ${n === 1 ? 'is' : 'are'} looking at this catalogue right now`;
-    if (el.dataset.t === t && !el.hidden) return;
-    const was = el.hidden || !el.dataset.t;
-    el.innerHTML = `<i class="dot"></i>${t}`; el.dataset.t = t; el.hidden = false;
-    if (was) M.play(el, [{ opacity: 0, transform: 'translateY(4px)' }, { opacity: 1, transform: 'none' }], { duration: 340, easing: 'ease-out' });
-    else M.bump(el.querySelector('.dot'), 1.6);
-  }));
+  ui(() => watchLive(D.code));   // (where this visitor is; only the team sees it, in the Team Portal)
 }
 
 // one visit per catalogue per visit to the site (the team's own "Open page" adds ?preview=1 and is not counted)

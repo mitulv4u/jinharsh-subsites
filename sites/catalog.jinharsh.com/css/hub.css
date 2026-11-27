@@ -87,16 +87,9 @@
 .cc-leaf.blank::before { content: ''; position: absolute; inset: 14% 14% auto 14%; height: 50%;
   background: repeating-linear-gradient(to bottom, #e9ebef 0 2px, transparent 2px 13px); border-radius: 2px; }
 
-/* Quick look and "who is looking" on each card */
+/* Quick look on each card */
 .cc-peek { position: absolute; top: 58px; right: 12px; background: var(--card); box-shadow: var(--shadow); width: 38px; height: 38px; }
 .cc-peek .i { width: 17px; height: 17px; }
-.cc-live { position: absolute; top: 12px; left: 12px; z-index: 3; display: inline-flex; align-items: center; gap: 6px; padding: 5px 10px 5px 8px;
-  border-radius: 999px; background: var(--card); box-shadow: var(--shadow); font-size: 12px; font-weight: 650; pointer-events: none; }
-.dot { position: relative; width: 8px; height: 8px; border-radius: 50%; background: var(--ok); flex: none; display: inline-block; }
-.dot::after { content: ''; position: absolute; inset: 0; border-radius: 50%; border: 2px solid var(--ok); animation: live-ping 2s cubic-bezier(.2,.6,.3,1) infinite; }
-@keyframes live-ping { from { transform: scale(1); opacity: .7; } to { transform: scale(2.7); opacity: 0; } }
-.live-pill { display: flex; width: fit-content; align-items: center; gap: 9px; margin: -10px auto 18px; padding: 7px 14px 7px 12px; border-radius: 999px;
-  background: var(--card); box-shadow: var(--shadow); font-size: 13.5px; font-weight: 600; }
 
 /* Quick look window (peek.js) */
 .peek-sheet h2 { margin: 2px 0 14px; font-size: 20px; letter-spacing: -.02em; padding-right: 40px; }
@@ -140,11 +133,9 @@
 
 @media (max-width: 760px) {
   .cc-peek { top: 48px; right: 8px; width: 34px; height: 34px; }
-  .cc-live { top: 8px; left: 8px; padding: 4px 8px 4px 7px; font-size: 11px; }
-  .live-pill { margin: -4px auto 14px; font-size: 12.5px; }
   .finder { border-radius: 18px; }
   .f-item { grid-template-columns: 32px minmax(0, 1fr); }
   .f-thumb { width: 32px; height: 43px; }
   .f-page { grid-column: 2; justify-self: start; margin-top: -4px; }
 }
-@media (prefers-reduced-motion: reduce) { .dot::after { animation: none; } .cat-card.tilt { transform: none; } }
+@media (prefers-reduced-motion: reduce) { .cat-card.tilt { transform: none; } }
