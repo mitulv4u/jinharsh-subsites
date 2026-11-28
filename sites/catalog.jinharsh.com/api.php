@@ -174,10 +174,26 @@ function load_custom_catalogs(string $file): array {
     return is_array($data) ? $data : [];
 }
 
+// Where uploaded PDFs go: [folder, public address]. hub/pdfs when the website may write there. On this server hub/ (and
+// pdfs/ in it) belongs to the deploy account, so the website cannot, and every team upload ended in "Failed to save PDF
+// on server": then a public folder next to hub/ (hub-pdfs, like hub-data, which the website could create). Deploys only
+// touch hub/, so it is never wiped. An empty index.html keeps its file list private.
+function pdf_store(string $base, string $pdfDir): array {
+    if (@is_dir($pdfDir) && @is_writable($pdfDir)) return [$pdfDir, '/hub/pdfs'];
+    $alt = dirname($base) . '/hub-pdfs';
+    if (!@is_dir($alt)) @mkdir($alt, 0755, true);
+    if (@is_dir($alt) && @is_writable($alt)) {
+        if (!@is_file($alt . '/index.html')) @file_put_contents($alt . '/index.html', '');
+        return [$alt, '/hub-pdfs'];
+    }
+    return [$pdfDir, '/hub/pdfs'];
+}
+
 // a PDF that has arrived (in one piece, or put together from pieces) becomes a catalogue: checked, given a free name,
-// moved into pdfs/, added to the team's list. Returns [http code, answer]. $fields: title, brand, category, badge,
-// description, uploaded_by. (The same steps the one-piece upload always took.)
-function publish_pdf(string $tmp, string $origName, int $size, array $fields, array $user, string $pdfDir, string $customFile, bool $wasUploaded): array {
+// moved into the PDF folder ($store from pdf_store), added to the team's list. Returns [http code, answer].
+// $fields: title, brand, category, badge, description, uploaded_by. (The same steps the one-piece upload always took.)
+function publish_pdf(string $tmp, string $origName, int $size, array $fields, array $user, array $store, string $customFile, bool $wasUploaded): array {
+    [$pdfDir, $urlBase] = $store;
     $ext  = strtolower(pathinfo($origName, PATHINFO_EXTENSION));
     $head = @file_get_contents($tmp, false, null, 0, 5);
     if ($ext !== 'pdf' || $head !== '%PDF-') {
@@ -216,7 +232,7 @@ function publish_pdf(string $tmp, string $origName, int $size, array $fields, ar
         'category'    => $category ?: 'Industrial Catalog',
         'title'       => $title,
         'description' => $description ?: "Official {$brand} technical catalog & product specifications supplied by JinHarsh Industrial Solutions.",
-        'pdfUrl'      => "/hub/pdfs/{$slug}.pdf",
+        'pdfUrl'      => "{$urlBase}/{$slug}.pdf",
         'badge'       => $badge ?: 'New 2026',
         'pages'       => format_bytes($size),
         'uploaded_at' => date('Y-m-d H:i:s'),
@@ -519,7 +535,7 @@ switch ($action) {
         }
 
         $file = $_FILES['pdf'];
-        [$code, $res] = publish_pdf((string)$file['tmp_name'], (string)$file['name'], (int)$file['size'], $_POST, $user, $PDF_DIR, $CUSTOM_CATS, true);
+        [$code, $res] = publish_pdf((string)$file['tmp_name'], (string)$file['name'], (int)$file['size'], $_POST, $user, pdf_store($BASE_DIR, $PDF_DIR), $CUSTOM_CATS, true);
         http_response_code($code);
         echo json_encode($res, JSON_UNESCAPED_SLASHES);
         break;
@@ -593,7 +609,7 @@ switch ($action) {
             if ($in) { stream_copy_to_stream($in, $out); fclose($in); }
         }
         fclose($out);
-        [$code, $res] = publish_pdf($whole, (string)($body['name'] ?? 'catalog.pdf'), $total, $body, $user, $PDF_DIR, $CUSTOM_CATS, false);
+        [$code, $res] = publish_pdf($whole, (string)($body['name'] ?? 'catalog.pdf'), $total, $body, $user, pdf_store($BASE_DIR, $PDF_DIR), $CUSTOM_CATS, false);
         remove_upload_dir($dir);
         http_response_code($code);
         echo json_encode($res, JSON_UNESCAPED_SLASHES);
@@ -608,7 +624,8 @@ switch ($action) {
         $updated = [];
         foreach ($custom as $item) {
             if (($item['id'] ?? '') === $id) {
-                $pdfPath = $PDF_DIR . '/' . basename((string)($item['pdfUrl'] ?? ''));
+                $url = (string)($item['pdfUrl'] ?? '');
+                $pdfPath = (strpos($url, '/hub-pdfs/') === 0 ? dirname($BASE_DIR) . '/hub-pdfs' : $PDF_DIR) . '/' . basename($url);
                 if (is_file($pdfPath)) @unlink($pdfPath);
                 continue;
             }
@@ -752,10 +769,13 @@ switch ($action) {
 
     case 'health': {
         // can the hub save its records (sign-in, visits, queries, uploads)? Only yes/no and which place, nothing else.
+        [$pdfSave] = pdf_store($BASE_DIR, $PDF_DIR);
         echo json_encode([
-            'ok'     => true,
-            'saving' => @is_writable($DATA_DIR) && @is_file($CONFIG_FILE),
-            'place'  => basename(dirname($DATA_DIR)) . '/' . basename($DATA_DIR),
+            'ok'         => true,
+            'saving'     => @is_writable($DATA_DIR) && @is_file($CONFIG_FILE),
+            'place'      => basename(dirname($DATA_DIR)) . '/' . basename($DATA_DIR),
+            'pdf_saving' => @is_writable($pdfSave),                                   // can uploaded PDFs be saved?
+            'pdf_place'  => basename(dirname($pdfSave)) . '/' . basename($pdfSave),
         ]);
         break;
     }
