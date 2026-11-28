@@ -260,11 +260,12 @@ async function openDash() {
   $('#gate').hidden = true;
   $('#dash').hidden = false;
   $('#signOut').hidden = false;
-  let tab = sessionStorage.getItem('jh_team_tab') || 'analytics';
+  const asked = { visitors: 'analytics', queries: 'queries', upload: 'upload', settings: 'settings' }[location.hash.slice(1)];
+  let tab = asked || sessionStorage.getItem('jh_team_tab') || 'analytics';
   await load();
   if (tab === 'settings' && !isAdmin()) tab = 'analytics';
   showTab(tab, false);
-  M.rise($$('.dash-head, .now, .kpi, .cities, #tab-analytics .panel'), { step: 40 });
+  M.rise($$('.dash-head, .now, .kpi, .cities, #tab-analytics .panel, #tab-queries .panel'), { step: 40 });
   clearTimeout(liveTimer);
   liveTimer = setTimeout(tick, LIVE_MS);
 }
@@ -543,6 +544,10 @@ function paintQueries(fresh = new Set()) {
   const nNew = all.filter(isUnseen).length;
   $('#qNew').hidden = !nNew;
   $('#qNew').innerHTML = `${nNew} new<span class="long"> since you last looked</span>`;
+  const badge = $('#qTabBadge');
+  badge.hidden = !nNew;
+  badge.textContent = nNew > 99 ? '99+' : String(nNew);
+  badge.setAttribute('aria-label', `${nNew} new`);
   const q = QF.q;
   const list = all.filter((r) => (QF.f === 'all' || (QF.f === 'today' ? dayLabel(r.timestamp_ist) === 'Today' : qStatus(r) === QF.f))
     && (!q || [r.name, r.company, r.email, r.phone, r.message, r.catalog_title, r.brand, r.city].join(' ').toLowerCase().includes(q)));
@@ -754,7 +759,7 @@ const PHASE_WORDS = { pre_exhibition: 'Before the exhibition', during_exhibition
 function drill(kind, arg, from) {
   const ev = newest(DATA.events), q = newest(DATA.inquiries);
   if (kind === 'kpi') {
-    if (arg === 'total_inquiries') return drillSheet({ eyebrow: 'Queries', title: 'Every query', items: q, kind: 'query', from });
+    if (arg === 'total_inquiries') { showTab('queries', true); scrollTo({ top: 0, behavior: M.calm() ? 'auto' : 'smooth' }); return; }
     if (arg === 'known_email_visitors') {   // one line per person, their latest action, how many in all
       const seen = new Map();
       for (const e of ev) { if (!e.email) continue; const p = seen.get(e.email); if (p) p._n++; else seen.set(e.email, { ...e, _n: 1 }); }
@@ -865,7 +870,8 @@ function showTab(tab, animate) {
   if (tab === 'settings' && !isAdmin()) tab = 'analytics';
   sessionStorage.setItem('jh_team_tab', tab);
   $$('.tabs [data-tab]').forEach((b) => { const on = b.dataset.tab === tab; b.classList.toggle('on', on); b.setAttribute('aria-selected', on); });
-  for (const t of ['analytics', 'upload', 'settings']) $(`#tab-${t}`).hidden = t !== tab;
+  for (const t of ['analytics', 'queries', 'upload', 'settings']) $(`#tab-${t}`).hidden = t !== tab;
+  try { history.replaceState(null, '', `#${tab === 'analytics' ? 'visitors' : tab}`); } catch {}   // (a link can open a tab: …/team.html#queries)
   if (animate) M.play($(`#tab-${tab}`), [{ opacity: 0, transform: 'translateY(10px)' }, { opacity: 1, transform: 'none' }], { duration: 300, easing: 'cubic-bezier(.2,.8,.2,1)' });
 }
 

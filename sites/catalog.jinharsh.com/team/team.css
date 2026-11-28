@@ -34,6 +34,12 @@
 .ex-top h1 { margin: 0; font-size: 26px; letter-spacing: -.03em; line-height: 1.15; }
 .dash-tools { display: flex; align-items: center; gap: 8px; }
 .team .tabs button { display: inline-flex; align-items: center; gap: 7px; }
+/* how many queries are new, on the Queries tab */
+.tab-badge { display: inline-grid; place-items: center; min-width: 19px; height: 19px; padding: 0 6px; border-radius: 999px; background: var(--accent); color: #fff;
+  font-size: 11.5px; font-weight: 750; line-height: 1; font-variant-numeric: tabular-nums; }
+.tab-badge[hidden] { display: none; }
+/* phones: four tabs (admins have Settings too) fit without their icons */
+@media (max-width: 560px) { .team .tabs:has(#settingsTab:not([hidden])) button .ti { display: none; } .team .tabs:has(#settingsTab:not([hidden])) button { gap: 5px; padding-left: 4px; padding-right: 4px; } }
 /* the exhibition as a line: before | during | after, the current part filled */
 .ex-line { display: grid; grid-template-columns: 1fr 1.2fr 1fr; gap: 4px; margin-top: 12px; max-width: 560px; }
 .ex-line .seg { padding: 7px 10px 8px; border-radius: 10px; background: var(--hover); font-size: 12px; color: var(--muted); line-height: 1.3; }
