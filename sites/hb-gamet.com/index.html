@@ -11,16 +11,11 @@
     <meta name="robots" content="index, follow">
     <meta name="description"
         content="GAMET/HB super precision tapered roller bearings for machine tools, spindles & CNC applications. Browse catalog with dimensions, pricing & technical specifications.">
-
-    <!-- Google Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link
-        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Urbanist:wght@600;700;800&display=swap"
-        rel="stylesheet">
-
-    <link rel="stylesheet" href="index.css">
-    <script src="lucide.min.js?v=2" defer></script>
+    <link rel="preload" href="fonts/urbanist-latin.woff2" as="font" type="font/woff2" crossorigin>
+    <link rel="preload" href="fonts/inter-latin.woff2" as="font" type="font/woff2" crossorigin>
+    <link rel="preload" as="image" href="images/GAMET%20-%20Product_Super%20Precision%20TRB_page2_image3.webp" type="image/webp">
+    <link rel="stylesheet" href="index.css?v=4">
+    <script src="lucide-slim.js?v=4" defer></script>
 
     <!-- Google Site Name Structured Data -->
     <script type="application/ld+json">
@@ -58,7 +53,7 @@
 
 <body>
     <!-- Global Full Page Loader -->
-    <div id="fullPageLoader" class="full-page-loader">
+    <div id="fullPageLoader" class="full-page-loader hidden">
         <div class="loader-content">
             <div class="pdf-spinner large"></div>
             <div id="loaderText">Loading GAMET...</div>
@@ -134,7 +129,7 @@
                 </div>
 
                 <div style="position: relative;">
-                    <img src="images/GAMET - Product_Super Precision TRB_page2_image3.jpg" alt="Gamet Precision Bearing"
+                    <img src="images/GAMET - Product_Super Precision TRB_page2_image3.webp" fetchpriority="high" decoding="async" alt="Gamet Precision Bearing"
                         style="width: 100%; border-radius: var(--radius-xl); box-shadow: var(--shadow-lg);">
                     <div
                         style="position: absolute; bottom: -30px; left: -30px; background: white; padding: 24px 32px; border-radius: var(--radius-lg); box-shadow: var(--shadow-md); display: flex; align-items: center; gap: 16px;">
@@ -245,7 +240,7 @@
 
                 <div style="position: sticky; top: 100px;">
                     <div style="position: relative;">
-                        <img src="images/GAMET - Product_Super Precision TRB_page3_image1.jpg"
+                        <img loading="lazy" decoding="async" src="images/GAMET - Product_Super Precision TRB_page3_image1.webp"
                             alt="Gamet Inside Spindle"
                             style="width: 100%; border-radius: var(--radius-xl); box-shadow: var(--shadow-md);">
                         <div
@@ -266,7 +261,7 @@
             <div class="container"
                 style="display: grid; grid-template-columns: 1fr 1fr; gap: 64px; align-items: center;">
                 <div style="position: relative;">
-                    <img src="envato/cnc-machining-process-for-metal-parts-at-a-manufa-2023-11-27-05-36-50-utc.jpg"
+                    <img loading="lazy" decoding="async" src="envato/cnc-machining-process-for-metal-parts-at-a-manufa-2023-11-27-05-36-50-utc.jpg"
                         alt="CNC Machining Parts" loading="lazy"
                         style="width: 100%; border-radius: var(--radius-xl); box-shadow: var(--shadow-lg);">
                 </div>
@@ -378,10 +373,10 @@
             <h2 style="font-size: 2.8rem; font-weight: 800; margin-bottom: 60px;">State-of-the-Art <span
                     class="text-gradient">Manufacturing</span></h2>
             <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 40px;">
-                <img src="envato/industrial-factory-with-cnc-machines-2026-01-05-00-12-44-utc.jpg"
+                <img loading="lazy" decoding="async" src="envato/industrial-factory-with-cnc-machines-2026-01-05-00-12-44-utc.jpg"
                     alt="Automation and Smart Industry" loading="lazy"
                     style="width: 100%; height: 350px; object-fit: cover; border-radius: var(--radius-xl); box-shadow: var(--shadow-md);">
-                <img src="envato/young-man-working-on-a-cnc-machine-in-a-factory-2026-01-08-22-57-04-utc.jpg"
+                <img loading="lazy" decoding="async" src="envato/young-man-working-on-a-cnc-machine-in-a-factory-2026-01-08-22-57-04-utc.jpg"
                     alt="Robotic Arm Assembly" loading="lazy"
                     style="width: 100%; height: 350px; object-fit: cover; border-radius: var(--radius-xl); box-shadow: var(--shadow-md);">
             </div>
@@ -481,7 +476,7 @@
         </div>
 
         <div id="extra-content">
-            <img src="images/new_logo.jpg" alt="Gamet Bearings"
+            <img loading="lazy" decoding="async" src="images/new_logo.webp" alt="Gamet Bearings"
                 style="max-width: 180px; margin-bottom: 30px; border-radius: 4px;">
 
             <div class="spacer-30-line"></div>

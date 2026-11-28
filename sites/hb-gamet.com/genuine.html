@@ -11,14 +11,9 @@
     <meta name="robots" content="index, follow">
     <meta name="description"
         content="Buy genuine GAMET/HB precision bearings from the authorised India partner. Avoid counterfeit bearings. Verified original quality with warranty.">
-
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link
-        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Urbanist:wght@600;700;800&display=swap"
-        rel="stylesheet">
-
-    <link rel="stylesheet" href="index.css">
+    <link rel="preload" href="fonts/urbanist-latin.woff2" as="font" type="font/woff2" crossorigin>
+    <link rel="preload" href="fonts/inter-latin.woff2" as="font" type="font/woff2" crossorigin>
+    <link rel="stylesheet" href="index.css?v=4">
     <style>
         .warning-banner {
             background: linear-gradient(135deg, #dc2626, #b91c1c);
@@ -244,7 +239,7 @@
             }
         }
     </style>
-    <script src="lucide.min.js?v=2" defer></script>
+    <script src="lucide-slim.js?v=4" defer></script>
 
     <!-- SEO & Webmaster Validation Placeholders -->
     <meta name='google-site-verification' content='REPLACE_WITH_YOUR_GOOGLE_VERIFICATION_CODE' />
@@ -271,7 +266,7 @@
 
 <body>
     <!-- Global Full Page Loader -->
-    <div id="fullPageLoader" class="full-page-loader">
+    <div id="fullPageLoader" class="full-page-loader hidden">
         <div class="loader-content">
             <div class="pdf-spinner large"></div>
             <div id="loaderText">Loading GAMET...</div>
@@ -390,7 +385,7 @@
 
                     <div
                         style="border-radius: var(--radius-lg); overflow: hidden; box-shadow: var(--shadow-sm); height: 100%;">
-                        <img loading="lazy" src="envato/asian-engineer-man-wearing-safety-helmet-checking-2026-01-11-10-42-35-utc.jpg"
+                        <img loading="lazy" decoding="async" src="envato/asian-engineer-man-wearing-safety-helmet-checking-2026-01-11-10-42-35-utc.jpg"
                             alt="Quality Inspector Checking Bearings"
                             style="width: 100%; height: 100%; object-fit: cover; min-height: 480px;">
                     </div>
@@ -415,7 +410,7 @@
 
                     <div class="counterfeit-images">
                         <div class="img-card">
-                            <img loading="lazy" src="images/Counterfeit_Gamet_Bearing.png" alt="Counterfeit Gamet Bearing">
+                            <img loading="lazy" decoding="async" src="images/Counterfeit_Gamet_Bearing.png" alt="Counterfeit Gamet Bearing">
                             <div class="img-card-caption">
                                 <h4>Counterfeit Gamet Bearing</h4>
                                 <p>An example of a fake Gamet bearing — note the surface finish and marking
@@ -424,7 +419,7 @@
                             </div>
                         </div>
                         <div class="img-card">
-                            <img loading="lazy" src="images/Counterfiet_Fake_Gamet_Spurios_Marking.jpg"
+                            <img loading="lazy" decoding="async" src="images/Counterfiet_Fake_Gamet_Spurios_Marking.jpg"
                                 alt="Spurious Marking on Fake Gamet">
                             <div class="img-card-caption">
                                 <h4>Fake / Spurious Marking Style</h4>
@@ -433,7 +428,7 @@
                             </div>
                         </div>
                         <div class="img-card">
-                            <img loading="lazy" src="images/Gamet_Fake_Marking.jpg" alt="Fake Gamet Marking">
+                            <img loading="lazy" decoding="async" src="images/Gamet_Fake_Marking.jpg" alt="Fake Gamet Marking">
                             <div class="img-card-caption">
                                 <h4>Fake Marking Comparison</h4>
                                 <p>Side-by-side comparison of genuine vs. fake Gamet cone markings — subtle but critical
@@ -441,7 +436,7 @@
                             </div>
                         </div>
                         <div class="img-card">
-                            <img loading="lazy" src="images/Old Gamet Logo.jpg" alt="Old vs Fake Logos">
+                            <img loading="lazy" decoding="async" src="images/Old Gamet Logo.jpg" alt="Old vs Fake Logos">
                             <div class="img-card-caption">
                                 <h4>Old Gamet Logo</h4>
                                 <p>The original standalone Gamet logo, used on pre-2019 (pre-HB Bearings) products and
@@ -468,14 +463,14 @@
                                 <span
                                     style="display: block; font-size: 0.95rem; font-weight: 700; color: var(--accent-primary); margin-bottom: 16px; text-transform: uppercase; letter-spacing: 1px;">New
                                     Brand Mark</span>
-                                <img loading="lazy" src="images/new_logo.jpg" alt="Gamet New Logo"
+                                <img loading="lazy" decoding="async" src="images/new_logo.jpg" alt="Gamet New Logo"
                                     style="height:60px;width:auto; border-radius: 6px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);">
                             </div>
                             <div style="text-align: center;">
                                 <span
                                     style="display: block; font-size: 0.95rem; font-weight: 700; color: var(--accent-primary); margin-bottom: 16px; text-transform: uppercase; letter-spacing: 1px;">Original
                                     Heritage Mark</span>
-                                <img loading="lazy" src="images/Old Gamet Logo.jpg" alt="Gamet Old Logo"
+                                <img loading="lazy" decoding="async" src="images/Old Gamet Logo.jpg" alt="Gamet Old Logo"
                                     style="height:60px;width:auto; border-radius: 6px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);">
                             </div>
                         </div>
@@ -547,14 +542,14 @@
                         <span
                             style="display: block; font-size: 0.8rem; color: var(--text-muted); margin-bottom: 8px; text-transform: uppercase; letter-spacing: 1px;">New
                             Brand Mark</span>
-                        <img loading="lazy" src="images/new_logo.jpg" alt="Gamet New Logo"
+                        <img loading="lazy" decoding="async" src="images/new_logo.jpg" alt="Gamet New Logo"
                             style="height:32px;width:auto; border-radius: 4px;">
                     </div>
                     <div style="text-align: center;">
                         <span
                             style="display: block; font-size: 0.8rem; color: var(--text-muted); margin-bottom: 8px; text-transform: uppercase; letter-spacing: 1px;">Original
                             Heritage Mark</span>
-                        <img loading="lazy" src="images/Old Gamet Logo.jpg" alt="Gamet Old Logo"
+                        <img loading="lazy" decoding="async" src="images/Old Gamet Logo.jpg" alt="Gamet Old Logo"
                             style="height:32px;width:auto; border-radius: 4px; ">
                     </div>
                 </div>
@@ -598,7 +593,7 @@
         </div>
 
         <div id="extra-content">
-            <img loading="lazy" src="images/new_logo.jpg" alt="Gamet Bearings"
+            <img loading="lazy" decoding="async" src="images/new_logo.jpg" alt="Gamet Bearings"
                 style="max-width: 180px; margin-bottom: 30px; border-radius: 4px;">
 
             <div class="spacer-30-line"></div>

@@ -50,7 +50,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // ============ Init ============
   function init() {
-    showState('loading');
     try {
       if (typeof gametData === 'undefined') throw new Error('gametData not loaded');
       catalogData = gametData.filter(item => item.part_number && item.part_number !== 'nan');
