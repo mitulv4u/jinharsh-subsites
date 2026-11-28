@@ -56,7 +56,8 @@
         </div>
         <div class="dash-tools">
           <div class="ju-seg tabs" role="tablist" aria-label="Team Portal">
-            <button type="button" role="tab" data-tab="analytics" class="on"><span class="ti" data-i="chart-column"></span><span>Visitors<span class="long"> &amp; queries</span></span></button>
+            <button type="button" role="tab" data-tab="analytics" class="on"><span class="ti" data-i="chart-column"></span><span>Visitors</span></button>
+            <button type="button" role="tab" data-tab="queries"><span class="ti" data-i="message-square-text"></span><span>Queries</span><span class="tab-badge" id="qTabBadge" hidden></span></button>
             <button type="button" role="tab" data-tab="upload"><span class="ti" data-i="upload"></span><span>Upload</span></button>
             <button type="button" role="tab" data-tab="settings" id="settingsTab" hidden><span class="ti" data-i="settings"></span><span>Settings</span></button>
           </div>
@@ -64,7 +65,7 @@
         </div>
       </div>
 
-      <!-- visitors and queries -->
+      <!-- visitors -->
       <div class="tab" id="tab-analytics">
         <div class="ju-card now idle" id="now">
           <div class="now-h">
@@ -96,6 +97,10 @@
           <p class="more ju-small ju-muted" id="eventsMore" hidden></p>
         </div>
 
+      </div>
+
+      <!-- queries -->
+      <div class="tab" id="tab-queries" hidden>
         <div class="ju-card panel">
           <div class="panel-head">
             <div><h2>Queries <span class="q-newcount" id="qNew" hidden></span></h2><p class="ju-muted">Sent from the catalogue site; each one also went to Odoo. Tap one to open it; tap its status to move it on.</p></div>
