@@ -103,13 +103,14 @@
       <div class="tab" id="tab-queries" hidden>
         <div class="ju-card panel">
           <div class="panel-head">
-            <div><h2>Queries <span class="q-newcount" id="qNew" hidden></span></h2><p class="ju-muted">Sent from the catalogue site; each one also went to Odoo. Tap one to open it; tap its status to move it on.</p></div>
+            <div><h2>Queries <span class="q-newcount" id="qNew" hidden></span></h2><p class="ju-muted">Sent from the catalogue site; each one also went to Odoo. Tap one to open it; tap its status to move it on; tick the ones of no use to archive them.</p></div>
             <button class="ju-btn sm" type="button" data-export="inquiries"><span class="ti" data-i="file-down"></span>Download CSV</button>
           </div>
           <div class="filters q-filters">
             <label class="search"><span class="ti" data-i="search"></span><input class="ju-inp" id="qq" type="search" placeholder="Search name, company, phone, message…" autocomplete="off"><span class="sr">Search queries</span></label>
             <div class="chips" id="qChips" role="group" aria-label="Show"></div>
           </div>
+          <div class="q-bulk" id="qBulk" role="toolbar" aria-label="Selected queries" hidden></div>
           <div class="q-list" id="queries"></div>
         </div>
       </div>

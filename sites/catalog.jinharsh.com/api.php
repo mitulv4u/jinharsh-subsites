@@ -180,7 +180,7 @@ function format_bytes(int $bytes): string {
     return $bytes . ' B PDF';
 }
 
-// how far the team has got with each query: { queryId: { s: 'new'|'contacted'|'done', by, at } } (Team Portal)
+// how far the team has got with each query: { queryId: { s: 'new'|'contacted'|'done', by, at, a?: 1 archived, ab, aa } } (Team Portal)
 function load_query_status(string $dataDir): array {
     $j = json_decode((string)@file_get_contents($dataDir . '/query-status.json'), true);
     return is_array($j) ? $j : [];
@@ -573,12 +573,58 @@ switch ($action) {
         if (!$fh) { http_response_code(500); echo json_encode(['ok' => false, 'error' => 'Could not save']); break; }
         flock($fh, LOCK_EX);
         $all = json_decode((string)stream_get_contents($fh), true) ?: [];
-        if ($status === 'new') unset($all[$id]);
-        else $all[$id] = ['s' => $status, 'by' => (string)($user['email'] ?? ''), 'at' => date('Y-m-d H:i:s')];
+        // an archived query stays archived when its status changes (a = archived, ab = by whom, aa = when)
+        $keep = [];
+        if (is_array($all[$id] ?? null) && !empty($all[$id]['a'])) {
+            $keep = ['a' => 1, 'ab' => (string)($all[$id]['ab'] ?? ''), 'aa' => (string)($all[$id]['aa'] ?? '')];
+        }
+        if ($status === 'new' && !$keep) unset($all[$id]);
+        else $all[$id] = array_merge(['s' => $status, 'by' => (string)($user['email'] ?? ''), 'at' => date('Y-m-d H:i:s')], $keep);
         ftruncate($fh, 0); rewind($fh);
         fwrite($fh, json_encode((object)$all, JSON_UNESCAPED_SLASHES));
         fflush($fh); flock($fh, LOCK_UN); fclose($fh);
         echo json_encode(['ok' => true, 'status' => $all[$id] ?? ['s' => 'new']], JSON_UNESCAPED_SLASHES);
+        break;
+    }
+
+    case 'query_archive': {
+        // the team puts queries of no use away (archive) or brings them back (restore); their status is kept as it was.
+        // Body: { ids: [queryId, ...], archive: true | false }. Nothing is deleted: the query itself stays in the records.
+        $user    = require_auth($config, 'uploader');
+        $body    = read_json_body();
+        $archive = !empty($body['archive']);
+        $ids     = [];
+        foreach ((array)($body['ids'] ?? []) as $x) {
+            $one = substr(preg_replace('/[^a-z0-9]/i', '', (string)$x), 0, 40);
+            if ($one !== '') $ids[$one] = true;
+        }
+        $ids = array_keys($ids);
+        if (!$ids || count($ids) > 1000) {
+            http_response_code(400);
+            echo json_encode(['ok' => false, 'error' => 'No queries chosen']);
+            break;
+        }
+        $fh = @fopen($DATA_DIR . '/query-status.json', 'c+');
+        if (!$fh) { http_response_code(500); echo json_encode(['ok' => false, 'error' => 'Could not save']); break; }
+        flock($fh, LOCK_EX);
+        $all = json_decode((string)stream_get_contents($fh), true) ?: [];
+        $out = [];
+        foreach ($ids as $id) {
+            $id = (string)$id;
+            $e  = is_array($all[$id] ?? null) ? $all[$id] : ['s' => 'new'];
+            if ($archive) {
+                $e['a'] = 1; $e['ab'] = (string)($user['email'] ?? ''); $e['aa'] = date('Y-m-d H:i:s');
+                $all[$id] = $e;
+            } else {
+                unset($e['a'], $e['ab'], $e['aa']);
+                if (($e['s'] ?? 'new') === 'new') unset($all[$id]); else $all[$id] = $e;
+            }
+            $out[$id] = $all[$id] ?? ['s' => 'new'];
+        }
+        ftruncate($fh, 0); rewind($fh);
+        fwrite($fh, json_encode((object)$all, JSON_UNESCAPED_SLASHES));
+        fflush($fh); flock($fh, LOCK_UN); fclose($fh);
+        echo json_encode(['ok' => true, 'status' => (object)$out], JSON_UNESCAPED_SLASHES);
         break;
     }
 
