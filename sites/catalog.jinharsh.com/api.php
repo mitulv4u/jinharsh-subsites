@@ -45,7 +45,7 @@ $GEO_CACHE    = $DATA_DIR . '/geo-cache.json';
 
 function load_config(string $path): array {
     $defaults = [
-        'exhibition_name' => 'JinHarsh Industrial Exhibition 2026',
+        'exhibition_name' => 'Jinharsh Industrial Exhibition 2026',
         'start_date'      => date('Y-m-d'),
         'end_date'        => date('Y-m-d', strtotime('+3 days')),
         'hmac_secret'     => bin2hex(random_bytes(24)),
@@ -201,7 +201,7 @@ function publish_pdf(string $tmp, string $origName, int $size, array $fields, ar
     }
 
     $title       = trim((string)($fields['title'] ?? ''));
-    $brand       = trim((string)($fields['brand'] ?? 'JinHarsh'));
+    $brand       = trim((string)($fields['brand'] ?? 'Jinharsh'));
     $category    = trim((string)($fields['category'] ?? 'Industrial Catalog'));
     $badge       = trim((string)($fields['badge'] ?? 'New 2026'));
     $description = trim((string)($fields['description'] ?? ''));
@@ -228,10 +228,10 @@ function publish_pdf(string $tmp, string $origName, int $size, array $fields, ar
 
     $entry = [
         'id'          => $slug,
-        'brand'       => $brand ?: 'JinHarsh',
+        'brand'       => $brand ?: 'Jinharsh',
         'category'    => $category ?: 'Industrial Catalog',
         'title'       => $title,
-        'description' => $description ?: "Official {$brand} technical catalog & product specifications supplied by JinHarsh Industrial Solutions.",
+        'description' => $description ?: "Official {$brand} technical catalog & product specifications supplied by Jinharsh Industrial Solutions.",
         'pdfUrl'      => "{$urlBase}/{$slug}.pdf",
         'badge'       => $badge ?: 'New 2026',
         'pages'       => format_bytes($size),

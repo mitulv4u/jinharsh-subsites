@@ -15,7 +15,7 @@ const BRAND_ALIASES = [
   [/\bgroz\b/i, 'Groz'],
   [/\bshell\b|\bomala\b|\btellus\b|\bgadus\b|\brimula\b|\bspirax\b/i, 'Shell'],
   [/\bflexco\b/i, 'Flexco'],
-  [/\bjin\s*harsh\b|\bjis\b/i, 'JinHarsh'],
+  [/\bjin\s*harsh\b|\bjis\b/i, 'Jinharsh'],
 ];
 const UNIT_WORDS = 'nos?|numbers?|pcs?|pieces?|units?|sets?|pairs?|qty|quantity|litres?|liters?|ltrs?|l|kg|kgs|kilos?|metres?|meters?|mtrs?|m|boxes?|drums?|pails?|buckets?|rolls?';
 const UNIT_RE = new RegExp(`(?:\\b(?:qty|quantity)\\s*[:=-]?\\s*(\\d{1,6})\\b)|(?:\\b(\\d{1,6})\\s*(?:x\\s*)?(${UNIT_WORDS})\\b)|(?:\\bx\\s*(\\d{1,6})\\b)`, 'i');
@@ -207,7 +207,7 @@ const BRANDS = {
   Groz: 'Groz makes lubrication equipment (grease guns, oil pumps, dispensers), fluid-handling tools, workshop tools and LED work lights.',
   Shell: 'Shell makes industrial lubricants and greases: gear oils (Omala), hydraulic oils (Tellus), greases (Gadus) and more.',
   Flexco: 'Flexco makes conveyor-belt maintenance products: belt fasteners and splices, belt cleaners, skirting and trackers.',
-  JinHarsh: 'Our own master guide covers everything we supply across our divisions: bearings, couplings, motors, lubricants, tools, safety and conveying.',
+  Jinharsh: 'Our own master guide covers everything we supply across our divisions: bearings, couplings, motors, lubricants, tools, safety and conveying.',
 };
 export const brandInfo = (b) => BRANDS[b] || '';
 
