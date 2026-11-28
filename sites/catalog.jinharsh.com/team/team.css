@@ -397,7 +397,7 @@
 .q-filters .ju-chip.on b { opacity: 1; }
 .q-list { display: grid; gap: 8px; }
 .q-day { margin: 10px 2px 0; font-size: 12px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); }
-.qcard { display: grid; grid-template-columns: 40px minmax(0, 1fr) auto; gap: 12px; align-items: start; padding: 14px; border-radius: 18px; background: var(--card);
+.qcard { display: grid; grid-template-columns: 22px 40px minmax(0, 1fr) auto; gap: 12px; align-items: start; padding: 14px; border-radius: 18px; background: var(--card);
   box-shadow: 0 0 0 1px var(--line); transition: transform .2s var(--ease), box-shadow .2s var(--ease); position: relative; }
 .qcard:hover { transform: translateY(-1px); box-shadow: 0 0 0 1px var(--line), 0 14px 30px -20px rgba(20,22,28,.4); }
 .qcard:focus-visible { outline: 2px solid var(--blue); outline-offset: 2px; }
@@ -436,10 +436,43 @@
 .q-status-row .ju-chip.on.st-contacted { background: var(--blue); color: #fff; }
 .q-status-row .ju-chip.on.st-done { background: var(--ok); color: #fff; }
 .q-label { font-size: 12px; font-weight: 650; color: var(--muted); }
+/* tick boxes: choose queries, then Archive them (or Restore them under "Archived") */
+.q-pick { position: relative; width: 22px; height: 40px; display: grid; place-items: center; cursor: pointer; }
+.q-pick input { position: absolute; inset: -6px; width: auto; height: auto; margin: 0; opacity: 0; cursor: pointer; }
+.q-box { position: relative; width: 18px; height: 18px; border-radius: 6px; background: var(--card); box-shadow: inset 0 0 0 1.6px var(--muted);
+  opacity: .5; transition: background .15s, box-shadow .15s, opacity .15s, transform .15s var(--ease); }
+.qcard:hover .q-box, .q-pick input:focus-visible + .q-box, .q-pick input:checked + .q-box { opacity: 1; }
+.q-pick input:focus-visible + .q-box { outline: 2px solid var(--blue); outline-offset: 2px; }
+.q-pick input:checked + .q-box { background: var(--accent); box-shadow: none; }
+.q-pick input:checked + .q-box::after { content: ''; position: absolute; left: 6.5px; top: 3px; width: 4px; height: 8.5px; border: solid #fff; border-width: 0 2px 2px 0; transform: rotate(45deg); }
+.q-pick input:active + .q-box { transform: scale(.86); }
+.qcard.sel { background: color-mix(in srgb, var(--accent-soft) 55%, var(--card)); box-shadow: 0 0 0 1.5px var(--accent), 0 12px 28px -22px rgba(20,22,28,.45); }
+.qcard.archived { opacity: .8; }
+.qcard.archived:hover, .qcard.archived.sel { opacity: 1; }
+/* the bar for the ticked queries: stays in view while you scroll the list */
+.q-bulk { position: sticky; top: 76px; z-index: 6; display: flex; align-items: center; gap: 8px; margin: 2px 0 10px; padding: 7px 7px 7px 16px;
+  border-radius: 14px; background: var(--ink); color: var(--ink-text); box-shadow: 0 14px 30px -18px rgba(0,0,0,.55); }
+.q-bulk[hidden] { display: none; }
+.q-bulk .qb-n { font-size: 14px; white-space: nowrap; }
+.q-bulk .qb-n b { font-size: 15px; font-weight: 750; }
+.q-bulk .qb-gap { flex: 1; }
+.q-bulk .ju-btn.ghost, .q-bulk .ju-icon { color: inherit; }
+.q-bulk .ju-btn.ghost:hover, .q-bulk .ju-icon:hover { background: color-mix(in srgb, var(--ink-text) 14%, transparent); }
+.q-bulk .ju-btn:not(.ghost):not(.accent) { background: var(--ink-text); color: var(--ink); }
+.q-bulk .qb-short { display: none; }
+@media (max-width: 440px) {                     /* a phone: "1 · All 2 · Archive · ✕" so the ✕ stays inside */
+  .q-bulk { gap: 6px; padding-left: 14px; }
+  .q-bulk .qb-long { display: none; }
+  .q-bulk .qb-short { display: inline; }
+}
+.q-arch-note { display: flex; align-items: center; gap: 6px; margin: -4px 0 14px; color: var(--muted); }
+.q-arch-note .i { width: 14px; height: 14px; flex: none; }
 @media (max-width: 760px) {
-  .qcard { grid-template-columns: 36px minmax(0, 1fr); padding: 12px; }
+  .qcard { grid-template-columns: 22px 36px minmax(0, 1fr); padding: 12px; }
   .q-av { width: 36px; height: 36px; font-size: 14px; }
-  .q-side { grid-column: 2; display: flex; justify-content: space-between; align-items: center; }
+  .q-pick { height: 36px; }
+  .q-bulk { top: 64px; padding-left: 12px; }
+  .q-side { grid-column: 3; display: flex; justify-content: space-between; align-items: center; }
   .q-filters .chips { flex-wrap: nowrap; overflow-x: auto; margin: 0 -14px; padding: 0 14px 2px; scrollbar-width: none; }
   .q-filters .chips::-webkit-scrollbar { display: none; }
 }

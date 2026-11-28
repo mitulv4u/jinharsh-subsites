@@ -526,6 +526,10 @@ const QSEEN = (() => { try { return +(localStorage.getItem('tp_q_seen') || 0); }
 const STATUS = { new: { word: 'New', next: 'contacted', hint: 'Mark as contacted' }, contacted: { word: 'Contacted', next: 'done', hint: 'Mark as done' }, done: { word: 'Done', next: 'new', hint: 'Mark as new again' } };
 const qStatus = (r) => ((DATA.query_status || {})[r.id] || {}).s || 'new';
 const qStatusInfo = (r) => (DATA.query_status || {})[r.id] || null;
+// archived = put away because it is of no use (a test, spam, a duplicate). It keeps its status and can be restored.
+const qArchived = (r) => !!(r.id && ((DATA.query_status || {})[r.id] || {}).a);
+const QSEL = new Set();          // the ticked queries (ids); only ones in the list on screen
+let QLAST = -1;                  // the box ticked last: Shift + click ticks everything in between
 const isUnseen = (r) => istMs(r.timestamp_ist) > QSEEN;
 const dayLabel = (ts) => {
   const t = istMs(ts); if (!t) return 'Earlier';
@@ -533,15 +537,21 @@ const dayLabel = (ts) => {
   const days = Math.floor(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate()) / 864e5) - Math.floor(Date.UTC(d.getUTCFullYear(), d.getUTCMonth(), d.getUTCDate()) / 864e5);
   return days === 0 ? 'Today' : days === 1 ? 'Yesterday' : `${d.getUTCDate()} ${MONTHS[d.getUTCMonth()]}${d.getUTCFullYear() !== now.getUTCFullYear() ? ' ' + d.getUTCFullYear() : ''}`;
 };
-const QFILTERS = [['all', 'All', ''], ['new', 'New', 'circle-alert'], ['contacted', 'Contacted', 'phone'], ['done', 'Done', 'circle-check'], ['today', 'Today', 'calendar-days']];
+const QFILTERS = [['all', 'All', ''], ['new', 'New', 'circle-alert'], ['contacted', 'Contacted', 'phone'], ['done', 'Done', 'circle-check'], ['today', 'Today', 'calendar-days'],
+  ['archived', 'Archived', 'archive']];
 
 function paintQueries(fresh = new Set()) {
   const all = newest(DATA.inquiries);
   const box = $('#queries');
-  const counts = { all: all.length, new: 0, contacted: 0, done: 0, today: 0 };
-  for (const r of all) { counts[qStatus(r)]++; if (dayLabel(r.timestamp_ist) === 'Today') counts.today++; }
-  $('#qChips').innerHTML = QFILTERS.map(([k, label, ic]) => `<button type="button" class="ju-chip${QF.f === k ? ' on' : ''}" data-qf="${k}">${ic ? icon(ic) : ''}${label}<b>${counts[k]}</b></button>`).join('');
-  const nNew = all.filter(isUnseen).length;
+  // archived queries are out of every count and list except "Archived"
+  const counts = { all: 0, new: 0, contacted: 0, done: 0, today: 0, archived: 0 };
+  for (const r of all) {
+    if (qArchived(r)) { counts.archived++; continue; }
+    counts.all++; counts[qStatus(r)]++; if (dayLabel(r.timestamp_ist) === 'Today') counts.today++;
+  }
+  $('#qChips').innerHTML = QFILTERS.filter(([k]) => k !== 'archived' || counts.archived || QF.f === 'archived')
+    .map(([k, label, ic]) => `<button type="button" class="ju-chip${QF.f === k ? ' on' : ''}${k === 'archived' ? ' q-arch-chip' : ''}" data-qf="${k}">${ic ? icon(ic) : ''}${label}<b>${counts[k]}</b></button>`).join('');
+  const nNew = all.filter((r) => !qArchived(r) && isUnseen(r)).length;
   $('#qNew').hidden = !nNew;
   $('#qNew').innerHTML = `${nNew} new<span class="long"> since you last looked</span>`;
   const badge = $('#qTabBadge');
@@ -549,17 +559,25 @@ function paintQueries(fresh = new Set()) {
   badge.textContent = nNew > 99 ? '99+' : String(nNew);
   badge.setAttribute('aria-label', `${nNew} new`);
   const q = QF.q;
-  const list = all.filter((r) => (QF.f === 'all' || (QF.f === 'today' ? dayLabel(r.timestamp_ist) === 'Today' : qStatus(r) === QF.f))
+  const arch = QF.f === 'archived';
+  const list = all.filter((r) => (arch ? qArchived(r) : !qArchived(r) && (QF.f === 'all' || (QF.f === 'today' ? dayLabel(r.timestamp_ist) === 'Today' : qStatus(r) === QF.f)))
     && (!q || [r.name, r.company, r.email, r.phone, r.message, r.catalog_title, r.brand, r.city].join(' ').toLowerCase().includes(q)));
   QLIST = list;
+  const onScreen = new Set(list.map((r) => r.id).filter(Boolean));   // ticks only count for what is on screen
+  for (const id of [...QSEL]) if (!onScreen.has(id)) QSEL.delete(id);
+  if (QLAST >= list.length) QLAST = -1;
+  paintBulk();
   if (!all.length) { box.innerHTML = `<div class="empty"><span class="ti">${icon('message-square-text')}</span>No queries yet. They appear here as soon as someone sends one from the catalogue site.</div>`; return; }
+  if (!list.length && arch && !q) { box.innerHTML = `<div class="empty"><span class="ti">${icon('archive')}</span>Nothing archived. Tick the queries of no use and press Archive. <button class="ju-btn sm" type="button" data-qclear>Show all</button></div>`; return; }
+  if (!list.length && QF.f === 'all' && !q && counts.archived) { box.innerHTML = `<div class="empty"><span class="ti">${icon('archive')}</span>Every query is archived. <button class="ju-btn sm" type="button" data-qshow="archived">Show archived</button></div>`; return; }
   if (!list.length) { box.innerHTML = `<div class="empty"><span class="ti">${icon('search')}</span>No query matches. <button class="ju-btn sm" type="button" data-qclear>Show all</button></div>`; return; }
   let day = '', html = '';
   list.forEach((r, i) => {
     const d = dayLabel(r.timestamp_ist);
     if (d !== day) { day = d; html += `<div class="q-day">${esc(d)}</div>`; }
-    const s = qStatus(r), wa = waLink(r.phone), name = r.name || 'No name';
-    html += `<div class="qcard tap st-${s}${isUnseen(r) ? ' unseen' : ''}${fresh.has(qKey(r)) ? ' is-new' : ''}" data-i="${i}" role="button" tabindex="0" title="Open the query">
+    const s = qStatus(r), wa = waLink(r.phone), name = r.name || 'No name', sel = !!(r.id && QSEL.has(r.id));
+    html += `<div class="qcard tap st-${s}${sel ? ' sel' : ''}${arch ? ' archived' : ''}${isUnseen(r) && !arch ? ' unseen' : ''}${fresh.has(qKey(r)) ? ' is-new' : ''}" data-i="${i}" role="button" tabindex="0" title="Open the query">
+      ${r.id ? `<label class="q-pick" title="Select (Shift + click selects a range)"><input type="checkbox" data-pick="${esc(r.id)}" data-pi="${i}"${sel ? ' checked' : ''} aria-label="Select the query from ${esc(name)}"><span class="q-box" aria-hidden="true"></span></label>` : '<span class="q-pick"></span>'}
       <span class="q-av" style="--h:${hue(name)}">${esc(name[0].toUpperCase())}</span>
       <div class="q-main">
         <div class="q-top"><b>${esc(name)}</b>${r.company ? `<span class="q-co">${esc(r.company)}</span>` : ''}${isUnseen(r) ? '<span class="q-newdot">New</span>' : ''}</div>
@@ -581,12 +599,91 @@ function paintQueries(fresh = new Set()) {
 }
 $('#qChips').addEventListener('click', (e) => {
   const b = e.target.closest('[data-qf]'); if (!b) return;
+  if (QF.f !== b.dataset.qf) { QSEL.clear(); QLAST = -1; }   // another list: start with nothing ticked
   QF.f = b.dataset.qf; M.bump(b, 1.06); paintQueries();
   M.rise($$('#queries .qcard').slice(0, 10), { step: 22, y: 6 });
 });
+
+// ---------- tick boxes: choose queries, then Archive them (or Restore them from "Archived") ----------
+function paintBulk() {
+  const bar = $('#qBulk'); if (!bar) return;
+  const n = QSEL.size, arch = QF.f === 'archived', can = QLIST.filter((r) => r.id).length;
+  const was = !bar.hidden;
+  bar.hidden = !n;
+  if (!n) return;
+  bar.innerHTML = `<span class="qb-n"><b>${n}</b><span class="qb-long"> selected</span></span>
+    ${n < can ? `<button class="ju-btn sm ghost" type="button" data-qbulk="all" aria-label="Select all ${can}"><span class="qb-long">Select all ${can}</span><span class="qb-short">All ${can}</span></button>` : ''}
+    <span class="qb-gap"></span>
+    <button class="ju-btn sm${arch ? '' : ' accent'}" type="button" data-qbulk="${arch ? 'restore' : 'archive'}">${icon(arch ? 'archive-restore' : 'archive')}${arch ? 'Restore' : 'Archive'}</button>
+    <button class="ju-icon" type="button" data-qbulk="clear" title="Clear the selection (Esc)" aria-label="Clear the selection">${icon('x')}</button>`;
+  if (!was) M.play(bar, [{ opacity: 0, transform: 'translateY(-6px)' }, { opacity: 1, transform: 'none' }], { duration: 180, easing: 'ease-out' });
+}
+function syncPicks() {                                     // ticks and highlights without drawing the list again
+  $$('#queries input[data-pick]').forEach((c) => { const on = QSEL.has(c.dataset.pick); c.checked = on; c.closest('.qcard').classList.toggle('sel', on); });
+  paintBulk();
+}
+$('#queries').addEventListener('click', (e) => {
+  const cb = e.target.closest('input[data-pick]'); if (!cb) return;
+  e.stopPropagation();
+  const i = +cb.dataset.pi, on = cb.checked;
+  if (e.shiftKey && QLAST >= 0 && QLAST !== i) {
+    for (let k = Math.min(QLAST, i); k <= Math.max(QLAST, i); k++) { const r = QLIST[k]; if (r && r.id) { if (on) QSEL.add(r.id); else QSEL.delete(r.id); } }
+  } else if (on) QSEL.add(cb.dataset.pick); else QSEL.delete(cb.dataset.pick);
+  QLAST = i;
+  syncPicks();
+});
+$('#qBulk').addEventListener('click', (e) => {
+  const b = e.target.closest('[data-qbulk]'); if (!b) return;
+  const k = b.dataset.qbulk;
+  if (k === 'clear') { QSEL.clear(); QLAST = -1; syncPicks(); return; }
+  if (k === 'all') { QLIST.forEach((r) => { if (r.id) QSEL.add(r.id); }); M.bump(b, 1.06); syncPicks(); return; }
+  archiveQueries([...QSEL], k === 'archive', b);
+});
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape' && QSEL.size && !document.querySelector('.ju-overlay')) { QSEL.clear(); QLAST = -1; syncPicks(); }
+});
+
+// archive / restore: the whole team sees it; the status stays as it was; nothing is deleted
+async function archiveQueries(ids, archive, from) {
+  ids = ids.filter(Boolean);
+  if (!ids.length) return;
+  const before = {};
+  for (const id of ids) before[id] = (DATA.query_status || {})[id];
+  DATA.query_status = { ...(DATA.query_status || {}) };
+  for (const id of ids) {
+    const e = { ...(DATA.query_status[id] || { s: 'new' }) };
+    if (archive) { e.a = 1; e.ab = (USER && USER.email) || ''; e.aa = ''; DATA.query_status[id] = e; }
+    else { delete e.a; delete e.ab; delete e.aa; if ((e.s || 'new') === 'new') delete DATA.query_status[id]; else DATA.query_status[id] = e; }
+  }
+  if (from) M.bump(from, 1.08);
+  const going = $$('#queries .qcard').filter((c) => { const cb = c.querySelector('[data-pick]'); return cb && ids.includes(cb.dataset.pick); });
+  await Promise.all(going.map((c, k) => M.play(c, [{ opacity: 1, transform: 'none' }, { opacity: 0, transform: `translateX(${archive ? 28 : -28}px) scale(.98)` }],
+    { duration: 220, delay: Math.min(k, 8) * 30, easing: 'ease-in', fill: 'forwards' })));
+  for (const id of ids) QSEL.delete(id);
+  QLAST = -1;
+  paintQueries(); dispatchEvent(new Event('tp:status'));
+  try {
+    const r = await fetch(`${API}?action=query_archive`, { method: 'POST', headers: { 'Content-Type': 'application/json', 'X-Team-Token': TOKEN }, body: JSON.stringify({ ids, archive }) });
+    const j = await r.json().catch(() => ({}));
+    if (r.status === 401) { signOut('Your sign-in has ended. Please sign in again.'); return; }
+    if (!r.ok || !j.ok) throw new Error(j.error || 'Could not save');
+    for (const [id, st] of Object.entries(j.status || {})) { if (st && (st.a || (st.s && st.s !== 'new'))) DATA.query_status[id] = st; else delete DATA.query_status[id]; }
+    const n = ids.length, w = n === 1 ? 'query' : 'queries';
+    toast(archive ? `${n} ${w} archived. Find ${n === 1 ? 'it' : 'them'} under Archived.` : `${n} ${w} restored.`);
+    paintQueries(); dispatchEvent(new Event('tp:status'));
+  } catch {
+    DATA.query_status = { ...DATA.query_status };
+    for (const id of ids) { if (before[id]) DATA.query_status[id] = before[id]; else delete DATA.query_status[id]; }
+    paintQueries(); dispatchEvent(new Event('tp:status'));
+    toast(archive ? 'Could not archive. Please try again.' : 'Could not restore. Please try again.');
+  }
+}
 let qqT = 0;
 $('#qq').addEventListener('input', (e) => { clearTimeout(qqT); qqT = setTimeout(() => { QF.q = e.target.value.trim().toLowerCase(); paintQueries(); }, 150); });
-$('#queries').addEventListener('click', (e) => { if (e.target.closest('[data-qclear]')) { QF.q = ''; QF.f = 'all'; $('#qq').value = ''; paintQueries(); } });
+$('#queries').addEventListener('click', (e) => {
+  if (e.target.closest('[data-qclear]')) { QF.q = ''; QF.f = 'all'; $('#qq').value = ''; paintQueries(); }
+  const s = e.target.closest('[data-qshow]'); if (s) { QSEL.clear(); QLAST = -1; QF.f = s.dataset.qshow; paintQueries(); }
+});
 // once the queries have been on screen for a few seconds, they count as seen (the "New" marks stay until the next visit)
 ui(() => {
   let t = 0;
@@ -599,8 +696,9 @@ ui(() => {
 // the status: a tap on it moves it on (New -> Contacted -> Done -> New); the whole team sees it
 async function setQueryStatus(id, status, from) {
   const before = (DATA.query_status || {})[id];
+  const keep = before && before.a ? { a: 1, ab: before.ab || '', aa: before.aa || '' } : null;   // archived stays archived
   DATA.query_status = { ...(DATA.query_status || {}) };
-  if (status === 'new') delete DATA.query_status[id]; else DATA.query_status[id] = { s: status, by: (USER && USER.email) || '', at: '' };
+  if (status === 'new' && !keep) delete DATA.query_status[id]; else DATA.query_status[id] = { s: status, by: (USER && USER.email) || '', at: '', ...(keep || {}) };
   paintQueries();
   dispatchEvent(new Event('tp:status'));
   if (from) M.bump(from, 1.1);
@@ -609,7 +707,7 @@ async function setQueryStatus(id, status, from) {
     const j = await r.json().catch(() => ({}));
     if (r.status === 401) { signOut('Your sign-in has ended. Please sign in again.'); return; }
     if (!r.ok || !j.ok) throw new Error(j.error || 'Could not save');
-    if (status !== 'new') DATA.query_status[id] = j.status;
+    if (status !== 'new' || keep) DATA.query_status[id] = j.status;
     toast(status === 'done' ? 'Marked as done' : status === 'contacted' ? 'Marked as contacted' : 'Marked as new');
     dispatchEvent(new Event('tp:status'));
   } catch {
@@ -622,17 +720,20 @@ document.addEventListener('click', (e) => {
   const b = e.target.closest('[data-status]');
   if (b) { e.stopPropagation(); const r = (DATA.inquiries || []).find((x) => x.id === b.dataset.status); if (r) setQueryStatus(r.id, STATUS[qStatus(r)].next, b); return; }
   const c = e.target.closest('[data-setstatus]');
-  if (c) setQueryStatus(c.dataset.setstatus, c.dataset.s, c);
+  if (c) { setQueryStatus(c.dataset.setstatus, c.dataset.s, c); return; }
+  const a = e.target.closest('[data-qarchive]');            // Archive / Restore inside a query's details
+  if (a) archiveQueries([a.dataset.qarchive], a.dataset.a === '1', a);
 }, true);
 
 // ---------- a row opens its details in a window ----------
 let QLIST = [], ELIST = [];
 function wireRows(box, open) {
   box.addEventListener('click', (e) => {
-    if (e.target.closest('a, button')) return;   // (a phone number or an email link still works by itself)
+    if (e.target.closest('a, button, input, label')) return;   // (a phone number, an email link or a tick box works by itself)
     const r = e.target.closest('.tap[data-i]'); if (r) open(+r.dataset.i, r);
   });
   box.addEventListener('keydown', (e) => {
+    if (e.target.closest && e.target.closest('a, button, input')) return;   // (Space on a tick box ticks it)
     const r = e.target.closest && e.target.closest('.tap[data-i]');
     if (r && (e.key === 'Enter' || e.key === ' ')) { e.preventDefault(); open(+r.dataset.i, r); }
   });
@@ -833,7 +934,9 @@ function renderQuery(r) {
       ${fact('Came from', esc(r.source || ''))}
       ${more ? fact('Before', `<button class="drill-link" type="button" data-drill="qby" data-arg="${esc(r.email || r.phone)}">${more} more ${more === 1 ? 'query' : 'queries'} from them ›</button>`) : ''}
     </div>
-    <div class="btns detail-btns"><button class="ju-btn" type="button" data-copy="${esc(all)}">${icon('copy')}Copy all details</button></div>`;
+    ${qArchived(r) ? `<p class="q-arch-note ju-small">${icon('archive')}Archived${qStatusInfo(r).ab ? ' by ' + esc(qStatusInfo(r).ab.split('@')[0]) : ''}${qStatusInfo(r).aa ? ', ' + esc(when(qStatusInfo(r).aa)) : ''}. It is out of the lists until it is restored.</p>` : ''}
+    <div class="btns detail-btns"><button class="ju-btn" type="button" data-copy="${esc(all)}">${icon('copy')}Copy all details</button>
+      ${r.id ? `<button class="ju-btn ghost" type="button" data-qarchive="${esc(r.id)}" data-a="${qArchived(r) ? 0 : 1}" title="${qArchived(r) ? 'Bring it back into the lists' : 'Put it away: of no use (a test, spam, a repeat)'}">${icon(qArchived(r) ? 'archive-restore' : 'archive')}${qArchived(r) ? 'Restore' : 'Archive'}</button>` : ''}</div>`;
 }
 
 // a visit, a read, a download...: what, who (when known), where from, when, how they came; each can be opened further
@@ -921,6 +1024,90 @@ $('#upForm').addEventListener('submit', (e) => {
   btn.disabled = true;
   $('#progress').hidden = false; bar.style.width = '0';
   setStatus(st, '', 'Uploading… 0%');
+  const finishUp = () => { btn.disabled = false; setTimeout(() => { $('#progress').hidden = true; }, 600); };
+  const done = (status, j) => {
+    finishUp();
+    if (status === 401) { signOut('Your sign-in has ended. Please sign in again.'); return; }
+    if (status >= 200 && status < 300 && j.ok) {
+      published(j.catalog);
+      setStatus(st, 'ok', 'Live now: anyone can open it, download it and scan its code.');
+      resetForm();
+      load();
+    } else setStatus(st, 'bad', j.error || 'The upload did not work. Please try again.');
+  };
+  // in pieces, several at once (fast over a long distance); if this server cannot take pieces, in one go as before
+  uploadInPieces(FILE, fields(fd), (k, sentMB, totalMB, left) => {
+    bar.style.width = k + '%';
+    setStatus(st, '', k < 100 ? `Uploading… ${k}%  ·  ${sentMB} of ${totalMB} MB${left ? '  ·  ' + left : ''}` : 'Publishing…');
+  }).then(({ status, j }) => done(status, j)).catch((e) => {
+    if (e && e.signin) { finishUp(); signOut('Your sign-in has ended. Please sign in again.'); return; }
+    if (e && e.old) { onePiece(fd, bar, st, done); return; }
+    finishUp();
+    setStatus(st, 'bad', e && e.message === 'network' ? 'No connection while uploading. Please try again.' : (e && e.message) || 'The upload did not work. Please try again.');
+  });
+});
+const fields = (fd) => Object.fromEntries(['title', 'brand', 'category', 'badge', 'uploaded_by', 'description'].map((k) => [k, fd.get(k) || '']));
+
+// ---------- upload in pieces ----------
+// Over HTTP/2 to the far-away server, Apache lets only about 64 KB of ONE upload travel at a time, so a single 50 MB upload
+// crawls (about 0.2 MB/s). Ten 1 MB pieces side by side each get that allowance: about ten times faster (measured 28 Nov 2026).
+// A piece that fails is sent again (up to 4 tries), so a shaky connection does not lose the whole upload.
+const PIECE = 1048576, SIDE_BY_SIDE = 10;
+const hex = (n) => [...crypto.getRandomValues(new Uint8Array(n))].map((b) => b.toString(16).padStart(2, '0')).join('');
+function sendPiece(u, i, n, blob, onBytes) {
+  return new Promise((ok, fail) => {
+    const x = new XMLHttpRequest();
+    x.open('POST', `${API}?action=upload_part&u=${u}&i=${i}&n=${n}`);
+    x.setRequestHeader('X-Team-Token', TOKEN);
+    x.setRequestHeader('Content-Type', 'application/octet-stream');
+    x.upload.onprogress = (p) => onBytes(p.loaded);
+    x.onerror = () => fail(new Error('network'));
+    x.onload = () => {
+      let j = {};
+      try { j = JSON.parse(x.responseText); } catch {}
+      if (x.status === 401) return fail(Object.assign(new Error('signin'), { signin: true }));
+      if (x.status >= 200 && x.status < 300 && j.ok) return ok();
+      fail(Object.assign(new Error(j.error || 'A piece did not go through'), { status: x.status, old: j.error === 'Unknown action' }));
+    };
+    x.send(blob);
+  });
+}
+async function uploadInPieces(file, extra, progress) {
+  const n = Math.max(1, Math.ceil(file.size / PIECE)), u = hex(12), sent = new Float64Array(n), t0 = performance.now();
+  const totalMB = (file.size / 1048576).toFixed(1);
+  let next = 0, shown = 0;
+  const report = () => {
+    const bytes = sent.reduce((a, b) => a + b, 0), k = Math.min(99, Math.floor((bytes / file.size) * 100));
+    if (k === shown && k) return;
+    shown = k;
+    const secs = (performance.now() - t0) / 1000, rate = bytes / Math.max(secs, 0.5), rest = (file.size - bytes) / Math.max(rate, 1);
+    const left = secs > 3 && bytes > 0 ? (rest < 60 ? `about ${Math.max(1, Math.round(rest))} s left` : `about ${Math.round(rest / 60)} min left`) : '';
+    progress(k, (bytes / 1048576).toFixed(1), totalMB, left);
+  };
+  const worker = async () => {
+    while (next < n) {
+      const i = next++;
+      const blob = file.slice(i * PIECE, Math.min(file.size, (i + 1) * PIECE));
+      for (let tries = 1; ; tries++) {
+        try { await sendPiece(u, i, n, blob, (b) => { sent[i] = b; report(); }); sent[i] = blob.size; report(); break; }
+        catch (e) {
+          sent[i] = 0;
+          if (e.signin || e.old || (e.status === 400 && tries >= 2) || tries >= 4) throw e;
+          await new Promise((r) => setTimeout(r, 700 * tries));
+        }
+      }
+    }
+  };
+  await Promise.all(Array.from({ length: Math.min(SIDE_BY_SIDE, n) }, worker));
+  progress(100, totalMB, totalMB, '');
+  const r = await fetch(`${API}?action=upload_done`, { method: 'POST', headers: { 'Content-Type': 'application/json', 'X-Team-Token': TOKEN },
+    body: JSON.stringify({ u, n, name: file.name, ...extra }) });
+  if (r.status === 401) throw Object.assign(new Error('signin'), { signin: true });
+  return { status: r.status, j: await r.json().catch(() => ({})) };
+}
+
+// the old way, one request for the whole PDF (only when the server cannot take pieces)
+function onePiece(fd, bar, st, done) {
   // (a plain request, so the bar can show how far the upload is)
   const x = new XMLHttpRequest();
   x.open('POST', `${API}?action=upload_catalog`);
@@ -931,22 +1118,14 @@ $('#upForm').addEventListener('submit', (e) => {
     bar.style.width = k + '%';
     setStatus(st, '', k < 100 ? `Uploading… ${k}%` : 'Publishing…');
   };
-  const finish = () => { btn.disabled = false; setTimeout(() => { $('#progress').hidden = true; }, 600); };
-  x.onerror = () => { finish(); setStatus(st, 'bad', 'No connection while uploading. Please try again.'); };
+  x.onerror = () => done(0, { error: 'No connection while uploading. Please try again.' });
   x.onload = () => {
-    finish();
     let j = {};
     try { j = JSON.parse(x.responseText); } catch {}
-    if (x.status === 401) { signOut('Your sign-in has ended. Please sign in again.'); return; }
-    if (x.status >= 200 && x.status < 300 && j.ok) {
-      published(j.catalog);
-      setStatus(st, 'ok', 'Live now: anyone can open it, download it and scan its code.');
-      resetForm();
-      load();
-    } else setStatus(st, 'bad', j.error || 'The upload did not work. Please try again.');
+    done(x.status, j);
   };
   x.send(fd);
-});
+}
 function resetForm() {
   FILE = null; fileInput.value = '';
   for (const id of ['upTitle', 'upBrand', 'upDesc']) $('#' + id).value = '';
