@@ -11,12 +11,9 @@
     <meta name="robots" content="index, follow">
     <meta name="description"
         content="Find GAMET bearing cross-references for leading machine tool OEMs. Exact replacement bearings for lathes, grinders, milling machines and CNC spindles.">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link
-        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Urbanist:wght@600;700;800&display=swap"
-        rel="stylesheet">
-    <link rel="stylesheet" href="index.css">
+    <link rel="preload" href="fonts/urbanist-latin.woff2" as="font" type="font/woff2" crossorigin>
+    <link rel="preload" href="fonts/inter-latin.woff2" as="font" type="font/woff2" crossorigin>
+    <link rel="stylesheet" href="index.css?v=4">
     <style>
         .filter-bar {
             display: flex;
@@ -252,7 +249,7 @@
             font-weight: 500;
         }
     </style>
-    <script src="lucide.min.js?v=2" defer></script>
+    <script src="lucide-slim.js?v=4" defer></script>
 
     <!-- SEO & Webmaster Validation Placeholders -->
     <meta name='google-site-verification' content='REPLACE_WITH_YOUR_GOOGLE_VERIFICATION_CODE' />
@@ -279,7 +276,7 @@
 
 <body>
     <!-- Global Full Page Loader -->
-    <div id="fullPageLoader" class="full-page-loader">
+    <div id="fullPageLoader" class="full-page-loader hidden">
         <div class="loader-content">
             <div class="pdf-spinner large"></div>
             <div id="loaderText">Loading GAMET...</div>
@@ -458,11 +455,11 @@
                 <div class="logo" style="display: flex; align-items: center; gap: 20px;">
                     <div style="text-align: center;">
                         <span style="display: block; font-size: 0.8rem; color: var(--text-muted); margin-bottom: 8px; text-transform: uppercase; letter-spacing: 1px;">New Brand Mark</span>
-                        <img loading="lazy" src="images/new_logo.jpg" alt="Gamet New Logo" style="height:32px;width:auto; border-radius: 4px;">
+                        <img loading="lazy" decoding="async" src="images/new_logo.jpg" alt="Gamet New Logo" style="height:32px;width:auto; border-radius: 4px;">
                     </div>
                     <div style="text-align: center;">
                         <span style="display: block; font-size: 0.8rem; color: var(--text-muted); margin-bottom: 8px; text-transform: uppercase; letter-spacing: 1px;">Original Heritage Mark</span>
-                        <img loading="lazy" src="images/Old Gamet Logo.jpg" alt="Gamet Old Logo" style="height:32px;width:auto; border-radius: 4px; ">
+                        <img loading="lazy" decoding="async" src="images/Old Gamet Logo.jpg" alt="Gamet Old Logo" style="height:32px;width:auto; border-radius: 4px; ">
                     </div>
                 </div>
                 <p>High precision tapered roller bearings for demanding applications.</p>
@@ -496,7 +493,7 @@
         </div>
     </footer>
 
-    <script src="oem_data.js"></script>
+    <script src="oem_data.js?v=4" defer></script>
     <script>
         let allOEM = [];
         let activeFilter = 'all';
