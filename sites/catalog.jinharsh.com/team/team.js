@@ -1024,6 +1024,90 @@ $('#upForm').addEventListener('submit', (e) => {
   btn.disabled = true;
   $('#progress').hidden = false; bar.style.width = '0';
   setStatus(st, '', 'Uploading… 0%');
+  const finishUp = () => { btn.disabled = false; setTimeout(() => { $('#progress').hidden = true; }, 600); };
+  const done = (status, j) => {
+    finishUp();
+    if (status === 401) { signOut('Your sign-in has ended. Please sign in again.'); return; }
+    if (status >= 200 && status < 300 && j.ok) {
+      published(j.catalog);
+      setStatus(st, 'ok', 'Live now: anyone can open it, download it and scan its code.');
+      resetForm();
+      load();
+    } else setStatus(st, 'bad', j.error || 'The upload did not work. Please try again.');
+  };
+  // in pieces, several at once (fast over a long distance); if this server cannot take pieces, in one go as before
+  uploadInPieces(FILE, fields(fd), (k, sentMB, totalMB, left) => {
+    bar.style.width = k + '%';
+    setStatus(st, '', k < 100 ? `Uploading… ${k}%  ·  ${sentMB} of ${totalMB} MB${left ? '  ·  ' + left : ''}` : 'Publishing…');
+  }).then(({ status, j }) => done(status, j)).catch((e) => {
+    if (e && e.signin) { finishUp(); signOut('Your sign-in has ended. Please sign in again.'); return; }
+    if (e && e.old) { onePiece(fd, bar, st, done); return; }
+    finishUp();
+    setStatus(st, 'bad', e && e.message === 'network' ? 'No connection while uploading. Please try again.' : (e && e.message) || 'The upload did not work. Please try again.');
+  });
+});
+const fields = (fd) => Object.fromEntries(['title', 'brand', 'category', 'badge', 'uploaded_by', 'description'].map((k) => [k, fd.get(k) || '']));
+
+// ---------- upload in pieces ----------
+// Over HTTP/2 to the far-away server, Apache lets only about 64 KB of ONE upload travel at a time, so a single 50 MB upload
+// crawls (about 0.2 MB/s). Ten 1 MB pieces side by side each get that allowance: about ten times faster (measured 28 Nov 2026).
+// A piece that fails is sent again (up to 4 tries), so a shaky connection does not lose the whole upload.
+const PIECE = 1048576, SIDE_BY_SIDE = 10;
+const hex = (n) => [...crypto.getRandomValues(new Uint8Array(n))].map((b) => b.toString(16).padStart(2, '0')).join('');
+function sendPiece(u, i, n, blob, onBytes) {
+  return new Promise((ok, fail) => {
+    const x = new XMLHttpRequest();
+    x.open('POST', `${API}?action=upload_part&u=${u}&i=${i}&n=${n}`);
+    x.setRequestHeader('X-Team-Token', TOKEN);
+    x.setRequestHeader('Content-Type', 'application/octet-stream');
+    x.upload.onprogress = (p) => onBytes(p.loaded);
+    x.onerror = () => fail(new Error('network'));
+    x.onload = () => {
+      let j = {};
+      try { j = JSON.parse(x.responseText); } catch {}
+      if (x.status === 401) return fail(Object.assign(new Error('signin'), { signin: true }));
+      if (x.status >= 200 && x.status < 300 && j.ok) return ok();
+      fail(Object.assign(new Error(j.error || 'A piece did not go through'), { status: x.status, old: j.error === 'Unknown action' }));
+    };
+    x.send(blob);
+  });
+}
+async function uploadInPieces(file, extra, progress) {
+  const n = Math.max(1, Math.ceil(file.size / PIECE)), u = hex(12), sent = new Float64Array(n), t0 = performance.now();
+  const totalMB = (file.size / 1048576).toFixed(1);
+  let next = 0, shown = 0;
+  const report = () => {
+    const bytes = sent.reduce((a, b) => a + b, 0), k = Math.min(99, Math.floor((bytes / file.size) * 100));
+    if (k === shown && k) return;
+    shown = k;
+    const secs = (performance.now() - t0) / 1000, rate = bytes / Math.max(secs, 0.5), rest = (file.size - bytes) / Math.max(rate, 1);
+    const left = secs > 3 && bytes > 0 ? (rest < 60 ? `about ${Math.max(1, Math.round(rest))} s left` : `about ${Math.round(rest / 60)} min left`) : '';
+    progress(k, (bytes / 1048576).toFixed(1), totalMB, left);
+  };
+  const worker = async () => {
+    while (next < n) {
+      const i = next++;
+      const blob = file.slice(i * PIECE, Math.min(file.size, (i + 1) * PIECE));
+      for (let tries = 1; ; tries++) {
+        try { await sendPiece(u, i, n, blob, (b) => { sent[i] = b; report(); }); sent[i] = blob.size; report(); break; }
+        catch (e) {
+          sent[i] = 0;
+          if (e.signin || e.old || (e.status === 400 && tries >= 2) || tries >= 4) throw e;
+          await new Promise((r) => setTimeout(r, 700 * tries));
+        }
+      }
+    }
+  };
+  await Promise.all(Array.from({ length: Math.min(SIDE_BY_SIDE, n) }, worker));
+  progress(100, totalMB, totalMB, '');
+  const r = await fetch(`${API}?action=upload_done`, { method: 'POST', headers: { 'Content-Type': 'application/json', 'X-Team-Token': TOKEN },
+    body: JSON.stringify({ u, n, name: file.name, ...extra }) });
+  if (r.status === 401) throw Object.assign(new Error('signin'), { signin: true });
+  return { status: r.status, j: await r.json().catch(() => ({})) };
+}
+
+// the old way, one request for the whole PDF (only when the server cannot take pieces)
+function onePiece(fd, bar, st, done) {
   // (a plain request, so the bar can show how far the upload is)
   const x = new XMLHttpRequest();
   x.open('POST', `${API}?action=upload_catalog`);
@@ -1034,22 +1118,14 @@ $('#upForm').addEventListener('submit', (e) => {
     bar.style.width = k + '%';
     setStatus(st, '', k < 100 ? `Uploading… ${k}%` : 'Publishing…');
   };
-  const finish = () => { btn.disabled = false; setTimeout(() => { $('#progress').hidden = true; }, 600); };
-  x.onerror = () => { finish(); setStatus(st, 'bad', 'No connection while uploading. Please try again.'); };
+  x.onerror = () => done(0, { error: 'No connection while uploading. Please try again.' });
   x.onload = () => {
-    finish();
     let j = {};
     try { j = JSON.parse(x.responseText); } catch {}
-    if (x.status === 401) { signOut('Your sign-in has ended. Please sign in again.'); return; }
-    if (x.status >= 200 && x.status < 300 && j.ok) {
-      published(j.catalog);
-      setStatus(st, 'ok', 'Live now: anyone can open it, download it and scan its code.');
-      resetForm();
-      load();
-    } else setStatus(st, 'bad', j.error || 'The upload did not work. Please try again.');
+    done(x.status, j);
   };
   x.send(fd);
-});
+}
 function resetForm() {
   FILE = null; fileInput.value = '';
   for (const id of ['upTitle', 'upBrand', 'upDesc']) $('#' + id).value = '';

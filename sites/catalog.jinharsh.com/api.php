@@ -174,6 +174,72 @@ function load_custom_catalogs(string $file): array {
     return is_array($data) ? $data : [];
 }
 
+// a PDF that has arrived (in one piece, or put together from pieces) becomes a catalogue: checked, given a free name,
+// moved into pdfs/, added to the team's list. Returns [http code, answer]. $fields: title, brand, category, badge,
+// description, uploaded_by. (The same steps the one-piece upload always took.)
+function publish_pdf(string $tmp, string $origName, int $size, array $fields, array $user, string $pdfDir, string $customFile, bool $wasUploaded): array {
+    $ext  = strtolower(pathinfo($origName, PATHINFO_EXTENSION));
+    $head = @file_get_contents($tmp, false, null, 0, 5);
+    if ($ext !== 'pdf' || $head !== '%PDF-') {
+        return [400, ['ok' => false, 'error' => 'Only valid PDF files are supported.']];
+    }
+
+    $title       = trim((string)($fields['title'] ?? ''));
+    $brand       = trim((string)($fields['brand'] ?? 'JinHarsh'));
+    $category    = trim((string)($fields['category'] ?? 'Industrial Catalog'));
+    $badge       = trim((string)($fields['badge'] ?? 'New 2026'));
+    $description = trim((string)($fields['description'] ?? ''));
+
+    if ($title === '') {
+        $title = ucwords(str_replace(['_', '-'], ' ', pathinfo($origName, PATHINFO_FILENAME)));
+    }
+
+    $baseSlug = trim((string)preg_replace('/[^a-z0-9]+/', '-', strtolower($title)), '-') ?: ('catalog-' . time());
+    $custom = load_custom_catalogs($customFile);
+    $existingIds = array_column($custom, 'id');
+    $slug = $baseSlug;
+    $i = 2;
+    while (in_array($slug, $existingIds, true) || file_exists($pdfDir . '/' . $slug . '.pdf')) {
+        $slug = $baseSlug . '-' . $i++;
+    }
+
+    $destPath = $pdfDir . '/' . $slug . '.pdf';
+    $moved = $wasUploaded ? move_uploaded_file($tmp, $destPath)
+                          : (@rename($tmp, $destPath) || (@copy($tmp, $destPath) && @unlink($tmp)));
+    if (!$moved) {
+        return [500, ['ok' => false, 'error' => 'Failed to save PDF on server.']];
+    }
+
+    $entry = [
+        'id'          => $slug,
+        'brand'       => $brand ?: 'JinHarsh',
+        'category'    => $category ?: 'Industrial Catalog',
+        'title'       => $title,
+        'description' => $description ?: "Official {$brand} technical catalog & product specifications supplied by JinHarsh Industrial Solutions.",
+        'pdfUrl'      => "/hub/pdfs/{$slug}.pdf",
+        'badge'       => $badge ?: 'New 2026',
+        'pages'       => format_bytes($size),
+        'uploaded_at' => date('Y-m-d H:i:s'),
+        'uploaded_by' => trim((string)($fields['uploaded_by'] ?? '')) ?: ($user['email'] ?? 'Team'),
+        'is_custom'   => true,
+    ];
+
+    $custom[] = $entry;
+    @file_put_contents($customFile, json_encode($custom, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES), LOCK_EX);
+    return [200, ['ok' => true, 'catalog' => $entry]];
+}
+
+// pieces of one upload (upload_part / upload_done) live in <records>/uploads/<id>/
+function remove_upload_dir(string $dir): void {
+    foreach (glob($dir . '/*') ?: [] as $f) @unlink($f);
+    @rmdir($dir);
+}
+function clean_old_uploads(string $root): void {
+    foreach (glob($root . '/*', GLOB_ONLYDIR) ?: [] as $d) {
+        if (@filemtime($d) < time() - 86400) remove_upload_dir($d);
+    }
+}
+
 function format_bytes(int $bytes): string {
     if ($bytes >= 1048576) return round($bytes / 1048576, 1) . ' MB PDF';
     if ($bytes >= 1024) return round($bytes / 1024) . ' KB PDF';
@@ -453,58 +519,84 @@ switch ($action) {
         }
 
         $file = $_FILES['pdf'];
-        $ext = strtolower(pathinfo((string)$file['name'], PATHINFO_EXTENSION));
-        $head = @file_get_contents($file['tmp_name'], false, null, 0, 5);
-        if ($ext !== 'pdf' || $head !== '%PDF-') {
+        [$code, $res] = publish_pdf((string)$file['tmp_name'], (string)$file['name'], (int)$file['size'], $_POST, $user, $PDF_DIR, $CUSTOM_CATS, true);
+        http_response_code($code);
+        echo json_encode($res, JSON_UNESCAPED_SLASHES);
+        break;
+    }
+
+    case 'upload_part': {
+        // a PDF comes in 1 MB pieces, several at the same time. Over HTTP/2 to a far-away server one upload on its own
+        // is very slow (Apache lets only about 64 KB travel at once); ten pieces side by side go about ten times faster.
+        // ?u=<upload id>&i=<piece number>&n=<pieces>, the body is the piece. Kept in the locked records folder.
+        $user = require_auth($config, 'uploader');
+        $u = (string)($_GET['u'] ?? '');
+        $i = (int)($_GET['i'] ?? -1);
+        $n = (int)($_GET['n'] ?? 0);
+        if (!preg_match('/^[a-f0-9]{16,40}$/', $u) || $n < 1 || $n > 300 || $i < 0 || $i >= $n) {
             http_response_code(400);
-            echo json_encode(['ok' => false, 'error' => 'Only valid PDF files are supported.']);
-            exit;
+            echo json_encode(['ok' => false, 'error' => 'Bad piece']);
+            break;
         }
-
-        $title       = trim((string)($_POST['title'] ?? ''));
-        $brand       = trim((string)($_POST['brand'] ?? 'JinHarsh'));
-        $category    = trim((string)($_POST['category'] ?? 'Industrial Catalog'));
-        $badge       = trim((string)($_POST['badge'] ?? 'New 2026'));
-        $description = trim((string)($_POST['description'] ?? ''));
-
-        if ($title === '') {
-            $title = ucwords(str_replace(['_', '-'], ' ', pathinfo((string)$file['name'], PATHINFO_FILENAME)));
+        $dir = $DATA_DIR . '/uploads/' . $u;
+        if (!is_dir($dir)) @mkdir($dir, 0755, true);
+        $in  = @fopen('php://input', 'rb');
+        $out = @fopen($dir . '/' . $i . '.tmp', 'wb');
+        if (!$in || !$out) { http_response_code(500); echo json_encode(['ok' => false, 'error' => 'Could not save the piece']); break; }
+        $bytes = (int)stream_copy_to_stream($in, $out, 4 * 1048576 + 1);
+        fclose($in); fclose($out);
+        if ($bytes < 1 || $bytes > 4 * 1048576) {
+            @unlink($dir . '/' . $i . '.tmp');
+            http_response_code(400);
+            echo json_encode(['ok' => false, 'error' => 'Empty or too big piece']);
+            break;
         }
+        @rename($dir . '/' . $i . '.tmp', $dir . '/' . $i . '.part');
+        if (mt_rand(1, 25) === 1) clean_old_uploads($DATA_DIR . '/uploads');   // pieces of uploads that never finished
+        echo json_encode(['ok' => true, 'i' => $i, 'bytes' => $bytes]);
+        break;
+    }
 
-        $baseSlug = trim((string)preg_replace('/[^a-z0-9]+/', '-', strtolower($title)), '-') ?: ('catalog-' . time());
-        $custom = load_custom_catalogs($CUSTOM_CATS);
-        $existingIds = array_column($custom, 'id');
-        $slug = $baseSlug;
-        $i = 2;
-        while (in_array($slug, $existingIds, true) || file_exists($PDF_DIR . '/' . $slug . '.pdf')) {
-            $slug = $baseSlug . '-' . $i++;
+    case 'upload_done': {
+        // all pieces are in: put them together in order, then publish exactly like a one-piece upload
+        $user = require_auth($config, 'uploader');
+        $body = read_json_body();
+        $u = (string)($body['u'] ?? '');
+        $n = (int)($body['n'] ?? 0);
+        if (!preg_match('/^[a-f0-9]{16,40}$/', $u) || $n < 1 || $n > 300) {
+            http_response_code(400);
+            echo json_encode(['ok' => false, 'error' => 'Unknown upload']);
+            break;
         }
-
-        $destPath = $PDF_DIR . '/' . $slug . '.pdf';
-        if (!move_uploaded_file($file['tmp_name'], $destPath)) {
-            http_response_code(500);
-            echo json_encode(['ok' => false, 'error' => 'Failed to save PDF on server.']);
-            exit;
+        $dir = $DATA_DIR . '/uploads/' . $u;
+        $total = 0;
+        for ($k = 0; $k < $n; $k++) {
+            $sz = @filesize($dir . '/' . $k . '.part');
+            if ($sz === false) {
+                http_response_code(400);
+                echo json_encode(['ok' => false, 'error' => 'A piece is missing. Please upload again.']);
+                break 2;
+            }
+            $total += $sz;
         }
-
-        $entry = [
-            'id'          => $slug,
-            'brand'       => $brand ?: 'JinHarsh',
-            'category'    => $category ?: 'Industrial Catalog',
-            'title'       => $title,
-            'description' => $description ?: "Official {$brand} technical catalog & product specifications supplied by JinHarsh Industrial Solutions.",
-            'pdfUrl'      => "/hub/pdfs/{$slug}.pdf",
-            'badge'       => $badge ?: 'New 2026',
-            'pages'       => format_bytes((int)$file['size']),
-            'uploaded_at' => date('Y-m-d H:i:s'),
-            'uploaded_by' => trim((string)($_POST['uploaded_by'] ?? '')) ?: ($user['email'] ?? 'Team'),
-            'is_custom'   => true,
-        ];
-
-        $custom[] = $entry;
-        @file_put_contents($CUSTOM_CATS, json_encode($custom, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES), LOCK_EX);
-
-        echo json_encode(['ok' => true, 'catalog' => $entry], JSON_UNESCAPED_SLASHES);
+        if ($total > 129 * 1048576) {
+            remove_upload_dir($dir);
+            http_response_code(400);
+            echo json_encode(['ok' => false, 'error' => 'The PDF is bigger than 128 MB.']);
+            break;
+        }
+        $whole = $dir . '/whole.pdf';
+        $out = @fopen($whole, 'wb');
+        if (!$out) { http_response_code(500); echo json_encode(['ok' => false, 'error' => 'Could not put the PDF together']); break; }
+        for ($k = 0; $k < $n; $k++) {
+            $in = @fopen($dir . '/' . $k . '.part', 'rb');
+            if ($in) { stream_copy_to_stream($in, $out); fclose($in); }
+        }
+        fclose($out);
+        [$code, $res] = publish_pdf($whole, (string)($body['name'] ?? 'catalog.pdf'), $total, $body, $user, $PDF_DIR, $CUSTOM_CATS, false);
+        remove_upload_dir($dir);
+        http_response_code($code);
+        echo json_encode($res, JSON_UNESCAPED_SLASHES);
         break;
     }
 
