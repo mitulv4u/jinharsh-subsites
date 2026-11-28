@@ -36,7 +36,7 @@ const BRAND_RULES = [
   { match: /pidilite|zorrik|m-seal/i, brand: 'Pidilite', cat: 'Adhesives & Coatings' },
   { match: /dodge/i, brand: 'Dodge', cat: 'Bearings & Housed Units' },
 ];
-const BRANDS = ['Timken', 'Regal Rexnord', 'Timken Lovejoy', 'SKF', 'Dodge', 'ABB & Baldor', 'Shell', 'Lubrilog', 'Groz', 'Dräger', 'Flexco', 'Ador Fontech', 'Pidilite', 'JinHarsh'];
+const BRANDS = ['Timken', 'Regal Rexnord', 'Timken Lovejoy', 'SKF', 'Dodge', 'ABB & Baldor', 'Shell', 'Lubrilog', 'Groz', 'Dräger', 'Flexco', 'Ador Fontech', 'Pidilite', 'Jinharsh'];
 const CATEGORIES = [['Bearings & Housed Units', 'Bearings & Housed Units'], ['Couplings', 'Couplings & Power Transmission'], ['Motors & Drives', 'Motors & Drives'],
   ['Lubrication & Tools', 'Lubrication & Tools'], ['Industrial Lubricants', 'Industrial Lubricants'], ['Safety & Gas Detection', 'Safety & Gas Detection'],
   ['Conveying Equipment', 'Conveying Equipment'], ['Welding & Wear', 'Welding & Wear'], ['Adhesives & Coatings', 'Adhesives & Coatings'], ['Application Hub', 'Application Hub']];
@@ -1004,7 +1004,7 @@ function takeFile(file) {
   if (!$('#upTitle').value) $('#upTitle').value = title;
   const rule = BRAND_RULES.find((r) => r.match.test(file.name));
   if (rule) { $('#upBrand').value = rule.brand; $('#upCat').value = rule.cat; }
-  if (!$('#upDesc').value) $('#upDesc').value = `Official ${$('#upBrand').value || 'JinHarsh'} catalog (${title}) with technical specifications, selection charts, and direct inquiry support from JinHarsh Industrial Solutions.`;
+  if (!$('#upDesc').value) $('#upDesc').value = `Official ${$('#upBrand').value || 'Jinharsh'} catalog (${title}) with technical specifications, selection charts, and direct inquiry support from Jinharsh Industrial Solutions.`;
 }
 
 $('#upForm').addEventListener('submit', (e) => {
