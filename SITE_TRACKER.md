@@ -7,10 +7,12 @@
 | `www.groz.tools` / `groz.in` | GROZ Industrial Tools & Catalogs | Adesh | `Live` (SSL Active) | `groz-tools` |
 | `omega.rexnord.co.in` | Rexnord OMEGA Elastomeric Couplings | Mitul / Adesh | `Live` (SSL Active) | `rexnord-omega` |
 | `indiansales.in` | Indian Sales Portal | Riya & Gayatri | `Ready for Upload` (Folder & SSL Active) | `indiansales` |
-| `general.tools` | General Tools Subsite | Riya & Gayatri | `Ready for Upload` (Folder & SSL Active) | `general-tools` |
-| `www.jinharsh.com` | Main JinHarsh Group Hub + Catalogs | Adesh (Dhwani) | `In Progress` (SSL Renewed) | `jinharsh-main` |
+| `general.tools` | General Tools Subsite | Riya & Gayatri | `Live` (SSL Active) | `general-tools` |
+| `www.jinharsh.com` | Main JinHarsh Group Hub + Catalogs | Adesh (Dhwani) | `Live` (SSL Active) | `jinharsh-main` |
 | `viva.rexnord.co.in` | Rexnord VIVA Couplings | Riya / Gayatri | `Backlog` | `rexnord-viva` |
-| `catalog.jinharsh.com` | JinHarsh Master Product Catalog (14 Divisions) | Mitul | `In Progress` | `jinharsh-catalog` |
+| `catalog.jinharsh.com` | JinHarsh Master Product Catalog (14 Divisions) | Mitul | `Live` (SSL Active) | `jinharsh-catalog` |
+| `hb-gamet.com` | GAMET / HB Super Precision Spindle Bearings | Mitul / Adesh | `Live` (SSL Active) | `hb-gamet` |
+| `gametbearing.com` | GAMET Super Precision Tapered Roller & Spindle Bearings | Mitul / Adesh | `Ready for Upload` (Git & Server Ready) | `gamet-bearing` |
 
 ### Status Legend
 - `Backlog` — Decided in weekly meeting, waiting for domain/build
